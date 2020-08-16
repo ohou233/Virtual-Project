@@ -1,0 +1,13 @@
+C:\Users\iamxb\Desktop\MyWindow\bin\Debug\MyWindow.exe.config
+C:\Users\iamxb\Desktop\MyWindow\bin\Debug\MyWindow.exe
+C:\Users\iamxb\Desktop\MyWindow\bin\Debug\MyWindow.pdb
+C:\Users\iamxb\Desktop\MyWindow\obj\Debug\MyWindow.csprojAssemblyReference.cache
+C:\Users\iamxb\Desktop\MyWindow\obj\Debug\MyWindow.Form1.resources
+C:\Users\iamxb\Desktop\MyWindow\obj\Debug\MyWindow.Properties.Resources.resources
+C:\Users\iamxb\Desktop\MyWindow\obj\Debug\MyWindow.csproj.GenerateResource.cache
+C:\Users\iamxb\Desktop\MyWindow\obj\Debug\MyWindow.csproj.CoreCompileInputs.cache
+C:\Users\iamxb\Desktop\MyWindow\obj\Debug\MyWindow.exe
+C:\Users\iamxb\Desktop\MyWindow\obj\Debug\MyWindow.pdb
+\\Mac\Home\Desktop\virtual_project\GUI\bin\Debug\MyWindow.exe.config
+\\Mac\Home\Desktop\virtual_project\GUI\obj\Debug\MyWindow.exe
+\\Mac\Home\Desktop\virtual_project\GUI\obj\Debug\MyWindow.pdb

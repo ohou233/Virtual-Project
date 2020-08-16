@@ -1,0 +1,5 @@
+C:\Users\iamxb\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\bin\Debug\AlgorithmDLL.dll
+C:\Users\iamxb\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\bin\Debug\AlgorithmDLL.pdb
+C:\Users\iamxb\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\obj\Debug\HAlgorithm.csproj.CoreCompileInputs.cache
+C:\Users\iamxb\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\obj\Debug\AlgorithmDLL.dll
+C:\Users\iamxb\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\obj\Debug\AlgorithmDLL.pdb

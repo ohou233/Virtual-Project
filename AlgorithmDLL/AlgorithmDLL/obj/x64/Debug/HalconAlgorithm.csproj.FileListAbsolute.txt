@@ -1,0 +1,17 @@
+C:\Users\iamxb\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\bin\x64\Debug\AlgorithmDLL.dll
+C:\Users\iamxb\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\bin\x64\Debug\AlgorithmDLL.pdb
+C:\Users\iamxb\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\obj\x64\Debug\HalconAlgorithm.csproj.CoreCompileInputs.cache
+C:\Users\iamxb\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\obj\x64\Debug\HalconAlgorithm.csproj.CopyComplete
+C:\Users\iamxb\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\obj\x64\Debug\AlgorithmDLL.dll
+C:\Users\iamxb\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\obj\x64\Debug\AlgorithmDLL.pdb
+\\Mac\Home\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\obj\x64\Debug\AlgorithmDLL.dll
+\\Mac\Home\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\obj\x64\Debug\AlgorithmDLL.pdb
+\\Mac\Home\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\bin\x64\Debug\AlgorithmDLL.dll
+\\Mac\Home\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\bin\x64\Debug\AlgorithmDLL.pdb
+C:\Users\iamxb\Desktop\virtual_project\Code\AlgorithmDLL\AlgorithmDLL\bin\x64\Debug\AlgorithmDLL.dll
+C:\Users\iamxb\Desktop\virtual_project\Code\AlgorithmDLL\AlgorithmDLL\bin\x64\Debug\AlgorithmDLL.pdb
+C:\Users\iamxb\Desktop\virtual_project\Code\AlgorithmDLL\AlgorithmDLL\obj\x64\Debug\HalconAlgorithm.csproj.CoreCompileInputs.cache
+C:\Users\iamxb\Desktop\virtual_project\Code\AlgorithmDLL\AlgorithmDLL\obj\x64\Debug\HalconAlgorithm.csproj.CopyComplete
+C:\Users\iamxb\Desktop\virtual_project\Code\AlgorithmDLL\AlgorithmDLL\obj\x64\Debug\AlgorithmDLL.dll
+C:\Users\iamxb\Desktop\virtual_project\Code\AlgorithmDLL\AlgorithmDLL\obj\x64\Debug\AlgorithmDLL.pdb
+C:\Users\iamxb\Desktop\virtual_project\Code\AlgorithmDLL\AlgorithmDLL\obj\x64\Debug\HalconAlgorithm.csprojAssemblyReference.cache

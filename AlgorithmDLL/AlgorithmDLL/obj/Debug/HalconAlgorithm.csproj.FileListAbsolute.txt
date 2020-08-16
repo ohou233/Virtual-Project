@@ -1,0 +1,6 @@
+\\Mac\Home\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\bin\Debug\AlgorithmDLL.dll
+\\Mac\Home\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\bin\Debug\AlgorithmDLL.pdb
+\\Mac\Home\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\bin\Debug\halcondotnet.dll
+\\Mac\Home\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\obj\Debug\HalconAlgorithm.csprojResolveAssemblyReference.cache
+\\Mac\Home\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\obj\Debug\AlgorithmDLL.dll
+\\Mac\Home\Desktop\virtual_project\AlgorithmDLL\AlgorithmDLL\obj\Debug\AlgorithmDLL.pdb
