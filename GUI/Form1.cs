@@ -34,10 +34,8 @@ namespace MyWindow
         UInt32 m_nBufSizeForSaveImage = 0;
         IntPtr m_BufForSaveImage;
 
-        //MyCamera.MV_FRAME_OUT_INFO_EX stFrameInfo = new MyCamera.MV_FRAME_OUT_INFO_EX();
 
         bool IsInLine = false;
-        bool IsContinue = true;
         int MeasureProject = -1;
         Thread thread_OutLineTest;
         bool IsthreadLoadImageStop = false;
@@ -48,9 +46,10 @@ namespace MyWindow
         public MyWindow()
         {
             InitializeComponent();
+            changeSize();
             HAlgorithm.CreateInWindow(pb_in.Handle, pb_in.Width, pb_in.Height);
             HAlgorithm.CreateOutWindow(pb_out.Handle, pb_out.Width, pb_out.Height);
-            //changeSize();
+            
             Control.CheckForIllegalCrossThreadCalls = false;
             OutLineModeState();
  
@@ -93,27 +92,27 @@ namespace MyWindow
             if (MyCamera.MV_OK != nRet)
             {
                 m_MyCamera.MV_CC_DestroyDevice_NET();
-                ShowErrorMsg("Device open fail!", nRet);
+                ShowErrorMsg("设备打开失败！", nRet);
                 return;
             }
 
-            //探测网络最佳包大小(只对GigE相机有效) 
-            if (device.nTLayerType == MyCamera.MV_GIGE_DEVICE)
-            {
-                int nPacketSize = m_MyCamera.MV_CC_GetOptimalPacketSize_NET();
-                if (nPacketSize > 0)
-                {
-                    nRet = m_MyCamera.MV_CC_SetIntValue_NET("GevSCPSPacketSize", (uint)nPacketSize);
-                    if (nRet != MyCamera.MV_OK)
-                    {
-                        ShowErrorMsg("Set Packet Size failed!", nRet);
-                    }
-                }
-                else
-                {
-                    ShowErrorMsg("Get Packet Size failed!", nPacketSize);
-                }
-            }
+            ////探测网络最佳包大小(只对GigE相机有效) 
+            //if (device.nTLayerType == MyCamera.MV_GIGE_DEVICE)
+            //{
+            //    int nPacketSize = m_MyCamera.MV_CC_GetOptimalPacketSize_NET();
+            //    if (nPacketSize > 0)
+            //    {
+            //        nRet = m_MyCamera.MV_CC_SetIntValue_NET("GevSCPSPacketSize", (uint)nPacketSize);
+            //        if (nRet != MyCamera.MV_OK)
+            //        {
+            //            ShowErrorMsg("设置网络最佳包大小失败！", nRet);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        ShowErrorMsg("获取网络最佳包大小失败！", nPacketSize);
+            //    }
+            //}
 
             // ch:设置采集连续模式 | en:Set Continues Aquisition Mode
             m_MyCamera.MV_CC_SetEnumValue_NET("AcquisitionMode", (uint)MyCamera.MV_CAM_ACQUISITION_MODE.MV_ACQ_MODE_CONTINUOUS);
@@ -130,13 +129,8 @@ namespace MyWindow
             tb_Exposure.Enabled = true;
             tb_Gain.Enabled = true;
             tb_FrameRate.Enabled = true;
-            rbt_ContinuesMode.Enabled = true;
-            rbt_ContinuesMode.Checked = true;
-            rbt_TriggerMode.Enabled = true;
-            rbt_TriggerMode.Checked = false;
             bt_StartGrab.Enabled = true;
             bt_StopGrab.Enabled = false;
-
         }
 
         //关闭相机
@@ -171,8 +165,6 @@ namespace MyWindow
             tb_Exposure.Enabled = false;
             tb_Gain.Enabled = false;
             tb_FrameRate.Enabled = false;
-            rbt_ContinuesMode.Enabled = false;
-            rbt_TriggerMode.Enabled = false;
             bt_StartGrab.Enabled = false;
             bt_StopGrab.Enabled = false;
         }
@@ -185,7 +177,7 @@ namespace MyWindow
             cb_DeviceList.Items.Clear();
             m_stDeviceList.nDeviceNum = 0;
             int nRet = MyCamera.MV_CC_EnumDevices_NET(MyCamera.MV_GIGE_DEVICE | MyCamera.MV_USB_DEVICE, ref m_stDeviceList);
-            if (0 != nRet)
+            if (0 != nRet || 0 == m_stDeviceList.nDeviceNum)
             {
                 ShowErrorMsg("未检测到设备！", 0);
                 return;
@@ -229,8 +221,6 @@ namespace MyWindow
                 //设置控件状态
                 bt_OpenCamera.Enabled = true;
             }
-
-
         }
 
         // 显示错误信息
@@ -353,6 +343,7 @@ namespace MyWindow
                     else
                     {
                         ShowErrorMsg("请选择文件路径", 0);
+                        OutLineModeState();
                         return;
                     }
                 }
@@ -377,8 +368,6 @@ namespace MyWindow
             tb_Gain.Enabled = false;
             bt_GetParam.Enabled = false;
             bt_SetParam.Enabled = false;
-            rbt_ContinuesMode.Enabled = false;
-            rbt_TriggerMode.Enabled = false;
             bt_StopGrab.Enabled = false;
             bt_SaveBmp.Enabled = false;
             bt_StartTest.Enabled = true;
@@ -387,6 +376,7 @@ namespace MyWindow
             rbt_Measure33.Enabled = true;
             rbt_Measure34.Enabled = true;
             rbt_Measure46.Enabled = true;
+            bt_StopTest.Enabled = false;
         }
 
         //选择在线模式
@@ -394,119 +384,34 @@ namespace MyWindow
         {
             bt_DiscoverCamera.Enabled = true;
             bt_StopTest.Enabled = false;
-        }
-
-        //选择触发模式
-        private void rbt_TriggerMode_CheckedChanged(object sender, EventArgs e)
-        {
-            IsContinue = false;
-            //触发源设为软触发
-            m_MyCamera.MV_CC_SetEnumValue_NET("TriggerSource", (uint)MyCamera.MV_CAM_TRIGGER_SOURCE.MV_TRIGGER_SOURCE_SOFTWARE);
-        }
-
-        //选择连续模式
-        private void rbt_ContinuesMode_CheckedChanged(object sender, EventArgs e)
-        {
-            IsContinue = true;
-            if (rbt_ContinuesMode.Checked)
-            {
-                m_MyCamera.MV_CC_SetEnumValue_NET("TriggerMode", (uint)MyCamera.MV_CAM_TRIGGER_MODE.MV_TRIGGER_MODE_OFF);
-                rbt_TriggerMode.Enabled = false;
-
-            }
-
+            bt_StartTest.Enabled = false;
         }
 
         //开始采集
         private void bt_StartGrab_Click(object sender, EventArgs e)
-        {   
-            if (true == IsContinue)
+        {
+            //连续采集图像
+            // 标志位置位true 
+            m_bGrabbing = true;
+
+            m_hReceiveThread = new Thread(ReceiveThreadProcess);
+            m_hReceiveThread.Start();
+
+            m_stFrameInfo.nFrameLen = 0;//取流之前先清除帧长度
+            m_stFrameInfo.enPixelType = MyCamera.MvGvspPixelType.PixelType_Gvsp_Undefined;
+            // 开始采集
+            int nRet = m_MyCamera.MV_CC_StartGrabbing_NET();
+            if (MyCamera.MV_OK != nRet)
             {
-                //连续采集图像
-                // 标志位置位true 
-                m_bGrabbing = true;
-
-                m_hReceiveThread = new Thread(ReceiveThreadProcess);
-                m_hReceiveThread.Start();
-
-                m_stFrameInfo.nFrameLen = 0;//取流之前先清除帧长度
-                m_stFrameInfo.enPixelType = MyCamera.MvGvspPixelType.PixelType_Gvsp_Undefined;
-                // 开始采集
-                int nRet = m_MyCamera.MV_CC_StartGrabbing_NET();
-                if (MyCamera.MV_OK != nRet)
-                {
-                    m_bGrabbing = false;
-                    m_hReceiveThread.Join();
-                    ShowErrorMsg("开始采集失败！", nRet);
-                    return;
-                }
-
-                // 控件操作
-                bt_StartTest.Enabled = true;
-                bt_StopGrab.Enabled = true;
+                m_bGrabbing = false;
+                m_hReceiveThread.Join();
+                ShowErrorMsg("开始采集失败！", nRet);
+                return;
             }
-            else
-            {
-                m_bGrabbing = true;
-                //采集单帧图像
-                int nRet;
-                // 触发命令
-                nRet = m_MyCamera.MV_CC_SetCommandValue_NET("TriggerSoftware");
-                if (MyCamera.MV_OK != nRet)
-                {
-                    MessageBox.Show("Trigger Fail");
-                }
 
-                MyCamera.MVCC_INTVALUE stParam = new MyCamera.MVCC_INTVALUE();
-                int Ret = m_MyCamera.MV_CC_GetIntValue_NET("PayloadSize", ref stParam);
-                if (MyCamera.MV_OK != Ret)
-                {
-                    ShowErrorMsg("Get PayloadSize failed", Ret);
-                    return;
-                }
-
-                UInt32 nPayloadSize = stParam.nCurValue;
-                if (nPayloadSize > m_nBufSizeForDriver)
-                {
-                    if (m_BufForDriver != IntPtr.Zero)
-                    {
-                        Marshal.Release(m_BufForDriver);
-                    }
-                    m_nBufSizeForDriver = nPayloadSize;
-                    m_BufForDriver = Marshal.AllocHGlobal((Int32)m_nBufSizeForDriver);
-                }
-
-                if (m_BufForDriver == IntPtr.Zero)
-                {
-                    return;
-                }
-
-                MyCamera.MV_FRAME_OUT_INFO_EX stFrameInfo = new MyCamera.MV_FRAME_OUT_INFO_EX();
-
-                while(true)
-                {
-                    lock (BufForDriverLock)
-                    {
-                        Ret = m_MyCamera.MV_CC_GetOneFrameTimeout_NET(m_BufForDriver, nPayloadSize, ref stFrameInfo, 1000);
-                        if (Ret == MyCamera.MV_OK)
-                        {
-                            m_stFrameInfo = stFrameInfo;
-                        }
-                    }
-
-                    if (Ret == MyCamera.MV_OK)
-                    {
-                        if (RemoveCustomPixelFormats(stFrameInfo.enPixelType))
-                        {
-                            continue;
-                        }
-                        HAlgorithm.DispBuffer(m_BufForDriver, stFrameInfo.nWidth, stFrameInfo.nHeight);
-                    }
-                    break;
-                }
-                bt_StopGrab.Enabled = false;
-            }
-            //设置控件状态
+            // 控件操作
+            bt_StartTest.Enabled = true;
+            bt_StopGrab.Enabled = true;
             bt_SaveBmp.Enabled = true;
             rbt_Measure46.Enabled = true;
             rbt_Measure9.Enabled = true;
@@ -692,6 +597,14 @@ namespace MyWindow
 
         }
 
+        private void MyWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(bt_CloseCamera.Enabled==true)
+            {
+                bt_CloseCamera_Click(null, null);
+            }
+        }
+
         //保存BMP图像文件
         private void bt_SaveBmp_Click(object sender, EventArgs e)
         {
@@ -781,7 +694,7 @@ namespace MyWindow
                     }
                     // set palette back
                     SaveFileDialog dialog = new SaveFileDialog();
-                    dialog.Filter = "图像文件(*.bmp)|*.bmp|";
+                    dialog.Filter = " 图像文件(*.bmp*) | *.bmp* ";
                     dialog.Title = "请选择保存路径";
                     dialog.DefaultExt = ".bmp";
                     if(dialog.ShowDialog() == DialogResult.OK)
@@ -798,7 +711,7 @@ namespace MyWindow
                     {
                         Bitmap bmp = new Bitmap(m_stFrameInfo.nWidth, m_stFrameInfo.nHeight, m_stFrameInfo.nWidth * 3, PixelFormat.Format24bppRgb, pTemp);
                         SaveFileDialog dialog = new SaveFileDialog();
-                        dialog.Filter = "图像文件(*.bmp)|*.bmp|";
+                        dialog.Filter = " 图像文件(*.bmp*) | *.bmp* ";
                         dialog.Title = "请选择保存路径";
                         dialog.DefaultExt = ".bmp";
                         if (dialog.ShowDialog() == DialogResult.OK)
@@ -987,84 +900,79 @@ namespace MyWindow
             sw.Close();
         }
 
-        //// 控件大小随窗体大小等比例缩放
-        // #region 
-        //private void MyWindow_Resize(object sender, EventArgs e)
-        //{
-        //    HAlgorithm.DisposeWindow(pb_in, pb_out);
-        //    HAlgorithm.CreateInWindow(pb_in.Handle, pb_in.Width, pb_in.Height);
-        //    HAlgorithm.CreateOutWindow(pb_out.Handle, pb_out.Width, pb_out.Height);
-        //}
-        //
-        // void changeSize()
-        // {
-        //     SetStyle(ControlStyles.UserPaint, true);
-        //     SetStyle(ControlStyles.AllPaintingInWmPaint, true); // 禁止擦除背景.
-        //     SetStyle(ControlStyles.OptimizedDoubleBuffer, true); // 双缓冲DoubleBuffer
+        // 控件大小随窗体大小等比例缩放
+        #region 
+        void changeSize()
+        {
+            SetStyle(ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true); // 禁止擦除背景.
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true); // 双缓冲DoubleBuffer
 
-        //     this.WindowState = FormWindowState.Maximized;
-        //     x = this.Width;
-        //     y = this.Height;
-        //     setTag(this);
-        // }
+            this.WindowState = FormWindowState.Maximized;
+            x = this.Width;
+            y = this.Height;
+            setTag(this);
+        }
 
-        // private float x;//定义当前窗体的宽度
-        // private float y;//定义当前窗体的高度
-        // private void setTag(Control cons)
-        // {
-        //     foreach (Control con in cons.Controls)
-        //     {
-        //         con.Tag = con.Width + ";" + con.Height + ";" + con.Left + ";" + con.Top + ";" + con.Font.Size;
-        //         if (con.Controls.Count > 0)
-        //         {
-        //             setTag(con);
-        //         }
-        //     }
-        // }
-        // //设置双缓冲区、解决闪屏问题
-        // public static void SetDouble(Control cc)
-        // {
+        private float x;//定义当前窗体的宽度
+        private float y;//定义当前窗体的高度
+        private void setTag(Control cons)
+        {
+            foreach (Control con in cons.Controls)
+            {
+                con.Tag = con.Width + ";" + con.Height + ";" + con.Left + ";" + con.Top + ";" + con.Font.Size;
+                if (con.Controls.Count > 0)
+                {
+                    setTag(con);
+                }
+            }
+        }
+        //设置双缓冲区、解决闪屏问题
+        public static void SetDouble(Control cc)
+        {
 
-        //     cc.GetType().GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance |
-        //                  System.Reflection.BindingFlags.NonPublic).SetValue(cc, true, null);
-        // }
+            cc.GetType().GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance |
+                         System.Reflection.BindingFlags.NonPublic).SetValue(cc, true, null);
+        }
 
-        // private void setControls(float newx, float newy, Control cons)
-        // {
-        //     //遍历窗体中的控件，重新设置控件的值
-        //     foreach (Control con in cons.Controls)
-        //     {
-        //         //获取控件的Tag属性值，并分割后存储字符串数组
-        //         SetDouble(this);
-        //         SetDouble(con);
-        //         if (con.Tag != null)
-        //         {
+        private void setControls(float newx, float newy, Control cons)
+        {
 
-        //             string[] mytag = con.Tag.ToString().Split(new char[] { ';' });
-        //             //根据窗体缩放的比例确定控件的值
-        //             con.Width = Convert.ToInt32(System.Convert.ToSingle(mytag[0]) * newx);//宽度
-        //             con.Height = Convert.ToInt32(System.Convert.ToSingle(mytag[1]) * newy);//高度
-        //             con.Left = Convert.ToInt32(System.Convert.ToSingle(mytag[2]) * newx);//左边距
-        //             con.Top = Convert.ToInt32(System.Convert.ToSingle(mytag[3]) * newy);//顶边距
-        //             Single currentSize = System.Convert.ToSingle(mytag[4]) * newy;//字体大小
-        //             con.Font = new Font(con.Font.Name, currentSize, con.Font.Style, con.Font.Unit);
-        //             if (con.Controls.Count > 0)
-        //             {
-        //                 setControls(newx, newy, con);
-        //             }
-        //         }
-        //     }
-        // }
+            //遍历窗体中的控件，重新设置控件的值
+            foreach (Control con in cons.Controls)
+            {
+                //获取控件的Tag属性值，并分割后存储字符串数组
+                SetDouble(this);
+                SetDouble(con);
+                if (con.Tag != null)
+                {
 
-        // private void MyWindow_Resize(object sender, EventArgs e)
-        // {
-        //     float newx = (this.Width) / x;
-        //     float newy = (this.Height) / y;
-        //     setControls(newx, newy, this);
-        //     HAlgorithm.DisposeWindow();
-        //     HAlgorithm.CreateInWindow(pb_in.Handle, pb_in.Width, pb_in.Height);
-        //     HAlgorithm.CreateOutWindow(pb_out.Handle, pb_out.Width, pb_out.Height);
-        // }
-        // #endregion
+                    string[] mytag = con.Tag.ToString().Split(new char[] { ';' });
+                    //根据窗体缩放的比例确定控件的值
+                    con.Width = Convert.ToInt32(System.Convert.ToSingle(mytag[0]) * newx);//宽度
+                    con.Height = Convert.ToInt32(System.Convert.ToSingle(mytag[1]) * newy);//高度
+                    con.Left = Convert.ToInt32(System.Convert.ToSingle(mytag[2]) * newx);//左边距
+                    con.Top = Convert.ToInt32(System.Convert.ToSingle(mytag[3]) * newy);//顶边距
+                    Single currentSize = System.Convert.ToSingle(mytag[4]) * newy;//字体大小
+                    con.Font = new Font(con.Font.Name, currentSize, con.Font.Style, con.Font.Unit);
+                    if (con.Controls.Count > 0)
+                    {
+                        setControls(newx, newy, con);
+                    }
+                }
+            }
+        }
+
+        private void MyWindow_Resize(object sender, EventArgs e)
+        {
+            HAlgorithm.DisposeWindow();
+            float newx = (this.Width) / x;
+            float newy = (this.Height) / y;
+            setControls(newx, newy, this);
+                       
+            HAlgorithm.CreateInWindow(pb_in.Handle, pb_in.Width, pb_in.Height);
+            HAlgorithm.CreateOutWindow(pb_out.Handle, pb_out.Width, pb_out.Height);
+        }
+        #endregion
     }
 }

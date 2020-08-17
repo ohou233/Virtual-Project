@@ -12,6 +12,7 @@ namespace HalconAlgorithm
     {
        private static HWindow inWindow, outWindow;
         
+        //接收相机传入buffer并显示在输入窗口
         public static void DispBuffer(IntPtr buffer, ushort Bufferwidth, ushort Bufferheight)
         {
             HObject HojFromBuffer;
@@ -23,47 +24,28 @@ namespace HalconAlgorithm
             HojFromBuffer.Dispose();
         }
 
-        public static void DisposeWindow(PictureBox pb_in, PictureBox pb_out)
+        //销毁窗口
+        public static void DisposeWindow()
         {
-            CreateInWindow(pb_in.Handle, pb_in.Width, pb_in.Height);
-            CreateOutWindow(pb_out.Handle, pb_out.Width, pb_out.Height);
+            inWindow.CloseWindow();
+            outWindow.CloseWindow();
             inWindow.Dispose();
             outWindow.Dispose();
         }
 
+        //创建输入显示窗口
         public static void CreateInWindow(IntPtr pb_Handle, int pb_width, int pb_height)
         {
             inWindow = new HWindow(0, 0, pb_width, pb_height, pb_Handle, "visible", "");
         }
 
+        //创建输出显示窗口
         public static void CreateOutWindow(IntPtr pb_Handle, int pb_width, int pb_height)
         {
             outWindow = new HWindow(0, 0, pb_width, pb_height, pb_Handle, "visible", "");
         }
 
-        public static void DispImageFile(string path)
-        {
-            HObject image;
-            HOperatorSet.GenEmptyObj(out image);
-            HTuple hv_ImageFiles = new HTuple(), hv_Index = new HTuple();
-            hv_ImageFiles.Dispose(); hv_Index.Dispose();
-            list_image_files(path, "bmp", new HTuple(), out hv_ImageFiles);
-            for (hv_Index = 0; (int)hv_Index <= (int)((new HTuple(hv_ImageFiles.TupleLength()
-        )) - 1); hv_Index = (int)hv_Index + 1)
-            {
-                image.Dispose();
-                HOperatorSet.ReadImage(out image, hv_ImageFiles.TupleSelect(hv_Index)); HTuple width, height;
-                HOperatorSet.GetImageSize(image, out width, out height);
-                inWindow.SetPart((HTuple)0, (HTuple)0, height, width);
-                inWindow.DispObj(image);
-                HOperatorSet.WaitSeconds(0.5);
-            }
-
-                
-
-            image.Dispose();
-        }
-
+        //在输出窗口显示图像
         public static void DispImage(HObject image)
         {
             HTuple width, height;
@@ -73,6 +55,7 @@ namespace HalconAlgorithm
             image.Dispose();
         }
 
+        //读取给定路径下的所有图像文件
         public static void list_image_files(HTuple hv_ImageDirectory, HTuple hv_Extensions, HTuple hv_Options,
     out HTuple hv_ImageFiles)
         {
@@ -348,6 +331,7 @@ namespace HalconAlgorithm
             return;
         }
 
+        //离线测试
         public static void OutLineMeasure(int MeasureProject, ListView lv, 
             out double Radius, out double PositionDegree, out double RunTime,
             out double DistanceL1L2, out double DistanceX1, out double DistanceY1, string path)
@@ -397,6 +381,7 @@ namespace HalconAlgorithm
 
         }
 
+        //在线测试
         public static void InLineMeasure(int MeasureProject, ListView lv, IntPtr buffer, ushort BufferWidth, ushort BufferHeight,
     out double Radius, out double PositionDegree, out double RunTime,
     out double DistanceL1L2, out double DistanceX1, out double DistanceY1)
@@ -436,6 +421,8 @@ namespace HalconAlgorithm
 
         }
 
+        //测量项
+        #region
         public static void Measure_9(HObject ho_Image, out double CirclrRadius, out double PositionDegree, out double RunTime,
             out double DistanceX1, out double DistanceY1)
         {
@@ -517,16 +504,16 @@ namespace HalconAlgorithm
             //输出结果
             hv_CircleRadius.Dispose();
             hv_CircleRadius = new HTuple(hv_FitCircleCenterRadius);
-            CirclrRadius = hv_CircleRadius*2;
+            CirclrRadius = hv_CircleRadius*2*0.0069;
             hv_PositionDegree.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
-                hv_PositionDegree = 2 * ((((((hv_X1 - 19.605)).TuplePow(
-                    2)) + (((hv_Y1 - 6.788)).TuplePow(2)))).TupleSqrt());
+                hv_PositionDegree = 2 * (((((((hv_X1*0.0069) - 19.605)).TuplePow(
+                    2)) + ((((hv_Y1*0.0069) - 6.788)).TuplePow(2)))).TupleSqrt());
             }
             PositionDegree = hv_PositionDegree;
-            DistanceX1 = hv_X1;
-            DistanceY1 = hv_Y1;
+            DistanceX1 = hv_X1*0.0069;
+            DistanceY1 = hv_Y1*0.0069;
 
             DispImage(ho_Image);
             outWindow.SetColor("red");
@@ -695,10 +682,10 @@ namespace HalconAlgorithm
             //输出结果
             hv_distanceL1L2.Dispose();
             hv_distanceL1L2 = new HTuple(hv_L1_L2);
-            DistanceL1L2 = hv_distanceL1L2;
+            DistanceL1L2 = hv_distanceL1L2 * 0.0069;
             hv_distanceX1.Dispose();
             hv_distanceX1 = new HTuple(hv_X1);
-            DistanceX1 = hv_distanceX1;
+            DistanceX1 = hv_distanceX1 * 0.0069;
 
             //显示
             DispImage(ho_Image);
@@ -832,8 +819,8 @@ namespace HalconAlgorithm
             hv_position_degree.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
-                hv_position_degree = 2 * ((((((5.325 - hv_X1)).TuplePow(
-                    2)) + (((6.788 - hv_Y1)).TuplePow(2)))).TupleSqrt());
+                hv_position_degree = 2 * ((((((5.325 - (hv_X1*0.0069))).TuplePow(
+                    2)) + (((6.788 - (hv_Y1*0.0069))).TuplePow(2)))).TupleSqrt());
             }
             //计算运行时间
             hv_StopTime.Dispose();
@@ -841,7 +828,7 @@ namespace HalconAlgorithm
             //输出结果
             hv_CircleRadius.Dispose();
             hv_CircleRadius = new HTuple(hv_FitCircleCenterRadius);
-            Radius = hv_CircleRadius*2;
+            Radius = hv_CircleRadius*2*0.0069;
             hv_PositionDegree.Dispose();
             hv_PositionDegree = new HTuple(hv_position_degree);
             PositionDegree = hv_PositionDegree;
@@ -851,8 +838,8 @@ namespace HalconAlgorithm
                 hv_RunTime = (hv_StopTime - hv_StartTime) * 1000;
                 RunTime = hv_RunTime;
             }
-            DistanceX1 = hv_X1;
-            DistanceY1 = hv_Y1;
+            DistanceX1 = hv_X1 * 0.0069;
+            DistanceY1 = hv_Y1 * 0.0069;
 
             DispImage(ho_Image);
             outWindow.SetColor("red");
@@ -1020,10 +1007,10 @@ namespace HalconAlgorithm
             }
             hv_distanceY1.Dispose();
             hv_distanceY1 = new HTuple(hv_Y1);
-            DistanceY1 = hv_distanceY1;
+            DistanceY1 = hv_distanceY1 * 0.0069;
             hv_distanceL1L2.Dispose();
             hv_distanceL1L2 = new HTuple(hv_L1_L2);
-            DistanceL1L2 = hv_distanceL1L2;
+            DistanceL1L2 = hv_distanceL1L2 * 0.0069;
 
             DispImage(ho_Image);
             outWindow.SetColor("red");
@@ -1135,7 +1122,7 @@ namespace HalconAlgorithm
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
                 hv_distanceY = ((hv_Y1 + hv_Y2) + hv_Y3) / 3;
-                DistanceY = hv_distanceY;
+                DistanceY = hv_distanceY * 0.0069;
             }
 
             DispImage(ho_Image);
@@ -1175,7 +1162,9 @@ namespace HalconAlgorithm
             hv_runtime.Dispose();
             hv_distanceY.Dispose();
         }
+        #endregion
 
+        //抓取底部边缘
         private static void gen_buttom_edge(HObject ho_Image, HTuple hv_CenterRow, HTuple hv_CenterCol,
     HTuple hv_BaseRectDistRow, HTuple hv_BaseRectDistCol, HTuple hv_BasePhi, HTuple hv_ImageWidth,
     HTuple hv_ImageHeight, HTuple hv_RotatePhi, HTuple hv_RectBasePhi, HTuple hv_MinCircleColumn,
@@ -1333,6 +1322,7 @@ namespace HalconAlgorithm
             return;
         }
 
+        //获取圆边缘
         private static void gen_Edge_Circle(HObject ho_Image, out HObject ho_Circle, HTuple hv_CenterRow,
             HTuple hv_CenterCol, HTuple hv_BasePhi, HTuple hv_ImageWidth, HTuple hv_ImageHeight,
             HTuple hv_RotatePhi, HTuple hv_BaseRectDist, out HTuple hv_LeftTopRowEdge, out HTuple hv_LeftTopColumnEdge,
@@ -1542,6 +1532,7 @@ namespace HalconAlgorithm
             return;
         }
 
+        //抓取右侧边缘
         private static void gen_right_edge(HObject ho_Image, HTuple hv_CenterRow, HTuple hv_CenterColumn,
             HTuple hv_BaseRectDistRow, HTuple hv_BaseRectDistColumn, HTuple hv_MaxCircleColumn,
             HTuple hv_BasePhi, HTuple hv_ImageWidth, HTuple hv_ImageHeight, HTuple hv_RotatePhi,
@@ -1675,6 +1666,7 @@ namespace HalconAlgorithm
             return;
         }
 
+        //获取两圆信息
         private static void gen_TwoCircle_info(HObject ho_Image, out HTuple hv_MaxCircleRow, out HTuple hv_MaxCircleColumn,
             out HTuple hv_MaxCircleRadius, out HTuple hv_MinCircleRow, out HTuple hv_MinCircleColumn,
             out HTuple hv_MinCircleRadius, out HTuple hv_TwoCirclePhi)
@@ -1726,6 +1718,7 @@ namespace HalconAlgorithm
             return;
         }
 
+        //测量项10：获取L1、L2距离
         private static void gen_L1L2_Measure10(HObject ho_Image, HTuple hv_CenterRow, HTuple hv_CenterColumn,
     HTuple hv_MinCircleRadius, HTuple hv_BasePhi, HTuple hv_Width, HTuple hv_Height,
     out HTuple hv_RightCircleRowEdge1, out HTuple hv_RightCircleColumnEdge1, out HTuple hv_LeftCircleRowEdge1,
@@ -1917,6 +1910,7 @@ namespace HalconAlgorithm
             }
         }
 
+        //测量项34：获取L1、L2距离
         private static void gen_L1L2_Measure34(HObject ho_Image, HTuple hv_MinCircleRow, HTuple hv_MinCircleColumn,
     HTuple hv_MinCircleRadius, HTuple hv_TwoCirclePhi, HTuple hv_Width, HTuple hv_Height,
     out HTuple hv_RightCircleRowEdge1, out HTuple hv_RightCircleColumnEdge1, out HTuple hv_LeftCircleRowEdge1,
@@ -2072,6 +2066,7 @@ namespace HalconAlgorithm
             return;
         }
 
+        //测量项46：获取P1、P2、P3坐标
         private static void gen_p1p2p3_Measure46(HObject ho_Image, HTuple hv_MinCircleRow, HTuple hv_MinCircleColumn,
     HTuple hv_MinCircleRadius, HTuple hv_MaxCircleColumn, HTuple hv_TwoCirclePhi,
     HTuple hv_Width, HTuple hv_Height, out HTuple hv_P1Row, out HTuple hv_P1Col,
@@ -2250,6 +2245,7 @@ namespace HalconAlgorithm
             return;
         }
 
+        //初始化ListView
         public static void InitListView(ListView lv)
         {
             lv.GridLines = true;        //显示网格线
@@ -2260,7 +2256,7 @@ namespace HalconAlgorithm
 
             // 添加列表头
             ColumnHeader C1 = new ColumnHeader();
-            C1.Text = "Diameter";
+            C1.Text = "Diameter(mm)";
             C1.Width = 110;
             lv.Columns.Add(C1);
             ColumnHeader C2 = new ColumnHeader();
@@ -2268,23 +2264,24 @@ namespace HalconAlgorithm
             C2.Width = 120;
             lv.Columns.Add(C2);
             ColumnHeader C3 = new ColumnHeader();
-            C3.Text = "DistanceX1";
+            C3.Text = "DistanceX1(mm)";
             C3.Width = 110;
             lv.Columns.Add(C3);
             ColumnHeader C4 = new ColumnHeader();
-            C4.Text = "DistanceY1";
+            C4.Text = "DistanceY1(mm)";
             C4.Width = 110;
             lv.Columns.Add(C4);
             ColumnHeader C5 = new ColumnHeader();
-            C5.Text = "DistanceL1L2";
+            C5.Text = "DistanceL1L2(mm)";
             C5.Width = 110;
             lv.Columns.Add(C5);
             ColumnHeader C6 = new ColumnHeader();
-            C6.Text = "RunTime";
+            C6.Text = "RunTime(ms)";
              C6.Width = 110;
             lv.Columns.Add(C6);
         }
 
+        //向ListView中插入一行数据
         public static void insertLine(ListView lv, double RunTime, double Radius, double PositionDegree,
              double DistanceL1L2,  double DistanceX1, double DistanceY1)
         {
@@ -2298,6 +2295,7 @@ namespace HalconAlgorithm
   
         }
 
+        //清空ListView
         public static void ClearListView(ListView lv)
         {
             lv.Clear();
