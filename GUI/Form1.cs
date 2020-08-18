@@ -599,12 +599,8 @@ namespace MyWindow
 
         private void MyWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(bt_CloseCamera.Enabled==true)
-            {
-                bt_CloseCamera_Click(null, null);
-            }
+            bt_CloseCamera_Click(null, null);
         }
-
         //保存BMP图像文件
         private void bt_SaveBmp_Click(object sender, EventArgs e)
         {
@@ -772,14 +768,6 @@ namespace MyWindow
             else
             {
                 //进行在线测试
-                int nRet;
-                // 触发命令
-                nRet = m_MyCamera.MV_CC_SetCommandValue_NET("TriggerSoftware");
-                if (MyCamera.MV_OK != nRet)
-                {
-                    MessageBox.Show("Trigger Fail");
-                }
-
                 MyCamera.MVCC_INTVALUE stParam = new MyCamera.MVCC_INTVALUE();
                 int Ret = m_MyCamera.MV_CC_GetIntValue_NET("PayloadSize", ref stParam);
                 if (MyCamera.MV_OK != Ret)
