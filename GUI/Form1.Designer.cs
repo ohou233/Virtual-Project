@@ -53,11 +53,10 @@
             this.bt_StartTest = new System.Windows.Forms.Button();
             this.bt_StopTest = new System.Windows.Forms.Button();
             this.gb_measurement = new System.Windows.Forms.GroupBox();
-            this.rbt_Measure46 = new System.Windows.Forms.RadioButton();
-            this.rbt_Measure34 = new System.Windows.Forms.RadioButton();
-            this.rbt_Measure33 = new System.Windows.Forms.RadioButton();
-            this.rbt_Measure10 = new System.Windows.Forms.RadioButton();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.rbt_Measure9 = new System.Windows.Forms.RadioButton();
+            this.rbt_Measure18C = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.bt_ClearData = new System.Windows.Forms.Button();
             this.bt_SaveCSV = new System.Windows.Forms.Button();
@@ -377,11 +376,10 @@
             // 
             // gb_measurement
             // 
-            this.gb_measurement.Controls.Add(this.rbt_Measure46);
-            this.gb_measurement.Controls.Add(this.rbt_Measure34);
-            this.gb_measurement.Controls.Add(this.rbt_Measure33);
-            this.gb_measurement.Controls.Add(this.rbt_Measure10);
+            this.gb_measurement.Controls.Add(this.label2);
+            this.gb_measurement.Controls.Add(this.label1);
             this.gb_measurement.Controls.Add(this.rbt_Measure9);
+            this.gb_measurement.Controls.Add(this.rbt_Measure18C);
             this.gb_measurement.Font = new System.Drawing.Font("宋体", 12F);
             this.gb_measurement.Location = new System.Drawing.Point(14, 127);
             this.gb_measurement.Margin = new System.Windows.Forms.Padding(2);
@@ -391,81 +389,52 @@
             this.gb_measurement.TabIndex = 6;
             this.gb_measurement.TabStop = false;
             this.gb_measurement.Text = "测量项";
+            this.gb_measurement.Enter += new System.EventHandler(this.gb_measurement_Enter);
             // 
-            // rbt_Measure46
+            // label2
             // 
-            this.rbt_Measure46.AutoSize = true;
-            this.rbt_Measure46.Enabled = false;
-            this.rbt_Measure46.Font = new System.Drawing.Font("宋体", 10F);
-            this.rbt_Measure46.Location = new System.Drawing.Point(82, 48);
-            this.rbt_Measure46.Margin = new System.Windows.Forms.Padding(2);
-            this.rbt_Measure46.Name = "rbt_Measure46";
-            this.rbt_Measure46.Size = new System.Drawing.Size(67, 18);
-            this.rbt_Measure46.TabIndex = 4;
-            this.rbt_Measure46.TabStop = true;
-            this.rbt_Measure46.Text = "FAI-46";
-            this.rbt_Measure46.UseVisualStyleBackColor = true;
-            this.rbt_Measure46.CheckedChanged += new System.EventHandler(this.rbt_Measure46_CheckedChanged);
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(109, 25);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(56, 16);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "2D项：";
             // 
-            // rbt_Measure34
+            // label1
             // 
-            this.rbt_Measure34.AutoSize = true;
-            this.rbt_Measure34.Enabled = false;
-            this.rbt_Measure34.Font = new System.Drawing.Font("宋体", 10F);
-            this.rbt_Measure34.Location = new System.Drawing.Point(14, 48);
-            this.rbt_Measure34.Margin = new System.Windows.Forms.Padding(2);
-            this.rbt_Measure34.Name = "rbt_Measure34";
-            this.rbt_Measure34.Size = new System.Drawing.Size(67, 18);
-            this.rbt_Measure34.TabIndex = 3;
-            this.rbt_Measure34.TabStop = true;
-            this.rbt_Measure34.Text = "FAI-34";
-            this.rbt_Measure34.UseVisualStyleBackColor = true;
-            this.rbt_Measure34.CheckedChanged += new System.EventHandler(this.rbt_Measure34_CheckedChanged);
-            // 
-            // rbt_Measure33
-            // 
-            this.rbt_Measure33.AutoSize = true;
-            this.rbt_Measure33.Enabled = false;
-            this.rbt_Measure33.Font = new System.Drawing.Font("宋体", 10F);
-            this.rbt_Measure33.Location = new System.Drawing.Point(152, 19);
-            this.rbt_Measure33.Margin = new System.Windows.Forms.Padding(2);
-            this.rbt_Measure33.Name = "rbt_Measure33";
-            this.rbt_Measure33.Size = new System.Drawing.Size(60, 18);
-            this.rbt_Measure33.TabIndex = 2;
-            this.rbt_Measure33.TabStop = true;
-            this.rbt_Measure33.Text = "FAI33";
-            this.rbt_Measure33.UseVisualStyleBackColor = true;
-            this.rbt_Measure33.CheckedChanged += new System.EventHandler(this.rbt_Measure33_CheckedChanged);
-            // 
-            // rbt_Measure10
-            // 
-            this.rbt_Measure10.AutoSize = true;
-            this.rbt_Measure10.Enabled = false;
-            this.rbt_Measure10.Font = new System.Drawing.Font("宋体", 10F);
-            this.rbt_Measure10.Location = new System.Drawing.Point(82, 19);
-            this.rbt_Measure10.Margin = new System.Windows.Forms.Padding(2);
-            this.rbt_Measure10.Name = "rbt_Measure10";
-            this.rbt_Measure10.Size = new System.Drawing.Size(67, 18);
-            this.rbt_Measure10.TabIndex = 1;
-            this.rbt_Measure10.TabStop = true;
-            this.rbt_Measure10.Text = "FAI-10";
-            this.rbt_Measure10.UseVisualStyleBackColor = true;
-            this.rbt_Measure10.CheckedChanged += new System.EventHandler(this.rbt_Measure10_CheckedChanged);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 25);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(56, 16);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "3D项：";
             // 
             // rbt_Measure9
             // 
             this.rbt_Measure9.AutoSize = true;
             this.rbt_Measure9.Enabled = false;
             this.rbt_Measure9.Font = new System.Drawing.Font("宋体", 10F);
-            this.rbt_Measure9.Location = new System.Drawing.Point(14, 19);
+            this.rbt_Measure9.Location = new System.Drawing.Point(134, 50);
             this.rbt_Measure9.Margin = new System.Windows.Forms.Padding(2);
             this.rbt_Measure9.Name = "rbt_Measure9";
             this.rbt_Measure9.Size = new System.Drawing.Size(60, 18);
-            this.rbt_Measure9.TabIndex = 0;
-            this.rbt_Measure9.TabStop = true;
+            this.rbt_Measure9.TabIndex = 1;
             this.rbt_Measure9.Text = "FAI-9";
             this.rbt_Measure9.UseVisualStyleBackColor = true;
             this.rbt_Measure9.CheckedChanged += new System.EventHandler(this.rbt_Measure9_CheckedChanged);
+            // 
+            // rbt_Measure18C
+            // 
+            this.rbt_Measure18C.AutoSize = true;
+            this.rbt_Measure18C.Font = new System.Drawing.Font("宋体", 10F);
+            this.rbt_Measure18C.Location = new System.Drawing.Point(31, 50);
+            this.rbt_Measure18C.Margin = new System.Windows.Forms.Padding(2);
+            this.rbt_Measure18C.Name = "rbt_Measure18C";
+            this.rbt_Measure18C.Size = new System.Drawing.Size(74, 18);
+            this.rbt_Measure18C.TabIndex = 0;
+            this.rbt_Measure18C.Text = "FAI-18C";
+            this.rbt_Measure18C.UseVisualStyleBackColor = true;
+            this.rbt_Measure18C.CheckedChanged += new System.EventHandler(this.rbt_Measure18C_CheckedChanged);
             // 
             // groupBox3
             // 
@@ -473,7 +442,7 @@
             this.groupBox3.Controls.Add(this.bt_SaveCSV);
             this.groupBox3.Controls.Add(this.bt_SaveBmp);
             this.groupBox3.Font = new System.Drawing.Font("宋体", 12F);
-            this.groupBox3.Location = new System.Drawing.Point(243, 26);
+            this.groupBox3.Location = new System.Drawing.Point(250, 142);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(230, 149);
             this.groupBox3.TabIndex = 5;
@@ -628,19 +597,18 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button bt_SaveBmp;
         private System.Windows.Forms.GroupBox gb_measurement;
-        private System.Windows.Forms.RadioButton rbt_Measure33;
-        private System.Windows.Forms.RadioButton rbt_Measure10;
-        private System.Windows.Forms.RadioButton rbt_Measure9;
         private System.Windows.Forms.Button bt_StartTest;
         private System.Windows.Forms.RadioButton rbt_outLineMode;
         private System.Windows.Forms.RadioButton rbt_inLineMode;
-        private System.Windows.Forms.RadioButton rbt_Measure46;
-        private System.Windows.Forms.RadioButton rbt_Measure34;
         private System.Windows.Forms.Button bt_StopTest;
         private System.Windows.Forms.GroupBox gb_Test;
         private System.Windows.Forms.Button bt_SaveCSV;
         private System.Windows.Forms.Button bt_ClearData;
         private System.Windows.Forms.ComboBox cb_DeviceList;
+        private System.Windows.Forms.RadioButton rbt_Measure9;
+        private System.Windows.Forms.RadioButton rbt_Measure18C;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hdevelop file_version="1.2" halcon_version="20.05.0.0">
+<hdevelop file_version="1.2" halcon_version="19.11.0.0">
 <procedure name="main">
 <interface/>
 <body>
-<l>list_image_files ('C:/Users/iamxb/Desktop/virtual_project/Data/BackLight', 'bmp', [], ImageFiles)</l>
+<l>list_image_files ('../../Data/BackLight', 'bmp', [], ImageFiles)</l>
 <l>for Index := 0 to |ImageFiles|-1 by 1</l>
 <l>    read_image (Image, ImageFiles[Index])</l>
 <l>    get_image_size (Image, Width, Height)   </l>

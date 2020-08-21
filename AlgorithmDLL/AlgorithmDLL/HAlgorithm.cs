@@ -358,17 +358,8 @@ namespace HalconAlgorithm
                     case 9:
                         Measure_9(image, out Radius, out PositionDegree, out RunTime, out DistanceX1, out DistanceY1);
                         break;
-                    case 10:
-                        Measure_10(image, out DistanceL1L2, out DistanceX1, out RunTime);
-                        break;
-                    case 33:
-                        Measure_33(image, out Radius, out PositionDegree, out DistanceX1, out DistanceY1, out RunTime);
-                        break;
-                    case 34:
-                        Measure_34(image, out RunTime, out DistanceL1L2, out DistanceY1);
-                        break;
-                    case 46:
-                        Measure_46(image, out RunTime, out DistanceY1);
+                    case 18:
+                        Measure_18(image);
                         break;
                     default:
                         break;
@@ -400,17 +391,8 @@ namespace HalconAlgorithm
                 case 9:
                     Measure_9(image, out Radius, out PositionDegree, out RunTime, out DistanceX1, out DistanceY1);
                     break;
-                case 10:
-                    Measure_10(image, out DistanceL1L2, out DistanceX1, out RunTime);
-                    break;
-                case 33:
-                    Measure_33(image, out Radius, out PositionDegree, out DistanceX1, out DistanceY1, out RunTime);
-                    break;
-                case 34:
-                    Measure_34(image, out RunTime, out DistanceL1L2, out DistanceY1);
-                    break;
-                case 46:
-                    Measure_46(image, out RunTime, out DistanceY1);
+                case 18:
+                    Measure_18(image);
                     break;
                 default:
                     break;
@@ -426,6 +408,11 @@ namespace HalconAlgorithm
         public static void Measure_9(HObject ho_Image, out double CirclrRadius, out double PositionDegree, out double RunTime,
             out double DistanceX1, out double DistanceY1)
         {
+            CirclrRadius = -1;
+            PositionDegree = -1;
+            RunTime = -1;
+            DistanceX1 = -1;
+            DistanceY1 = -1;
             // Local iconic variables 
             HObject ho_BigCircle;
             // Local control variables 
@@ -454,74 +441,92 @@ namespace HalconAlgorithm
             hv_StartTime.Dispose();
             HOperatorSet.CountSeconds(out hv_StartTime);
             hv_MaxCircleRow.Dispose(); hv_MaxCircleColumn.Dispose(); hv_MaxCircleRadius.Dispose(); hv_MinCircleRow.Dispose(); hv_MinCircleColumn.Dispose(); hv_MinCircleRadius.Dispose(); hv_TwoCirclePhi.Dispose();
-            gen_TwoCircle_info(ho_Image, out hv_MaxCircleRow, out hv_MaxCircleColumn, out hv_MaxCircleRadius,
-                out hv_MinCircleRow, out hv_MinCircleColumn, out hv_MinCircleRadius, out hv_TwoCirclePhi);
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
+            try
             {
-                ho_BigCircle.Dispose(); hv_LeftTopRowEdge.Dispose(); hv_LeftTopColumnEdge.Dispose(); hv_RightButtomRowEdge.Dispose(); hv_RightButtomColumnEdge.Dispose(); hv_LeftButtomRowEdge.Dispose(); hv_LeftButtomColumnEdge.Dispose(); hv_RightTopRowEdge.Dispose(); hv_RightTopColumnEdge.Dispose(); hv_FitCircleCenterRow.Dispose(); hv_FitCircleCenterCol.Dispose(); hv_FitCircleCenterRadius.Dispose();
-                gen_Edge_Circle(ho_Image, out ho_BigCircle, hv_MaxCircleRow, hv_MaxCircleColumn,
-                    hv_TwoCirclePhi, hv_Width, hv_Height, (new HTuple(45)).TupleRad(), hv_MaxCircleRadius,
-                    out hv_LeftTopRowEdge, out hv_LeftTopColumnEdge, out hv_RightButtomRowEdge,
-                    out hv_RightButtomColumnEdge, out hv_LeftButtomRowEdge, out hv_LeftButtomColumnEdge,
-                    out hv_RightTopRowEdge, out hv_RightTopColumnEdge, out hv_FitCircleCenterRow,
-                    out hv_FitCircleCenterCol, out hv_FitCircleCenterRadius);
-            }
-            //定位底部测量矩形
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_ButtomRowEdge1.Dispose(); hv_ButtomColumnEdge1.Dispose(); hv_ButtomRowEdge2.Dispose(); hv_ButtomColumnEdge2.Dispose();
-                gen_buttom_edge(ho_Image, hv_MaxCircleRow, hv_MaxCircleColumn, (hv_MaxCircleRadius * 3) / 2,
-                    (hv_MaxCircleRadius * 3) / 4, hv_TwoCirclePhi, hv_Width, hv_Height, (new HTuple(90)).TupleRad()
-                    , (new HTuple(90)).TupleRad(), hv_MinCircleColumn, hv_MaxCircleColumn, out hv_ButtomRowEdge1,
-                    out hv_ButtomColumnEdge1, out hv_ButtomRowEdge2, out hv_ButtomColumnEdge2);
-            }
-            //定位右侧测量矩形
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_RightRowEdge1.Dispose(); hv_RightColumnEdge1.Dispose(); hv_RightRowEdge2.Dispose(); hv_RightColumnEdge2.Dispose();
-                gen_right_edge(ho_Image, hv_MinCircleRow, hv_MinCircleColumn, (hv_MinCircleRadius * 3) / 4,
-                    (hv_MinCircleRadius * 6) / 5, hv_MaxCircleColumn, hv_TwoCirclePhi, hv_Width,
-                    hv_Height, (new HTuple(180)).TupleRad(), 0, out hv_RightRowEdge1, out hv_RightColumnEdge1,
-                    out hv_RightRowEdge2, out hv_RightColumnEdge2);
-            }
-            //计算X1
-            hv_X1.Dispose();
-            HOperatorSet.DistancePl(hv_FitCircleCenterRow, hv_FitCircleCenterCol, hv_RightRowEdge1,
-                hv_RightColumnEdge1, hv_RightRowEdge2, hv_RightColumnEdge2, out hv_X1);
-            //计算Y1
-            hv_Y1.Dispose();
-            HOperatorSet.DistancePl(hv_FitCircleCenterRow, hv_FitCircleCenterCol, hv_ButtomRowEdge1,
-                hv_ButtomColumnEdge1, hv_ButtomRowEdge2, hv_ButtomColumnEdge2, out hv_Y1);
-            //计算运行时间
-            hv_StopTime.Dispose();
-            HOperatorSet.CountSeconds(out hv_StopTime);
-            hv_runtime.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_runtime = (hv_StopTime - hv_StartTime) * 1000;
-                RunTime = hv_runtime;
-            }
-            //输出结果
-            hv_CircleRadius.Dispose();
-            hv_CircleRadius = new HTuple(hv_FitCircleCenterRadius);
-            CirclrRadius = hv_CircleRadius*2*0.0069;
-            hv_PositionDegree.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_PositionDegree = 2 * (((((((hv_X1*0.0069) - 19.605)).TuplePow(
-                    2)) + ((((hv_Y1*0.0069) - 6.788)).TuplePow(2)))).TupleSqrt());
-            }
-            PositionDegree = hv_PositionDegree;
-            DistanceX1 = hv_X1*0.0069;
-            DistanceY1 = hv_Y1*0.0069;
+                gen_TwoCircle_info(ho_Image, out hv_MaxCircleRow, out hv_MaxCircleColumn, out hv_MaxCircleRadius,
+    out hv_MinCircleRow, out hv_MinCircleColumn, out hv_MinCircleRadius, out hv_TwoCirclePhi);
+                using (HDevDisposeHelper dh = new HDevDisposeHelper())
+                {
+                    ho_BigCircle.Dispose(); hv_LeftTopRowEdge.Dispose(); hv_LeftTopColumnEdge.Dispose(); hv_RightButtomRowEdge.Dispose(); hv_RightButtomColumnEdge.Dispose(); hv_LeftButtomRowEdge.Dispose(); hv_LeftButtomColumnEdge.Dispose(); hv_RightTopRowEdge.Dispose(); hv_RightTopColumnEdge.Dispose(); hv_FitCircleCenterRow.Dispose(); hv_FitCircleCenterCol.Dispose(); hv_FitCircleCenterRadius.Dispose();
+                    gen_Edge_Circle(ho_Image, out ho_BigCircle, hv_MaxCircleRow, hv_MaxCircleColumn,
+                        hv_TwoCirclePhi, hv_Width, hv_Height, (new HTuple(45)).TupleRad(), hv_MaxCircleRadius,
+                        out hv_LeftTopRowEdge, out hv_LeftTopColumnEdge, out hv_RightButtomRowEdge,
+                        out hv_RightButtomColumnEdge, out hv_LeftButtomRowEdge, out hv_LeftButtomColumnEdge,
+                        out hv_RightTopRowEdge, out hv_RightTopColumnEdge, out hv_FitCircleCenterRow,
+                        out hv_FitCircleCenterCol, out hv_FitCircleCenterRadius);
+                }
+                //定位底部测量矩形
+                using (HDevDisposeHelper dh = new HDevDisposeHelper())
+                {
+                    hv_ButtomRowEdge1.Dispose(); hv_ButtomColumnEdge1.Dispose(); hv_ButtomRowEdge2.Dispose(); hv_ButtomColumnEdge2.Dispose();
+                    gen_buttom_edge(ho_Image, hv_MaxCircleRow, hv_MaxCircleColumn, (hv_MaxCircleRadius * 3) / 2,
+                        (hv_MaxCircleRadius * 3) / 4, hv_TwoCirclePhi, hv_Width, hv_Height, (new HTuple(90)).TupleRad()
+                        , (new HTuple(90)).TupleRad(), hv_MinCircleColumn, hv_MaxCircleColumn, out hv_ButtomRowEdge1,
+                        out hv_ButtomColumnEdge1, out hv_ButtomRowEdge2, out hv_ButtomColumnEdge2);
+                }
+                //定位右侧测量矩形
+                using (HDevDisposeHelper dh = new HDevDisposeHelper())
+                {
+                    hv_RightRowEdge1.Dispose(); hv_RightColumnEdge1.Dispose(); hv_RightRowEdge2.Dispose(); hv_RightColumnEdge2.Dispose();
+                    gen_right_edge(ho_Image, hv_MinCircleRow, hv_MinCircleColumn, (hv_MinCircleRadius * 3) / 4,
+                        (hv_MinCircleRadius * 6) / 5, hv_MaxCircleColumn, hv_TwoCirclePhi, hv_Width,
+                        hv_Height, (new HTuple(180)).TupleRad(), 0, out hv_RightRowEdge1, out hv_RightColumnEdge1,
+                        out hv_RightRowEdge2, out hv_RightColumnEdge2);
+                }
+                //计算X1
+                hv_X1.Dispose();
+                HOperatorSet.DistancePl(hv_FitCircleCenterRow, hv_FitCircleCenterCol, hv_RightRowEdge1,
+                    hv_RightColumnEdge1, hv_RightRowEdge2, hv_RightColumnEdge2, out hv_X1);
+                //计算Y1
+                hv_Y1.Dispose();
+                HOperatorSet.DistancePl(hv_FitCircleCenterRow, hv_FitCircleCenterCol, hv_ButtomRowEdge1,
+                    hv_ButtomColumnEdge1, hv_ButtomRowEdge2, hv_ButtomColumnEdge2, out hv_Y1);
+                //计算运行时间
+                hv_StopTime.Dispose();
+                HOperatorSet.CountSeconds(out hv_StopTime);
+                hv_runtime.Dispose();
+                using (HDevDisposeHelper dh = new HDevDisposeHelper())
+                {
+                    hv_runtime = (hv_StopTime - hv_StartTime) * 1000;
+                    RunTime = hv_runtime;
+                }
+                //输出结果
+                hv_CircleRadius.Dispose();
+                hv_CircleRadius = new HTuple(hv_FitCircleCenterRadius);
+                CirclrRadius = hv_CircleRadius * 2 * 0.0069;
+                hv_PositionDegree.Dispose();
+                using (HDevDisposeHelper dh = new HDevDisposeHelper())
+                {
+                    hv_PositionDegree = 2 * (((((((hv_X1 * 0.0069) - 19.605)).TuplePow(
+                        2)) + ((((hv_Y1 * 0.0069) - 6.788)).TuplePow(2)))).TupleSqrt());
+                }
+                PositionDegree = hv_PositionDegree;
+                DistanceX1 = hv_X1 * 0.0069;
+                DistanceY1 = hv_Y1 * 0.0069;
 
-            DispImage(ho_Image);
-            outWindow.SetColor("red");
-            outWindow.SetLineWidth(2);
-            outWindow.SetDraw("margin");
-            outWindow.DispCircle(hv_FitCircleCenterRow, hv_FitCircleCenterCol, hv_FitCircleCenterRadius);
-            outWindow.DispLine(hv_ButtomRowEdge1, hv_ButtomColumnEdge1, hv_ButtomRowEdge2, hv_ButtomColumnEdge2);
-            outWindow.DispLine(hv_RightRowEdge1, hv_RightColumnEdge1, hv_RightRowEdge2, hv_RightColumnEdge2);
+                DispImage(ho_Image);
+                outWindow.SetColor("red");
+                outWindow.SetLineWidth(2);
+                outWindow.SetDraw("margin");
+                outWindow.DispCircle(hv_FitCircleCenterRow, hv_FitCircleCenterCol, hv_FitCircleCenterRadius);
+                outWindow.DispLine(hv_ButtomRowEdge1, hv_ButtomColumnEdge1, hv_ButtomRowEdge2, hv_ButtomColumnEdge2);
+                outWindow.DispLine(hv_RightRowEdge1, hv_RightColumnEdge1, hv_RightRowEdge2, hv_RightColumnEdge2);
+
+                double RightCenterRow = (hv_RightRowEdge1 + hv_RightRowEdge2) / 2;
+                double RightCenterCol = (hv_RightColumnEdge1 + hv_RightColumnEdge2) / 2;
+                double ButtomCenterRow = (hv_ButtomRowEdge1 + hv_ButtomRowEdge2) / 2;
+                double ButtomCenterCol = (hv_ButtomColumnEdge1 + hv_ButtomColumnEdge2) / 2;
+                outWindow.DispArrow(hv_FitCircleCenterRow, hv_FitCircleCenterCol, (HTuple)RightCenterRow, (HTuple)RightCenterCol, (HTuple)6);
+                outWindow.DispArrow(hv_FitCircleCenterRow, hv_FitCircleCenterCol, (HTuple)ButtomCenterRow, (HTuple)ButtomCenterCol, (HTuple)6);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("请正确放置工件");
+                return;
+            }
+
+           
 
             ho_Image.Dispose();
             ho_BigCircle.Dispose();
@@ -563,605 +568,610 @@ namespace HalconAlgorithm
             hv_PositionDegree.Dispose();
         }
 
-        public static void Measure_10(HObject ho_Image, out double DistanceL1L2, out double DistanceX1, out double RunTime)
+        public static void Measure_18(HObject ho_Image)
         {
-            DistanceL1L2 = -1;
-            DistanceX1 = -1;
-            RunTime = -1;
-            // Local control variables 
-            HTuple hv_Width = new HTuple(), hv_Height = new HTuple();
-            HTuple hv_StartTime = new HTuple(), hv_MaxCircleRow = new HTuple();
-            HTuple hv_MaxCircleColumn = new HTuple(), hv_MaxCircleRadius = new HTuple();
-            HTuple hv_MinCircleRow = new HTuple(), hv_MinCircleColumn = new HTuple();
-            HTuple hv_MinCircleRadius = new HTuple(), hv_TwoCirclePhi = new HTuple();
-            HTuple hv_RightCircleRowEdge1 = new HTuple(), hv_RightCircleColumnEdge1 = new HTuple();
-            HTuple hv_LeftCircleRowEdge1 = new HTuple(), hv_LeftCircleColumnEdge1 = new HTuple();
-            HTuple hv_RightCircleRowEdge2 = new HTuple(), hv_RightCircleColumnEdge2 = new HTuple();
-            HTuple hv_LeftCircleRowEdge2 = new HTuple(), hv_LeftCircleColumnEdge2 = new HTuple();
-            HTuple hv_RightCenterRow = new HTuple(), hv_RightCenterCol = new HTuple();
-            HTuple hv_LeftCenterRow = new HTuple(), hv_LeftCenterCol = new HTuple();
-            HTuple hv_L1_L2 = new HTuple(), hv_RightRowEdge1 = new HTuple();
-            HTuple hv_RightColumnEdge1 = new HTuple(), hv_RightRowEdge2 = new HTuple();
-            HTuple hv_RightColumnEdge2 = new HTuple(), hv_L3CenterRow = new HTuple();
-            HTuple hv_L3CenterCol = new HTuple(), hv_L3StartRow = new HTuple();
-            HTuple hv_L3StartCol = new HTuple(), hv_L3EndRow = new HTuple();
-            HTuple hv_L3EndCol = new HTuple(), hv_X1 = new HTuple();
-            HTuple hv_StopTime = new HTuple(), hv_runtime = new HTuple();
-            HTuple hv_distanceL1L2 = new HTuple(), hv_distanceX1 = new HTuple();
-            // Initialize local and output iconic variables 
-            hv_Width.Dispose(); hv_Height.Dispose();
-            HOperatorSet.GetImageSize(ho_Image, out hv_Width, out hv_Height);
-            hv_StartTime.Dispose();
-            HOperatorSet.CountSeconds(out hv_StartTime);
-            hv_MaxCircleRow.Dispose(); hv_MaxCircleColumn.Dispose(); hv_MaxCircleRadius.Dispose(); hv_MinCircleRow.Dispose(); hv_MinCircleColumn.Dispose(); hv_MinCircleRadius.Dispose(); hv_TwoCirclePhi.Dispose();
-            gen_TwoCircle_info(ho_Image, out hv_MaxCircleRow, out hv_MaxCircleColumn, out hv_MaxCircleRadius,
-                out hv_MinCircleRow, out hv_MinCircleColumn, out hv_MinCircleRadius, out hv_TwoCirclePhi);
-            hv_RightCircleRowEdge1.Dispose(); hv_RightCircleColumnEdge1.Dispose(); hv_LeftCircleRowEdge1.Dispose(); hv_LeftCircleColumnEdge1.Dispose(); hv_RightCircleRowEdge2.Dispose(); hv_RightCircleColumnEdge2.Dispose(); hv_LeftCircleRowEdge2.Dispose(); hv_LeftCircleColumnEdge2.Dispose();
-            gen_L1L2_Measure10(ho_Image, hv_MinCircleRow, hv_MinCircleColumn, hv_MinCircleRadius,
-                hv_TwoCirclePhi, hv_Width, hv_Height, out hv_RightCircleRowEdge1, out hv_RightCircleColumnEdge1,
-                out hv_LeftCircleRowEdge1, out hv_LeftCircleColumnEdge1, out hv_RightCircleRowEdge2,
-                out hv_RightCircleColumnEdge2, out hv_LeftCircleRowEdge2, out hv_LeftCircleColumnEdge2);
-            //分别计算L1、L2的中心坐标
-            hv_RightCenterRow.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_RightCenterRow = (hv_RightCircleRowEdge1 + hv_RightCircleRowEdge2) / 2;
-            }
-            hv_RightCenterCol.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_RightCenterCol = (hv_RightCircleColumnEdge1 + hv_RightCircleColumnEdge2) / 2;
-            }
-            hv_LeftCenterRow.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_LeftCenterRow = (hv_LeftCircleRowEdge1 + hv_LeftCircleRowEdge2) / 2;
-            }
-            hv_LeftCenterCol.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_LeftCenterCol = (hv_LeftCircleColumnEdge1 + hv_LeftCircleColumnEdge2) / 2;
-            }
-            //显示并计算L1、L2之间距离
-            hv_L1_L2.Dispose();
-            HOperatorSet.DistancePp(hv_RightCenterRow, hv_RightCenterCol, hv_LeftCenterRow,
-                hv_LeftCenterCol, out hv_L1_L2);
-            //定位右侧测量矩形
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_RightRowEdge1.Dispose(); hv_RightColumnEdge1.Dispose(); hv_RightRowEdge2.Dispose(); hv_RightColumnEdge2.Dispose();
-                gen_right_edge(ho_Image, hv_MinCircleRow, hv_MinCircleColumn, (hv_MinCircleRadius * 3) / 4,
-                    (hv_MinCircleRadius * 5) / 4, hv_MaxCircleColumn, hv_TwoCirclePhi, hv_Width,
-                    hv_Height, (new HTuple(180)).TupleRad(), 0, out hv_RightRowEdge1, out hv_RightColumnEdge1,
-                    out hv_RightRowEdge2, out hv_RightColumnEdge2);
-            }
-            //计算L3中心坐标和起点、终点坐标
-            hv_L3CenterRow.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_L3CenterRow = (hv_RightCenterRow + hv_LeftCenterRow) / 2;
-            }
-            hv_L3CenterCol.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_L3CenterCol = (hv_RightCenterCol + hv_LeftCenterCol) / 2;
-            }
-            hv_L3StartRow.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_L3StartRow = (hv_RightCircleRowEdge1 + hv_LeftCircleRowEdge2) / 2;
-            }
-            hv_L3StartCol.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_L3StartCol = (hv_RightCircleColumnEdge1 + hv_LeftCircleColumnEdge2) / 2;
-            }
-            hv_L3EndRow.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_L3EndRow = (hv_RightCircleRowEdge2 + hv_LeftCircleRowEdge1) / 2;
-            }
-            hv_L3EndCol.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_L3EndCol = (hv_RightCircleColumnEdge2 + hv_LeftCircleColumnEdge1) / 2;
-            }
-            //计算X1
-            hv_X1.Dispose();
-            HOperatorSet.DistancePl(hv_L3CenterRow, hv_L3CenterCol, hv_RightRowEdge1, hv_RightColumnEdge1,
-                hv_RightRowEdge2, hv_RightColumnEdge2, out hv_X1);
-            //计算运行时间
-            hv_StopTime.Dispose();
-            HOperatorSet.CountSeconds(out hv_StopTime);
-            hv_runtime.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_runtime = (hv_StopTime - hv_StartTime) * 1000;
-                RunTime = hv_runtime;
-            }
-            //输出结果
-            hv_distanceL1L2.Dispose();
-            hv_distanceL1L2 = new HTuple(hv_L1_L2);
-            DistanceL1L2 = hv_distanceL1L2 * 0.0069;
-            hv_distanceX1.Dispose();
-            hv_distanceX1 = new HTuple(hv_X1);
-            DistanceX1 = hv_distanceX1 * 0.0069;
-
-            //显示
-            DispImage(ho_Image);
-            outWindow.SetColor("red");
-            outWindow.SetLineWidth(2);
-            outWindow.DispLine(hv_RightCenterRow, hv_RightCenterCol, hv_LeftCenterRow, hv_LeftCenterCol);
-            outWindow.DispLine(hv_L3StartRow, hv_L3StartCol, hv_L3EndRow, hv_L3EndCol);
-
-            ho_Image.Dispose();
-            hv_Width.Dispose();
-            hv_Height.Dispose();
-            hv_StartTime.Dispose();
-            hv_MaxCircleRow.Dispose();
-            hv_MaxCircleColumn.Dispose();
-            hv_MaxCircleRadius.Dispose();
-            hv_MinCircleRow.Dispose();
-            hv_MinCircleColumn.Dispose();
-            hv_MinCircleRadius.Dispose();
-            hv_TwoCirclePhi.Dispose();
-            hv_RightCircleRowEdge1.Dispose();
-            hv_RightCircleColumnEdge1.Dispose();
-            hv_LeftCircleRowEdge1.Dispose();
-            hv_LeftCircleColumnEdge1.Dispose();
-            hv_RightCircleRowEdge2.Dispose();
-            hv_RightCircleColumnEdge2.Dispose();
-            hv_LeftCircleRowEdge2.Dispose();
-            hv_LeftCircleColumnEdge2.Dispose();
-            hv_RightCenterRow.Dispose();
-            hv_RightCenterCol.Dispose();
-            hv_LeftCenterRow.Dispose();
-            hv_LeftCenterCol.Dispose();
-            hv_L1_L2.Dispose();
-            hv_RightRowEdge1.Dispose();
-            hv_RightColumnEdge1.Dispose();
-            hv_RightRowEdge2.Dispose();
-            hv_RightColumnEdge2.Dispose();
-            hv_L3CenterRow.Dispose();
-            hv_L3CenterCol.Dispose();
-            hv_L3StartRow.Dispose();
-            hv_L3StartCol.Dispose();
-            hv_L3EndRow.Dispose();
-            hv_L3EndCol.Dispose();
-            hv_X1.Dispose();
-            hv_StopTime.Dispose();
-            hv_runtime.Dispose();
-            hv_distanceL1L2.Dispose();
-            hv_distanceX1.Dispose();
+            
         }
 
-        public static void Measure_33(HObject ho_Image, out double Radius, out double PositionDegree, 
-            out double DistanceX1, out double DistanceY1, out double RunTime)
-        {
-            // Local iconic variables 
-            HObject ho_SmallCircle;
-            // Local control variables 
-            HTuple hv_Width = new HTuple(), hv_Height = new HTuple();
-            HTuple hv_StartTime = new HTuple(), hv_MaxCircleRow = new HTuple();
-            HTuple hv_MaxCircleColumn = new HTuple(), hv_MaxCircleRadius = new HTuple();
-            HTuple hv_MinCircleRow = new HTuple(), hv_MinCircleColumn = new HTuple();
-            HTuple hv_MinCircleRadius = new HTuple(), hv_TwoCirclePhi = new HTuple();
-            HTuple hv_LeftTopRowEdge = new HTuple(), hv_LeftTopColumnEdge = new HTuple();
-            HTuple hv_RightButtomRowEdge = new HTuple(), hv_RightButtomColumnEdge = new HTuple();
-            HTuple hv_LeftButtomRowEdge = new HTuple(), hv_LeftButtomColumnEdge = new HTuple();
-            HTuple hv_RightTopRowEdge = new HTuple(), hv_RightTopColumnEdge = new HTuple();
-            HTuple hv_FitCircleCenterRow = new HTuple(), hv_FitCircleCenterCol = new HTuple();
-            HTuple hv_FitCircleCenterRadius = new HTuple(), hv_ButtomRowEdge1 = new HTuple();
-            HTuple hv_ButtomColumnEdge1 = new HTuple(), hv_ButtomRowEdge2 = new HTuple();
-            HTuple hv_ButtomColumnEdge2 = new HTuple(), hv_RightRowEdge1 = new HTuple();
-            HTuple hv_RightColumnEdge1 = new HTuple(), hv_RightRowEdge2 = new HTuple();
-            HTuple hv_RightColumnEdge2 = new HTuple(), hv_X1 = new HTuple();
-            HTuple hv_Y1 = new HTuple(), hv_position_degree = new HTuple();
-            HTuple hv_StopTime = new HTuple(), hv_CircleRadius = new HTuple();
-            HTuple hv_PositionDegree = new HTuple(), hv_RunTime = new HTuple();
-            // Initialize local and output iconic variables 
-            HOperatorSet.GenEmptyObj(out ho_SmallCircle);
-            hv_Width.Dispose(); hv_Height.Dispose();
-            HOperatorSet.GetImageSize(ho_Image, out hv_Width, out hv_Height);
-            if (HDevWindowStack.IsOpen())
-            {
-                HOperatorSet.SetDraw(HDevWindowStack.GetActive(), "margin");
-            }
-            hv_StartTime.Dispose();
-            HOperatorSet.CountSeconds(out hv_StartTime);
-            hv_MaxCircleRow.Dispose(); hv_MaxCircleColumn.Dispose(); hv_MaxCircleRadius.Dispose(); hv_MinCircleRow.Dispose(); hv_MinCircleColumn.Dispose(); hv_MinCircleRadius.Dispose(); hv_TwoCirclePhi.Dispose();
-            gen_TwoCircle_info(ho_Image, out hv_MaxCircleRow, out hv_MaxCircleColumn, out hv_MaxCircleRadius,
-                out hv_MinCircleRow, out hv_MinCircleColumn, out hv_MinCircleRadius, out hv_TwoCirclePhi);
-            //生成基准矩形
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                ho_SmallCircle.Dispose(); hv_LeftTopRowEdge.Dispose(); hv_LeftTopColumnEdge.Dispose(); hv_RightButtomRowEdge.Dispose(); hv_RightButtomColumnEdge.Dispose(); hv_LeftButtomRowEdge.Dispose(); hv_LeftButtomColumnEdge.Dispose(); hv_RightTopRowEdge.Dispose(); hv_RightTopColumnEdge.Dispose(); hv_FitCircleCenterRow.Dispose(); hv_FitCircleCenterCol.Dispose(); hv_FitCircleCenterRadius.Dispose();
-                gen_Edge_Circle(ho_Image, out ho_SmallCircle, hv_MinCircleRow, hv_MinCircleColumn,
-                    hv_TwoCirclePhi, hv_Width, hv_Height, (new HTuple(45)).TupleRad(), hv_MinCircleRadius,
-                    out hv_LeftTopRowEdge, out hv_LeftTopColumnEdge, out hv_RightButtomRowEdge,
-                    out hv_RightButtomColumnEdge, out hv_LeftButtomRowEdge, out hv_LeftButtomColumnEdge,
-                    out hv_RightTopRowEdge, out hv_RightTopColumnEdge, out hv_FitCircleCenterRow,
-                    out hv_FitCircleCenterCol, out hv_FitCircleCenterRadius);
-            }
-            if (HDevWindowStack.IsOpen())
-            {
-                HOperatorSet.DispObj(ho_SmallCircle, HDevWindowStack.GetActive());
-            }
-            //定位底部测量矩形
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_ButtomRowEdge1.Dispose(); hv_ButtomColumnEdge1.Dispose(); hv_ButtomRowEdge2.Dispose(); hv_ButtomColumnEdge2.Dispose();
-                gen_buttom_edge(ho_Image, hv_MaxCircleRow, hv_MaxCircleColumn, (hv_MaxCircleRadius * 3) / 2,
-                    (hv_MaxCircleRadius * 3) / 4, hv_TwoCirclePhi, hv_Width, hv_Height, (new HTuple(90)).TupleRad()
-                    , (new HTuple(90)).TupleRad(), hv_MinCircleColumn, hv_MaxCircleColumn, out hv_ButtomRowEdge1,
-                    out hv_ButtomColumnEdge1, out hv_ButtomRowEdge2, out hv_ButtomColumnEdge2);
-            }
+        //public static void Measure_10(HObject ho_Image, out double DistanceL1L2, out double DistanceX1, out double RunTime)
+        //{
+        //    DistanceL1L2 = -1;
+        //    DistanceX1 = -1;
+        //    RunTime = -1;
+        //    // Local control variables 
+        //    HTuple hv_Width = new HTuple(), hv_Height = new HTuple();
+        //    HTuple hv_StartTime = new HTuple(), hv_MaxCircleRow = new HTuple();
+        //    HTuple hv_MaxCircleColumn = new HTuple(), hv_MaxCircleRadius = new HTuple();
+        //    HTuple hv_MinCircleRow = new HTuple(), hv_MinCircleColumn = new HTuple();
+        //    HTuple hv_MinCircleRadius = new HTuple(), hv_TwoCirclePhi = new HTuple();
+        //    HTuple hv_RightCircleRowEdge1 = new HTuple(), hv_RightCircleColumnEdge1 = new HTuple();
+        //    HTuple hv_LeftCircleRowEdge1 = new HTuple(), hv_LeftCircleColumnEdge1 = new HTuple();
+        //    HTuple hv_RightCircleRowEdge2 = new HTuple(), hv_RightCircleColumnEdge2 = new HTuple();
+        //    HTuple hv_LeftCircleRowEdge2 = new HTuple(), hv_LeftCircleColumnEdge2 = new HTuple();
+        //    HTuple hv_RightCenterRow = new HTuple(), hv_RightCenterCol = new HTuple();
+        //    HTuple hv_LeftCenterRow = new HTuple(), hv_LeftCenterCol = new HTuple();
+        //    HTuple hv_L1_L2 = new HTuple(), hv_RightRowEdge1 = new HTuple();
+        //    HTuple hv_RightColumnEdge1 = new HTuple(), hv_RightRowEdge2 = new HTuple();
+        //    HTuple hv_RightColumnEdge2 = new HTuple(), hv_L3CenterRow = new HTuple();
+        //    HTuple hv_L3CenterCol = new HTuple(), hv_L3StartRow = new HTuple();
+        //    HTuple hv_L3StartCol = new HTuple(), hv_L3EndRow = new HTuple();
+        //    HTuple hv_L3EndCol = new HTuple(), hv_X1 = new HTuple();
+        //    HTuple hv_StopTime = new HTuple(), hv_runtime = new HTuple();
+        //    HTuple hv_distanceL1L2 = new HTuple(), hv_distanceX1 = new HTuple();
+        //    // Initialize local and output iconic variables 
+        //    hv_Width.Dispose(); hv_Height.Dispose();
+        //    HOperatorSet.GetImageSize(ho_Image, out hv_Width, out hv_Height);
+        //    hv_StartTime.Dispose();
+        //    HOperatorSet.CountSeconds(out hv_StartTime);
+        //    hv_MaxCircleRow.Dispose(); hv_MaxCircleColumn.Dispose(); hv_MaxCircleRadius.Dispose(); hv_MinCircleRow.Dispose(); hv_MinCircleColumn.Dispose(); hv_MinCircleRadius.Dispose(); hv_TwoCirclePhi.Dispose();
+        //    gen_TwoCircle_info(ho_Image, out hv_MaxCircleRow, out hv_MaxCircleColumn, out hv_MaxCircleRadius,
+        //        out hv_MinCircleRow, out hv_MinCircleColumn, out hv_MinCircleRadius, out hv_TwoCirclePhi);
+        //    hv_RightCircleRowEdge1.Dispose(); hv_RightCircleColumnEdge1.Dispose(); hv_LeftCircleRowEdge1.Dispose(); hv_LeftCircleColumnEdge1.Dispose(); hv_RightCircleRowEdge2.Dispose(); hv_RightCircleColumnEdge2.Dispose(); hv_LeftCircleRowEdge2.Dispose(); hv_LeftCircleColumnEdge2.Dispose();
+        //    gen_L1L2_Measure10(ho_Image, hv_MinCircleRow, hv_MinCircleColumn, hv_MinCircleRadius,
+        //        hv_TwoCirclePhi, hv_Width, hv_Height, out hv_RightCircleRowEdge1, out hv_RightCircleColumnEdge1,
+        //        out hv_LeftCircleRowEdge1, out hv_LeftCircleColumnEdge1, out hv_RightCircleRowEdge2,
+        //        out hv_RightCircleColumnEdge2, out hv_LeftCircleRowEdge2, out hv_LeftCircleColumnEdge2);
+        //    //分别计算L1、L2的中心坐标
+        //    hv_RightCenterRow.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_RightCenterRow = (hv_RightCircleRowEdge1 + hv_RightCircleRowEdge2) / 2;
+        //    }
+        //    hv_RightCenterCol.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_RightCenterCol = (hv_RightCircleColumnEdge1 + hv_RightCircleColumnEdge2) / 2;
+        //    }
+        //    hv_LeftCenterRow.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_LeftCenterRow = (hv_LeftCircleRowEdge1 + hv_LeftCircleRowEdge2) / 2;
+        //    }
+        //    hv_LeftCenterCol.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_LeftCenterCol = (hv_LeftCircleColumnEdge1 + hv_LeftCircleColumnEdge2) / 2;
+        //    }
+        //    //显示并计算L1、L2之间距离
+        //    hv_L1_L2.Dispose();
+        //    HOperatorSet.DistancePp(hv_RightCenterRow, hv_RightCenterCol, hv_LeftCenterRow,
+        //        hv_LeftCenterCol, out hv_L1_L2);
+        //    //定位右侧测量矩形
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_RightRowEdge1.Dispose(); hv_RightColumnEdge1.Dispose(); hv_RightRowEdge2.Dispose(); hv_RightColumnEdge2.Dispose();
+        //        gen_right_edge(ho_Image, hv_MinCircleRow, hv_MinCircleColumn, (hv_MinCircleRadius * 3) / 4,
+        //            (hv_MinCircleRadius * 5) / 4, hv_MaxCircleColumn, hv_TwoCirclePhi, hv_Width,
+        //            hv_Height, (new HTuple(180)).TupleRad(), 0, out hv_RightRowEdge1, out hv_RightColumnEdge1,
+        //            out hv_RightRowEdge2, out hv_RightColumnEdge2);
+        //    }
+        //    //计算L3中心坐标和起点、终点坐标
+        //    hv_L3CenterRow.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_L3CenterRow = (hv_RightCenterRow + hv_LeftCenterRow) / 2;
+        //    }
+        //    hv_L3CenterCol.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_L3CenterCol = (hv_RightCenterCol + hv_LeftCenterCol) / 2;
+        //    }
+        //    hv_L3StartRow.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_L3StartRow = (hv_RightCircleRowEdge1 + hv_LeftCircleRowEdge2) / 2;
+        //    }
+        //    hv_L3StartCol.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_L3StartCol = (hv_RightCircleColumnEdge1 + hv_LeftCircleColumnEdge2) / 2;
+        //    }
+        //    hv_L3EndRow.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_L3EndRow = (hv_RightCircleRowEdge2 + hv_LeftCircleRowEdge1) / 2;
+        //    }
+        //    hv_L3EndCol.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_L3EndCol = (hv_RightCircleColumnEdge2 + hv_LeftCircleColumnEdge1) / 2;
+        //    }
+        //    //计算X1
+        //    hv_X1.Dispose();
+        //    HOperatorSet.DistancePl(hv_L3CenterRow, hv_L3CenterCol, hv_RightRowEdge1, hv_RightColumnEdge1,
+        //        hv_RightRowEdge2, hv_RightColumnEdge2, out hv_X1);
+        //    //计算运行时间
+        //    hv_StopTime.Dispose();
+        //    HOperatorSet.CountSeconds(out hv_StopTime);
+        //    hv_runtime.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_runtime = (hv_StopTime - hv_StartTime) * 1000;
+        //        RunTime = hv_runtime;
+        //    }
+        //    //输出结果
+        //    hv_distanceL1L2.Dispose();
+        //    hv_distanceL1L2 = new HTuple(hv_L1_L2);
+        //    DistanceL1L2 = hv_distanceL1L2 * 0.0069;
+        //    hv_distanceX1.Dispose();
+        //    hv_distanceX1 = new HTuple(hv_X1);
+        //    DistanceX1 = hv_distanceX1 * 0.0069;
 
-            //定位右侧测量矩形
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_RightRowEdge1.Dispose(); hv_RightColumnEdge1.Dispose(); hv_RightRowEdge2.Dispose(); hv_RightColumnEdge2.Dispose();
-                gen_right_edge(ho_Image, hv_MinCircleRow, hv_MinCircleColumn, (hv_MinCircleRadius * 3) / 4,
-                    (hv_MinCircleRadius * 5) / 4, hv_MaxCircleColumn, hv_TwoCirclePhi, hv_Width,
-                    hv_Height, (new HTuple(180)).TupleRad(), (new HTuple(0)).TupleRad(), out hv_RightRowEdge1,
-                    out hv_RightColumnEdge1, out hv_RightRowEdge2, out hv_RightColumnEdge2);
-            }
+        //    //显示
+        //    DispImage(ho_Image);
+        //    outWindow.SetColor("red");
+        //    outWindow.SetLineWidth(2);
+        //    outWindow.DispLine(hv_RightCenterRow, hv_RightCenterCol, hv_LeftCenterRow, hv_LeftCenterCol);
+        //    outWindow.DispLine(hv_L3StartRow, hv_L3StartCol, hv_L3EndRow, hv_L3EndCol);
 
-            //计算X1
-            hv_X1.Dispose();
-            HOperatorSet.DistancePl(hv_FitCircleCenterRow, hv_FitCircleCenterCol, hv_RightRowEdge1,
-                hv_RightColumnEdge1, hv_RightRowEdge2, hv_RightColumnEdge2, out hv_X1);
-            //计算Y1
-            hv_Y1.Dispose();
-            HOperatorSet.DistancePl(hv_FitCircleCenterRow, hv_FitCircleCenterCol, hv_ButtomRowEdge1,
-                hv_ButtomColumnEdge1, hv_ButtomRowEdge2, hv_ButtomColumnEdge2, out hv_Y1);
-            //计算基准度
-            hv_position_degree.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_position_degree = 2 * ((((((5.325 - (hv_X1*0.0069))).TuplePow(
-                    2)) + (((6.788 - (hv_Y1*0.0069))).TuplePow(2)))).TupleSqrt());
-            }
-            //计算运行时间
-            hv_StopTime.Dispose();
-            HOperatorSet.CountSeconds(out hv_StopTime);
-            //输出结果
-            hv_CircleRadius.Dispose();
-            hv_CircleRadius = new HTuple(hv_FitCircleCenterRadius);
-            Radius = hv_CircleRadius*2*0.0069;
-            hv_PositionDegree.Dispose();
-            hv_PositionDegree = new HTuple(hv_position_degree);
-            PositionDegree = hv_PositionDegree;
-            hv_RunTime.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_RunTime = (hv_StopTime - hv_StartTime) * 1000;
-                RunTime = hv_RunTime;
-            }
-            DistanceX1 = hv_X1 * 0.0069;
-            DistanceY1 = hv_Y1 * 0.0069;
+        //    ho_Image.Dispose();
+        //    hv_Width.Dispose();
+        //    hv_Height.Dispose();
+        //    hv_StartTime.Dispose();
+        //    hv_MaxCircleRow.Dispose();
+        //    hv_MaxCircleColumn.Dispose();
+        //    hv_MaxCircleRadius.Dispose();
+        //    hv_MinCircleRow.Dispose();
+        //    hv_MinCircleColumn.Dispose();
+        //    hv_MinCircleRadius.Dispose();
+        //    hv_TwoCirclePhi.Dispose();
+        //    hv_RightCircleRowEdge1.Dispose();
+        //    hv_RightCircleColumnEdge1.Dispose();
+        //    hv_LeftCircleRowEdge1.Dispose();
+        //    hv_LeftCircleColumnEdge1.Dispose();
+        //    hv_RightCircleRowEdge2.Dispose();
+        //    hv_RightCircleColumnEdge2.Dispose();
+        //    hv_LeftCircleRowEdge2.Dispose();
+        //    hv_LeftCircleColumnEdge2.Dispose();
+        //    hv_RightCenterRow.Dispose();
+        //    hv_RightCenterCol.Dispose();
+        //    hv_LeftCenterRow.Dispose();
+        //    hv_LeftCenterCol.Dispose();
+        //    hv_L1_L2.Dispose();
+        //    hv_RightRowEdge1.Dispose();
+        //    hv_RightColumnEdge1.Dispose();
+        //    hv_RightRowEdge2.Dispose();
+        //    hv_RightColumnEdge2.Dispose();
+        //    hv_L3CenterRow.Dispose();
+        //    hv_L3CenterCol.Dispose();
+        //    hv_L3StartRow.Dispose();
+        //    hv_L3StartCol.Dispose();
+        //    hv_L3EndRow.Dispose();
+        //    hv_L3EndCol.Dispose();
+        //    hv_X1.Dispose();
+        //    hv_StopTime.Dispose();
+        //    hv_runtime.Dispose();
+        //    hv_distanceL1L2.Dispose();
+        //    hv_distanceX1.Dispose();
+        //}
 
-            DispImage(ho_Image);
-            outWindow.SetColor("red");
-            outWindow.SetLineWidth(2);
-            outWindow.SetDraw("margin");
-            outWindow.DispCircle(hv_FitCircleCenterRow, hv_FitCircleCenterCol, hv_FitCircleCenterRadius);
-            outWindow.DispLine(hv_ButtomRowEdge1, hv_ButtomColumnEdge1, hv_ButtomRowEdge2, hv_ButtomColumnEdge2);
-            outWindow.DispLine(hv_RightRowEdge1, hv_RightColumnEdge1, hv_RightRowEdge2, hv_RightColumnEdge2);
+        //public static void Measure_33(HObject ho_Image, out double Radius, out double PositionDegree, 
+        //    out double DistanceX1, out double DistanceY1, out double RunTime)
+        //{
+        //    // Local iconic variables 
+        //    HObject ho_SmallCircle;
+        //    // Local control variables 
+        //    HTuple hv_Width = new HTuple(), hv_Height = new HTuple();
+        //    HTuple hv_StartTime = new HTuple(), hv_MaxCircleRow = new HTuple();
+        //    HTuple hv_MaxCircleColumn = new HTuple(), hv_MaxCircleRadius = new HTuple();
+        //    HTuple hv_MinCircleRow = new HTuple(), hv_MinCircleColumn = new HTuple();
+        //    HTuple hv_MinCircleRadius = new HTuple(), hv_TwoCirclePhi = new HTuple();
+        //    HTuple hv_LeftTopRowEdge = new HTuple(), hv_LeftTopColumnEdge = new HTuple();
+        //    HTuple hv_RightButtomRowEdge = new HTuple(), hv_RightButtomColumnEdge = new HTuple();
+        //    HTuple hv_LeftButtomRowEdge = new HTuple(), hv_LeftButtomColumnEdge = new HTuple();
+        //    HTuple hv_RightTopRowEdge = new HTuple(), hv_RightTopColumnEdge = new HTuple();
+        //    HTuple hv_FitCircleCenterRow = new HTuple(), hv_FitCircleCenterCol = new HTuple();
+        //    HTuple hv_FitCircleCenterRadius = new HTuple(), hv_ButtomRowEdge1 = new HTuple();
+        //    HTuple hv_ButtomColumnEdge1 = new HTuple(), hv_ButtomRowEdge2 = new HTuple();
+        //    HTuple hv_ButtomColumnEdge2 = new HTuple(), hv_RightRowEdge1 = new HTuple();
+        //    HTuple hv_RightColumnEdge1 = new HTuple(), hv_RightRowEdge2 = new HTuple();
+        //    HTuple hv_RightColumnEdge2 = new HTuple(), hv_X1 = new HTuple();
+        //    HTuple hv_Y1 = new HTuple(), hv_position_degree = new HTuple();
+        //    HTuple hv_StopTime = new HTuple(), hv_CircleRadius = new HTuple();
+        //    HTuple hv_PositionDegree = new HTuple(), hv_RunTime = new HTuple();
+        //    // Initialize local and output iconic variables 
+        //    HOperatorSet.GenEmptyObj(out ho_SmallCircle);
+        //    hv_Width.Dispose(); hv_Height.Dispose();
+        //    HOperatorSet.GetImageSize(ho_Image, out hv_Width, out hv_Height);
+        //    if (HDevWindowStack.IsOpen())
+        //    {
+        //        HOperatorSet.SetDraw(HDevWindowStack.GetActive(), "margin");
+        //    }
+        //    hv_StartTime.Dispose();
+        //    HOperatorSet.CountSeconds(out hv_StartTime);
+        //    hv_MaxCircleRow.Dispose(); hv_MaxCircleColumn.Dispose(); hv_MaxCircleRadius.Dispose(); hv_MinCircleRow.Dispose(); hv_MinCircleColumn.Dispose(); hv_MinCircleRadius.Dispose(); hv_TwoCirclePhi.Dispose();
+        //    gen_TwoCircle_info(ho_Image, out hv_MaxCircleRow, out hv_MaxCircleColumn, out hv_MaxCircleRadius,
+        //        out hv_MinCircleRow, out hv_MinCircleColumn, out hv_MinCircleRadius, out hv_TwoCirclePhi);
+        //    //生成基准矩形
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        ho_SmallCircle.Dispose(); hv_LeftTopRowEdge.Dispose(); hv_LeftTopColumnEdge.Dispose(); hv_RightButtomRowEdge.Dispose(); hv_RightButtomColumnEdge.Dispose(); hv_LeftButtomRowEdge.Dispose(); hv_LeftButtomColumnEdge.Dispose(); hv_RightTopRowEdge.Dispose(); hv_RightTopColumnEdge.Dispose(); hv_FitCircleCenterRow.Dispose(); hv_FitCircleCenterCol.Dispose(); hv_FitCircleCenterRadius.Dispose();
+        //        gen_Edge_Circle(ho_Image, out ho_SmallCircle, hv_MinCircleRow, hv_MinCircleColumn,
+        //            hv_TwoCirclePhi, hv_Width, hv_Height, (new HTuple(45)).TupleRad(), hv_MinCircleRadius,
+        //            out hv_LeftTopRowEdge, out hv_LeftTopColumnEdge, out hv_RightButtomRowEdge,
+        //            out hv_RightButtomColumnEdge, out hv_LeftButtomRowEdge, out hv_LeftButtomColumnEdge,
+        //            out hv_RightTopRowEdge, out hv_RightTopColumnEdge, out hv_FitCircleCenterRow,
+        //            out hv_FitCircleCenterCol, out hv_FitCircleCenterRadius);
+        //    }
+        //    if (HDevWindowStack.IsOpen())
+        //    {
+        //        HOperatorSet.DispObj(ho_SmallCircle, HDevWindowStack.GetActive());
+        //    }
+        //    //定位底部测量矩形
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_ButtomRowEdge1.Dispose(); hv_ButtomColumnEdge1.Dispose(); hv_ButtomRowEdge2.Dispose(); hv_ButtomColumnEdge2.Dispose();
+        //        gen_buttom_edge(ho_Image, hv_MaxCircleRow, hv_MaxCircleColumn, (hv_MaxCircleRadius * 3) / 2,
+        //            (hv_MaxCircleRadius * 3) / 4, hv_TwoCirclePhi, hv_Width, hv_Height, (new HTuple(90)).TupleRad()
+        //            , (new HTuple(90)).TupleRad(), hv_MinCircleColumn, hv_MaxCircleColumn, out hv_ButtomRowEdge1,
+        //            out hv_ButtomColumnEdge1, out hv_ButtomRowEdge2, out hv_ButtomColumnEdge2);
+        //    }
+
+        //    //定位右侧测量矩形
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_RightRowEdge1.Dispose(); hv_RightColumnEdge1.Dispose(); hv_RightRowEdge2.Dispose(); hv_RightColumnEdge2.Dispose();
+        //        gen_right_edge(ho_Image, hv_MinCircleRow, hv_MinCircleColumn, (hv_MinCircleRadius * 3) / 4,
+        //            (hv_MinCircleRadius * 5) / 4, hv_MaxCircleColumn, hv_TwoCirclePhi, hv_Width,
+        //            hv_Height, (new HTuple(180)).TupleRad(), (new HTuple(0)).TupleRad(), out hv_RightRowEdge1,
+        //            out hv_RightColumnEdge1, out hv_RightRowEdge2, out hv_RightColumnEdge2);
+        //    }
+
+        //    //计算X1
+        //    hv_X1.Dispose();
+        //    HOperatorSet.DistancePl(hv_FitCircleCenterRow, hv_FitCircleCenterCol, hv_RightRowEdge1,
+        //        hv_RightColumnEdge1, hv_RightRowEdge2, hv_RightColumnEdge2, out hv_X1);
+        //    //计算Y1
+        //    hv_Y1.Dispose();
+        //    HOperatorSet.DistancePl(hv_FitCircleCenterRow, hv_FitCircleCenterCol, hv_ButtomRowEdge1,
+        //        hv_ButtomColumnEdge1, hv_ButtomRowEdge2, hv_ButtomColumnEdge2, out hv_Y1);
+        //    //计算基准度
+        //    hv_position_degree.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_position_degree = 2 * ((((((5.325 - (hv_X1*0.0069))).TuplePow(
+        //            2)) + (((6.788 - (hv_Y1*0.0069))).TuplePow(2)))).TupleSqrt());
+        //    }
+        //    //计算运行时间
+        //    hv_StopTime.Dispose();
+        //    HOperatorSet.CountSeconds(out hv_StopTime);
+        //    //输出结果
+        //    hv_CircleRadius.Dispose();
+        //    hv_CircleRadius = new HTuple(hv_FitCircleCenterRadius);
+        //    Radius = hv_CircleRadius*2*0.0069;
+        //    hv_PositionDegree.Dispose();
+        //    hv_PositionDegree = new HTuple(hv_position_degree);
+        //    PositionDegree = hv_PositionDegree;
+        //    hv_RunTime.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_RunTime = (hv_StopTime - hv_StartTime) * 1000;
+        //        RunTime = hv_RunTime;
+        //    }
+        //    DistanceX1 = hv_X1 * 0.0069;
+        //    DistanceY1 = hv_Y1 * 0.0069;
+
+        //    DispImage(ho_Image);
+        //    outWindow.SetColor("red");
+        //    outWindow.SetLineWidth(2);
+        //    outWindow.SetDraw("margin");
+        //    outWindow.DispCircle(hv_FitCircleCenterRow, hv_FitCircleCenterCol, hv_FitCircleCenterRadius);
+        //    outWindow.DispLine(hv_ButtomRowEdge1, hv_ButtomColumnEdge1, hv_ButtomRowEdge2, hv_ButtomColumnEdge2);
+        //    outWindow.DispLine(hv_RightRowEdge1, hv_RightColumnEdge1, hv_RightRowEdge2, hv_RightColumnEdge2);
 
 
-            ho_Image.Dispose();
-            ho_SmallCircle.Dispose();
+        //    ho_Image.Dispose();
+        //    ho_SmallCircle.Dispose();
 
-            hv_Width.Dispose();
-            hv_Height.Dispose();
-            hv_StartTime.Dispose();
-            hv_MaxCircleRow.Dispose();
-            hv_MaxCircleColumn.Dispose();
-            hv_MaxCircleRadius.Dispose();
-            hv_MinCircleRow.Dispose();
-            hv_MinCircleColumn.Dispose();
-            hv_MinCircleRadius.Dispose();
-            hv_TwoCirclePhi.Dispose();
-            hv_LeftTopRowEdge.Dispose();
-            hv_LeftTopColumnEdge.Dispose();
-            hv_RightButtomRowEdge.Dispose();
-            hv_RightButtomColumnEdge.Dispose();
-            hv_LeftButtomRowEdge.Dispose();
-            hv_LeftButtomColumnEdge.Dispose();
-            hv_RightTopRowEdge.Dispose();
-            hv_RightTopColumnEdge.Dispose();
-            hv_FitCircleCenterRow.Dispose();
-            hv_FitCircleCenterCol.Dispose();
-            hv_FitCircleCenterRadius.Dispose();
-            hv_ButtomRowEdge1.Dispose();
-            hv_ButtomColumnEdge1.Dispose();
-            hv_ButtomRowEdge2.Dispose();
-            hv_ButtomColumnEdge2.Dispose();
-            hv_RightRowEdge1.Dispose();
-            hv_RightColumnEdge1.Dispose();
-            hv_RightRowEdge2.Dispose();
-            hv_RightColumnEdge2.Dispose();
-            hv_X1.Dispose();
-            hv_Y1.Dispose();
-            hv_position_degree.Dispose();
-            hv_StopTime.Dispose();
-            hv_CircleRadius.Dispose();
-            hv_PositionDegree.Dispose();
-            hv_RunTime.Dispose();
-        }
+        //    hv_Width.Dispose();
+        //    hv_Height.Dispose();
+        //    hv_StartTime.Dispose();
+        //    hv_MaxCircleRow.Dispose();
+        //    hv_MaxCircleColumn.Dispose();
+        //    hv_MaxCircleRadius.Dispose();
+        //    hv_MinCircleRow.Dispose();
+        //    hv_MinCircleColumn.Dispose();
+        //    hv_MinCircleRadius.Dispose();
+        //    hv_TwoCirclePhi.Dispose();
+        //    hv_LeftTopRowEdge.Dispose();
+        //    hv_LeftTopColumnEdge.Dispose();
+        //    hv_RightButtomRowEdge.Dispose();
+        //    hv_RightButtomColumnEdge.Dispose();
+        //    hv_LeftButtomRowEdge.Dispose();
+        //    hv_LeftButtomColumnEdge.Dispose();
+        //    hv_RightTopRowEdge.Dispose();
+        //    hv_RightTopColumnEdge.Dispose();
+        //    hv_FitCircleCenterRow.Dispose();
+        //    hv_FitCircleCenterCol.Dispose();
+        //    hv_FitCircleCenterRadius.Dispose();
+        //    hv_ButtomRowEdge1.Dispose();
+        //    hv_ButtomColumnEdge1.Dispose();
+        //    hv_ButtomRowEdge2.Dispose();
+        //    hv_ButtomColumnEdge2.Dispose();
+        //    hv_RightRowEdge1.Dispose();
+        //    hv_RightColumnEdge1.Dispose();
+        //    hv_RightRowEdge2.Dispose();
+        //    hv_RightColumnEdge2.Dispose();
+        //    hv_X1.Dispose();
+        //    hv_Y1.Dispose();
+        //    hv_position_degree.Dispose();
+        //    hv_StopTime.Dispose();
+        //    hv_CircleRadius.Dispose();
+        //    hv_PositionDegree.Dispose();
+        //    hv_RunTime.Dispose();
+        //}
 
-        public static void Measure_34(HObject ho_Image, out double RunTime, out double DistanceL1L2, out double DistanceY1)
-        {
-            // Local control variables 
-            HTuple hv_Width = new HTuple(), hv_Height = new HTuple();
-            HTuple hv_StartTime = new HTuple(), hv_MaxCircleRow = new HTuple();
-            HTuple hv_MaxCircleColumn = new HTuple(), hv_MaxCircleRadius = new HTuple();
-            HTuple hv_MinCircleRow = new HTuple(), hv_MinCircleColumn = new HTuple();
-            HTuple hv_MinCircleRadius = new HTuple(), hv_TwoCirclePhi = new HTuple();
-            HTuple hv_RightCircleRowEdge1 = new HTuple(), hv_RightCircleColumnEdge1 = new HTuple();
-            HTuple hv_LeftCircleRowEdge1 = new HTuple(), hv_LeftCircleColumnEdge1 = new HTuple();
-            HTuple hv_RightCircleRowEdge2 = new HTuple(), hv_RightCircleColumnEdge2 = new HTuple();
-            HTuple hv_LeftCircleRowEdge2 = new HTuple(), hv_LeftCircleColumnEdge2 = new HTuple();
-            HTuple hv_RightCenterRow = new HTuple(), hv_RightCenterCol = new HTuple();
-            HTuple hv_LeftCenterRow = new HTuple(), hv_LeftCenterCol = new HTuple();
-            HTuple hv_L1_L2 = new HTuple(), hv_ButtomRowEdge1 = new HTuple();
-            HTuple hv_ButtomColumnEdge1 = new HTuple(), hv_ButtomRowEdge2 = new HTuple();
-            HTuple hv_ButtomColumnEdge2 = new HTuple(), hv_L3CenterRow = new HTuple();
-            HTuple hv_L3CenterCol = new HTuple(), hv_L3StartRow = new HTuple();
-            HTuple hv_L3StartCol = new HTuple(), hv_L3EndRow = new HTuple();
-            HTuple hv_L3EndCol = new HTuple(), hv_Y1 = new HTuple();
-            HTuple hv_StopTime = new HTuple(), hv_runtime = new HTuple();
-            HTuple hv_distanceY1 = new HTuple(), hv_distanceL1L2 = new HTuple();
-            // Initialize local and output iconic variables 
-            hv_Width.Dispose(); hv_Height.Dispose();
-            HOperatorSet.GetImageSize(ho_Image, out hv_Width, out hv_Height);
-            hv_StartTime.Dispose();
-            HOperatorSet.CountSeconds(out hv_StartTime);
-            hv_MaxCircleRow.Dispose(); hv_MaxCircleColumn.Dispose(); hv_MaxCircleRadius.Dispose(); hv_MinCircleRow.Dispose(); hv_MinCircleColumn.Dispose(); hv_MinCircleRadius.Dispose(); hv_TwoCirclePhi.Dispose();
-            gen_TwoCircle_info(ho_Image, out hv_MaxCircleRow, out hv_MaxCircleColumn, out hv_MaxCircleRadius,
-                out hv_MinCircleRow, out hv_MinCircleColumn, out hv_MinCircleRadius, out hv_TwoCirclePhi);
-            hv_RightCircleRowEdge1.Dispose(); hv_RightCircleColumnEdge1.Dispose(); hv_LeftCircleRowEdge1.Dispose(); hv_LeftCircleColumnEdge1.Dispose(); hv_RightCircleRowEdge2.Dispose(); hv_RightCircleColumnEdge2.Dispose(); hv_LeftCircleRowEdge2.Dispose(); hv_LeftCircleColumnEdge2.Dispose();
-            gen_L1L2_Measure34(ho_Image, hv_MinCircleRow, hv_MinCircleColumn, hv_MinCircleRadius,
-                hv_TwoCirclePhi, hv_Width, hv_Height, out hv_RightCircleRowEdge1, out hv_RightCircleColumnEdge1,
-                out hv_LeftCircleRowEdge1, out hv_LeftCircleColumnEdge1, out hv_RightCircleRowEdge2,
-                out hv_RightCircleColumnEdge2, out hv_LeftCircleRowEdge2, out hv_LeftCircleColumnEdge2);
-            //分别计算L1、L2的中心坐标
-            hv_RightCenterRow.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_RightCenterRow = (hv_RightCircleRowEdge1 + hv_RightCircleRowEdge2) / 2;
-            }
-            hv_RightCenterCol.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_RightCenterCol = (hv_RightCircleColumnEdge1 + hv_RightCircleColumnEdge2) / 2;
-            }
-            hv_LeftCenterRow.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_LeftCenterRow = (hv_LeftCircleRowEdge1 + hv_LeftCircleRowEdge2) / 2;
-            }
-            hv_LeftCenterCol.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_LeftCenterCol = (hv_LeftCircleColumnEdge1 + hv_LeftCircleColumnEdge2) / 2;
-            }
-            //计算L1、L2之间距离
-            hv_L1_L2.Dispose();
-            HOperatorSet.DistancePp(hv_RightCenterRow, hv_RightCenterCol, hv_LeftCenterRow,
-                hv_LeftCenterCol, out hv_L1_L2);
-            //定位底部测量矩形
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_ButtomRowEdge1.Dispose(); hv_ButtomColumnEdge1.Dispose(); hv_ButtomRowEdge2.Dispose(); hv_ButtomColumnEdge2.Dispose();
-                gen_buttom_edge(ho_Image, hv_MaxCircleRow, hv_MaxCircleColumn, (hv_MaxCircleRadius * 3) / 2,
-                    (hv_MaxCircleRadius * 3) / 4, hv_TwoCirclePhi, hv_Width, hv_Height, (new HTuple(90)).TupleRad()
-                    , (new HTuple(90)).TupleRad(), hv_MinCircleColumn, hv_MaxCircleColumn, out hv_ButtomRowEdge1,
-                    out hv_ButtomColumnEdge1, out hv_ButtomRowEdge2, out hv_ButtomColumnEdge2);
-            }
-            //计算L3中心坐标和起点、终点坐标
-            hv_L3CenterRow.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_L3CenterRow = (hv_RightCenterRow + hv_LeftCenterRow) / 2;
-            }
-            hv_L3CenterCol.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_L3CenterCol = (hv_RightCenterCol + hv_LeftCenterCol) / 2;
-            }
-            hv_L3StartRow.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_L3StartRow = (hv_RightCircleRowEdge1 + hv_LeftCircleRowEdge2) / 2;
-            }
-            hv_L3StartCol.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_L3StartCol = (hv_RightCircleColumnEdge1 + hv_LeftCircleColumnEdge2) / 2;
-            }
-            hv_L3EndRow.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_L3EndRow = (hv_RightCircleRowEdge2 + hv_LeftCircleRowEdge1) / 2;
-            }
-            hv_L3EndCol.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_L3EndCol = (hv_RightCircleColumnEdge2 + hv_LeftCircleColumnEdge1) / 2;
-            }
-            //计算X1
-            hv_Y1.Dispose();
-            HOperatorSet.DistancePl(hv_L3CenterRow, hv_L3CenterCol, hv_ButtomRowEdge1, hv_ButtomColumnEdge1,
-                hv_ButtomRowEdge2, hv_ButtomColumnEdge2, out hv_Y1);
-            //计算运行时间
-            hv_StopTime.Dispose();
-            HOperatorSet.CountSeconds(out hv_StopTime);
-            //输出结果
-            hv_runtime.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_runtime = (hv_StopTime - hv_StartTime) * 1000;
-                RunTime = hv_runtime;
-            }
-            hv_distanceY1.Dispose();
-            hv_distanceY1 = new HTuple(hv_Y1);
-            DistanceY1 = hv_distanceY1 * 0.0069;
-            hv_distanceL1L2.Dispose();
-            hv_distanceL1L2 = new HTuple(hv_L1_L2);
-            DistanceL1L2 = hv_distanceL1L2 * 0.0069;
+        //public static void Measure_34(HObject ho_Image, out double RunTime, out double DistanceL1L2, out double DistanceY1)
+        //{
+        //    // Local control variables 
+        //    HTuple hv_Width = new HTuple(), hv_Height = new HTuple();
+        //    HTuple hv_StartTime = new HTuple(), hv_MaxCircleRow = new HTuple();
+        //    HTuple hv_MaxCircleColumn = new HTuple(), hv_MaxCircleRadius = new HTuple();
+        //    HTuple hv_MinCircleRow = new HTuple(), hv_MinCircleColumn = new HTuple();
+        //    HTuple hv_MinCircleRadius = new HTuple(), hv_TwoCirclePhi = new HTuple();
+        //    HTuple hv_RightCircleRowEdge1 = new HTuple(), hv_RightCircleColumnEdge1 = new HTuple();
+        //    HTuple hv_LeftCircleRowEdge1 = new HTuple(), hv_LeftCircleColumnEdge1 = new HTuple();
+        //    HTuple hv_RightCircleRowEdge2 = new HTuple(), hv_RightCircleColumnEdge2 = new HTuple();
+        //    HTuple hv_LeftCircleRowEdge2 = new HTuple(), hv_LeftCircleColumnEdge2 = new HTuple();
+        //    HTuple hv_RightCenterRow = new HTuple(), hv_RightCenterCol = new HTuple();
+        //    HTuple hv_LeftCenterRow = new HTuple(), hv_LeftCenterCol = new HTuple();
+        //    HTuple hv_L1_L2 = new HTuple(), hv_ButtomRowEdge1 = new HTuple();
+        //    HTuple hv_ButtomColumnEdge1 = new HTuple(), hv_ButtomRowEdge2 = new HTuple();
+        //    HTuple hv_ButtomColumnEdge2 = new HTuple(), hv_L3CenterRow = new HTuple();
+        //    HTuple hv_L3CenterCol = new HTuple(), hv_L3StartRow = new HTuple();
+        //    HTuple hv_L3StartCol = new HTuple(), hv_L3EndRow = new HTuple();
+        //    HTuple hv_L3EndCol = new HTuple(), hv_Y1 = new HTuple();
+        //    HTuple hv_StopTime = new HTuple(), hv_runtime = new HTuple();
+        //    HTuple hv_distanceY1 = new HTuple(), hv_distanceL1L2 = new HTuple();
+        //    // Initialize local and output iconic variables 
+        //    hv_Width.Dispose(); hv_Height.Dispose();
+        //    HOperatorSet.GetImageSize(ho_Image, out hv_Width, out hv_Height);
+        //    hv_StartTime.Dispose();
+        //    HOperatorSet.CountSeconds(out hv_StartTime);
+        //    hv_MaxCircleRow.Dispose(); hv_MaxCircleColumn.Dispose(); hv_MaxCircleRadius.Dispose(); hv_MinCircleRow.Dispose(); hv_MinCircleColumn.Dispose(); hv_MinCircleRadius.Dispose(); hv_TwoCirclePhi.Dispose();
+        //    gen_TwoCircle_info(ho_Image, out hv_MaxCircleRow, out hv_MaxCircleColumn, out hv_MaxCircleRadius,
+        //        out hv_MinCircleRow, out hv_MinCircleColumn, out hv_MinCircleRadius, out hv_TwoCirclePhi);
+        //    hv_RightCircleRowEdge1.Dispose(); hv_RightCircleColumnEdge1.Dispose(); hv_LeftCircleRowEdge1.Dispose(); hv_LeftCircleColumnEdge1.Dispose(); hv_RightCircleRowEdge2.Dispose(); hv_RightCircleColumnEdge2.Dispose(); hv_LeftCircleRowEdge2.Dispose(); hv_LeftCircleColumnEdge2.Dispose();
+        //    gen_L1L2_Measure34(ho_Image, hv_MinCircleRow, hv_MinCircleColumn, hv_MinCircleRadius,
+        //        hv_TwoCirclePhi, hv_Width, hv_Height, out hv_RightCircleRowEdge1, out hv_RightCircleColumnEdge1,
+        //        out hv_LeftCircleRowEdge1, out hv_LeftCircleColumnEdge1, out hv_RightCircleRowEdge2,
+        //        out hv_RightCircleColumnEdge2, out hv_LeftCircleRowEdge2, out hv_LeftCircleColumnEdge2);
+        //    //分别计算L1、L2的中心坐标
+        //    hv_RightCenterRow.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_RightCenterRow = (hv_RightCircleRowEdge1 + hv_RightCircleRowEdge2) / 2;
+        //    }
+        //    hv_RightCenterCol.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_RightCenterCol = (hv_RightCircleColumnEdge1 + hv_RightCircleColumnEdge2) / 2;
+        //    }
+        //    hv_LeftCenterRow.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_LeftCenterRow = (hv_LeftCircleRowEdge1 + hv_LeftCircleRowEdge2) / 2;
+        //    }
+        //    hv_LeftCenterCol.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_LeftCenterCol = (hv_LeftCircleColumnEdge1 + hv_LeftCircleColumnEdge2) / 2;
+        //    }
+        //    //计算L1、L2之间距离
+        //    hv_L1_L2.Dispose();
+        //    HOperatorSet.DistancePp(hv_RightCenterRow, hv_RightCenterCol, hv_LeftCenterRow,
+        //        hv_LeftCenterCol, out hv_L1_L2);
+        //    //定位底部测量矩形
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_ButtomRowEdge1.Dispose(); hv_ButtomColumnEdge1.Dispose(); hv_ButtomRowEdge2.Dispose(); hv_ButtomColumnEdge2.Dispose();
+        //        gen_buttom_edge(ho_Image, hv_MaxCircleRow, hv_MaxCircleColumn, (hv_MaxCircleRadius * 3) / 2,
+        //            (hv_MaxCircleRadius * 3) / 4, hv_TwoCirclePhi, hv_Width, hv_Height, (new HTuple(90)).TupleRad()
+        //            , (new HTuple(90)).TupleRad(), hv_MinCircleColumn, hv_MaxCircleColumn, out hv_ButtomRowEdge1,
+        //            out hv_ButtomColumnEdge1, out hv_ButtomRowEdge2, out hv_ButtomColumnEdge2);
+        //    }
+        //    //计算L3中心坐标和起点、终点坐标
+        //    hv_L3CenterRow.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_L3CenterRow = (hv_RightCenterRow + hv_LeftCenterRow) / 2;
+        //    }
+        //    hv_L3CenterCol.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_L3CenterCol = (hv_RightCenterCol + hv_LeftCenterCol) / 2;
+        //    }
+        //    hv_L3StartRow.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_L3StartRow = (hv_RightCircleRowEdge1 + hv_LeftCircleRowEdge2) / 2;
+        //    }
+        //    hv_L3StartCol.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_L3StartCol = (hv_RightCircleColumnEdge1 + hv_LeftCircleColumnEdge2) / 2;
+        //    }
+        //    hv_L3EndRow.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_L3EndRow = (hv_RightCircleRowEdge2 + hv_LeftCircleRowEdge1) / 2;
+        //    }
+        //    hv_L3EndCol.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_L3EndCol = (hv_RightCircleColumnEdge2 + hv_LeftCircleColumnEdge1) / 2;
+        //    }
+        //    //计算X1
+        //    hv_Y1.Dispose();
+        //    HOperatorSet.DistancePl(hv_L3CenterRow, hv_L3CenterCol, hv_ButtomRowEdge1, hv_ButtomColumnEdge1,
+        //        hv_ButtomRowEdge2, hv_ButtomColumnEdge2, out hv_Y1);
+        //    //计算运行时间
+        //    hv_StopTime.Dispose();
+        //    HOperatorSet.CountSeconds(out hv_StopTime);
+        //    //输出结果
+        //    hv_runtime.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_runtime = (hv_StopTime - hv_StartTime) * 1000;
+        //        RunTime = hv_runtime;
+        //    }
+        //    hv_distanceY1.Dispose();
+        //    hv_distanceY1 = new HTuple(hv_Y1);
+        //    DistanceY1 = hv_distanceY1 * 0.0069;
+        //    hv_distanceL1L2.Dispose();
+        //    hv_distanceL1L2 = new HTuple(hv_L1_L2);
+        //    DistanceL1L2 = hv_distanceL1L2 * 0.0069;
 
-            DispImage(ho_Image);
-            outWindow.SetColor("red");
-            outWindow.SetLineWidth(2);
-            outWindow.DispLine(hv_RightCenterRow, hv_RightCenterCol, hv_LeftCenterRow, hv_LeftCenterCol);
-            outWindow.DispLine(hv_L3StartRow, hv_L3StartCol, hv_L3EndRow, hv_L3EndCol);
-            outWindow.DispLine(hv_ButtomRowEdge1, hv_ButtomColumnEdge1, hv_ButtomRowEdge2, hv_ButtomColumnEdge2);
+        //    DispImage(ho_Image);
+        //    outWindow.SetColor("red");
+        //    outWindow.SetLineWidth(2);
+        //    outWindow.DispLine(hv_RightCenterRow, hv_RightCenterCol, hv_LeftCenterRow, hv_LeftCenterCol);
+        //    outWindow.DispLine(hv_L3StartRow, hv_L3StartCol, hv_L3EndRow, hv_L3EndCol);
+        //    outWindow.DispLine(hv_ButtomRowEdge1, hv_ButtomColumnEdge1, hv_ButtomRowEdge2, hv_ButtomColumnEdge2);
 
-            ho_Image.Dispose();
+        //    ho_Image.Dispose();
 
-            hv_Width.Dispose();
-            hv_Height.Dispose();
-            hv_StartTime.Dispose();
-            hv_MaxCircleRow.Dispose();
-            hv_MaxCircleColumn.Dispose();
-            hv_MaxCircleRadius.Dispose();
-            hv_MinCircleRow.Dispose();
-            hv_MinCircleColumn.Dispose();
-            hv_MinCircleRadius.Dispose();
-            hv_TwoCirclePhi.Dispose();
-            hv_RightCircleRowEdge1.Dispose();
-            hv_RightCircleColumnEdge1.Dispose();
-            hv_LeftCircleRowEdge1.Dispose();
-            hv_LeftCircleColumnEdge1.Dispose();
-            hv_RightCircleRowEdge2.Dispose();
-            hv_RightCircleColumnEdge2.Dispose();
-            hv_LeftCircleRowEdge2.Dispose();
-            hv_LeftCircleColumnEdge2.Dispose();
-            hv_RightCenterRow.Dispose();
-            hv_RightCenterCol.Dispose();
-            hv_LeftCenterRow.Dispose();
-            hv_LeftCenterCol.Dispose();
-            hv_L1_L2.Dispose();
-            hv_ButtomRowEdge1.Dispose();
-            hv_ButtomColumnEdge1.Dispose();
-            hv_ButtomRowEdge2.Dispose();
-            hv_ButtomColumnEdge2.Dispose();
-            hv_L3CenterRow.Dispose();
-            hv_L3CenterCol.Dispose();
-            hv_L3StartRow.Dispose();
-            hv_L3StartCol.Dispose();
-            hv_L3EndRow.Dispose();
-            hv_L3EndCol.Dispose();
-            hv_Y1.Dispose();
-            hv_StopTime.Dispose();
-            hv_runtime.Dispose();
-            hv_distanceY1.Dispose();
-            hv_distanceL1L2.Dispose();
-        }
+        //    hv_Width.Dispose();
+        //    hv_Height.Dispose();
+        //    hv_StartTime.Dispose();
+        //    hv_MaxCircleRow.Dispose();
+        //    hv_MaxCircleColumn.Dispose();
+        //    hv_MaxCircleRadius.Dispose();
+        //    hv_MinCircleRow.Dispose();
+        //    hv_MinCircleColumn.Dispose();
+        //    hv_MinCircleRadius.Dispose();
+        //    hv_TwoCirclePhi.Dispose();
+        //    hv_RightCircleRowEdge1.Dispose();
+        //    hv_RightCircleColumnEdge1.Dispose();
+        //    hv_LeftCircleRowEdge1.Dispose();
+        //    hv_LeftCircleColumnEdge1.Dispose();
+        //    hv_RightCircleRowEdge2.Dispose();
+        //    hv_RightCircleColumnEdge2.Dispose();
+        //    hv_LeftCircleRowEdge2.Dispose();
+        //    hv_LeftCircleColumnEdge2.Dispose();
+        //    hv_RightCenterRow.Dispose();
+        //    hv_RightCenterCol.Dispose();
+        //    hv_LeftCenterRow.Dispose();
+        //    hv_LeftCenterCol.Dispose();
+        //    hv_L1_L2.Dispose();
+        //    hv_ButtomRowEdge1.Dispose();
+        //    hv_ButtomColumnEdge1.Dispose();
+        //    hv_ButtomRowEdge2.Dispose();
+        //    hv_ButtomColumnEdge2.Dispose();
+        //    hv_L3CenterRow.Dispose();
+        //    hv_L3CenterCol.Dispose();
+        //    hv_L3StartRow.Dispose();
+        //    hv_L3StartCol.Dispose();
+        //    hv_L3EndRow.Dispose();
+        //    hv_L3EndCol.Dispose();
+        //    hv_Y1.Dispose();
+        //    hv_StopTime.Dispose();
+        //    hv_runtime.Dispose();
+        //    hv_distanceY1.Dispose();
+        //    hv_distanceL1L2.Dispose();
+        //}
 
-        public static void Measure_46(HObject ho_Image, out double RunTime, out double DistanceY)
-        {
-            // Local control variables 
-            HTuple hv_Width = new HTuple(), hv_Height = new HTuple();
-            HTuple hv_StartTime = new HTuple(), hv_MaxCircleRow = new HTuple();
-            HTuple hv_MaxCircleColumn = new HTuple(), hv_MaxCircleRadius = new HTuple();
-            HTuple hv_MinCircleRow = new HTuple(), hv_MinCircleColumn = new HTuple();
-            HTuple hv_MinCircleRadius = new HTuple(), hv_TwoCirclePhi = new HTuple();
-            HTuple hv_P1Row = new HTuple(), hv_P1Col = new HTuple();
-            HTuple hv_P2Row = new HTuple(), hv_P2Col = new HTuple();
-            HTuple hv_P3Row = new HTuple(), hv_P3Col = new HTuple();
-            HTuple hv_ButtomRowEdge1 = new HTuple(), hv_ButtomColumnEdge1 = new HTuple();
-            HTuple hv_ButtomRowEdge2 = new HTuple(), hv_ButtomColumnEdge2 = new HTuple();
-            HTuple hv_Y1 = new HTuple(), hv_Y2 = new HTuple(), hv_Y3 = new HTuple();
-            HTuple hv_StopTime = new HTuple(), hv_runtime = new HTuple();
-            HTuple hv_distanceY = new HTuple();
-            // Initialize local and output iconic variables 
-             hv_Width.Dispose(); hv_Height.Dispose();
-            HOperatorSet.GetImageSize(ho_Image, out hv_Width, out hv_Height);
-            hv_StartTime.Dispose();
-            HOperatorSet.CountSeconds(out hv_StartTime);
-            hv_MaxCircleRow.Dispose(); hv_MaxCircleColumn.Dispose(); hv_MaxCircleRadius.Dispose(); hv_MinCircleRow.Dispose(); hv_MinCircleColumn.Dispose(); hv_MinCircleRadius.Dispose(); hv_TwoCirclePhi.Dispose();
-            gen_TwoCircle_info(ho_Image, out hv_MaxCircleRow, out hv_MaxCircleColumn, out hv_MaxCircleRadius,
-                out hv_MinCircleRow, out hv_MinCircleColumn, out hv_MinCircleRadius, out hv_TwoCirclePhi);
-            hv_P1Row.Dispose(); hv_P1Col.Dispose(); hv_P2Row.Dispose(); hv_P2Col.Dispose(); hv_P3Row.Dispose(); hv_P3Col.Dispose();
-            gen_p1p2p3_Measure46(ho_Image, hv_MinCircleRow, hv_MinCircleColumn, hv_MinCircleRadius,
-                hv_MaxCircleColumn, hv_TwoCirclePhi, hv_Width, hv_Height, out hv_P1Row, out hv_P1Col,
-                out hv_P2Row, out hv_P2Col, out hv_P3Row, out hv_P3Col);
-            //定位底部测量矩形
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_ButtomRowEdge1.Dispose(); hv_ButtomColumnEdge1.Dispose(); hv_ButtomRowEdge2.Dispose(); hv_ButtomColumnEdge2.Dispose();
-                gen_buttom_edge(ho_Image, hv_MaxCircleRow, hv_MaxCircleColumn, (hv_MaxCircleRadius * 3) / 2,
-                    (hv_MaxCircleRadius * 3) / 4, hv_TwoCirclePhi, hv_Width, hv_Height, (new HTuple(90)).TupleRad()
-                    , (new HTuple(90)).TupleRad(), hv_MinCircleColumn, hv_MaxCircleColumn, out hv_ButtomRowEdge1,
-                    out hv_ButtomColumnEdge1, out hv_ButtomRowEdge2, out hv_ButtomColumnEdge2);
-            }
-            //计算三点分别到底部边缘距离
-            hv_Y1.Dispose();
-            HOperatorSet.DistancePl(hv_P1Row, hv_P1Col, hv_ButtomRowEdge1, hv_ButtomColumnEdge1,
-                hv_ButtomRowEdge2, hv_ButtomColumnEdge2, out hv_Y1);
-            hv_Y2.Dispose();
-            HOperatorSet.DistancePl(hv_P2Row, hv_P2Col, hv_ButtomRowEdge1, hv_ButtomColumnEdge1,
-                hv_ButtomRowEdge2, hv_ButtomColumnEdge2, out hv_Y2);
-            hv_Y3.Dispose();
-            HOperatorSet.DistancePl(hv_P3Row, hv_P3Col, hv_ButtomRowEdge1, hv_ButtomColumnEdge1,
-                hv_ButtomRowEdge2, hv_ButtomColumnEdge2, out hv_Y3);
-            //计算运行时间
-            hv_StopTime.Dispose();
-            HOperatorSet.CountSeconds(out hv_StopTime);
-            //输出结果
-            hv_runtime.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_runtime = (hv_StopTime - hv_StartTime) * 1000;
-                RunTime = hv_runtime;
-            }
-            hv_distanceY.Dispose();
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_distanceY = ((hv_Y1 + hv_Y2) + hv_Y3) / 3;
-                DistanceY = hv_distanceY * 0.0069;
-            }
+        //public static void Measure_46(HObject ho_Image, out double RunTime, out double DistanceY)
+        //{
+        //    // Local control variables 
+        //    HTuple hv_Width = new HTuple(), hv_Height = new HTuple();
+        //    HTuple hv_StartTime = new HTuple(), hv_MaxCircleRow = new HTuple();
+        //    HTuple hv_MaxCircleColumn = new HTuple(), hv_MaxCircleRadius = new HTuple();
+        //    HTuple hv_MinCircleRow = new HTuple(), hv_MinCircleColumn = new HTuple();
+        //    HTuple hv_MinCircleRadius = new HTuple(), hv_TwoCirclePhi = new HTuple();
+        //    HTuple hv_P1Row = new HTuple(), hv_P1Col = new HTuple();
+        //    HTuple hv_P2Row = new HTuple(), hv_P2Col = new HTuple();
+        //    HTuple hv_P3Row = new HTuple(), hv_P3Col = new HTuple();
+        //    HTuple hv_ButtomRowEdge1 = new HTuple(), hv_ButtomColumnEdge1 = new HTuple();
+        //    HTuple hv_ButtomRowEdge2 = new HTuple(), hv_ButtomColumnEdge2 = new HTuple();
+        //    HTuple hv_Y1 = new HTuple(), hv_Y2 = new HTuple(), hv_Y3 = new HTuple();
+        //    HTuple hv_StopTime = new HTuple(), hv_runtime = new HTuple();
+        //    HTuple hv_distanceY = new HTuple();
+        //    // Initialize local and output iconic variables 
+        //     hv_Width.Dispose(); hv_Height.Dispose();
+        //    HOperatorSet.GetImageSize(ho_Image, out hv_Width, out hv_Height);
+        //    hv_StartTime.Dispose();
+        //    HOperatorSet.CountSeconds(out hv_StartTime);
+        //    hv_MaxCircleRow.Dispose(); hv_MaxCircleColumn.Dispose(); hv_MaxCircleRadius.Dispose(); hv_MinCircleRow.Dispose(); hv_MinCircleColumn.Dispose(); hv_MinCircleRadius.Dispose(); hv_TwoCirclePhi.Dispose();
+        //    gen_TwoCircle_info(ho_Image, out hv_MaxCircleRow, out hv_MaxCircleColumn, out hv_MaxCircleRadius,
+        //        out hv_MinCircleRow, out hv_MinCircleColumn, out hv_MinCircleRadius, out hv_TwoCirclePhi);
+        //    hv_P1Row.Dispose(); hv_P1Col.Dispose(); hv_P2Row.Dispose(); hv_P2Col.Dispose(); hv_P3Row.Dispose(); hv_P3Col.Dispose();
+        //    gen_p1p2p3_Measure46(ho_Image, hv_MinCircleRow, hv_MinCircleColumn, hv_MinCircleRadius,
+        //        hv_MaxCircleColumn, hv_TwoCirclePhi, hv_Width, hv_Height, out hv_P1Row, out hv_P1Col,
+        //        out hv_P2Row, out hv_P2Col, out hv_P3Row, out hv_P3Col);
+        //    //定位底部测量矩形
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_ButtomRowEdge1.Dispose(); hv_ButtomColumnEdge1.Dispose(); hv_ButtomRowEdge2.Dispose(); hv_ButtomColumnEdge2.Dispose();
+        //        gen_buttom_edge(ho_Image, hv_MaxCircleRow, hv_MaxCircleColumn, (hv_MaxCircleRadius * 3) / 2,
+        //            (hv_MaxCircleRadius * 3) / 4, hv_TwoCirclePhi, hv_Width, hv_Height, (new HTuple(90)).TupleRad()
+        //            , (new HTuple(90)).TupleRad(), hv_MinCircleColumn, hv_MaxCircleColumn, out hv_ButtomRowEdge1,
+        //            out hv_ButtomColumnEdge1, out hv_ButtomRowEdge2, out hv_ButtomColumnEdge2);
+        //    }
+        //    //计算三点分别到底部边缘距离
+        //    hv_Y1.Dispose();
+        //    HOperatorSet.DistancePl(hv_P1Row, hv_P1Col, hv_ButtomRowEdge1, hv_ButtomColumnEdge1,
+        //        hv_ButtomRowEdge2, hv_ButtomColumnEdge2, out hv_Y1);
+        //    hv_Y2.Dispose();
+        //    HOperatorSet.DistancePl(hv_P2Row, hv_P2Col, hv_ButtomRowEdge1, hv_ButtomColumnEdge1,
+        //        hv_ButtomRowEdge2, hv_ButtomColumnEdge2, out hv_Y2);
+        //    hv_Y3.Dispose();
+        //    HOperatorSet.DistancePl(hv_P3Row, hv_P3Col, hv_ButtomRowEdge1, hv_ButtomColumnEdge1,
+        //        hv_ButtomRowEdge2, hv_ButtomColumnEdge2, out hv_Y3);
+        //    //计算运行时间
+        //    hv_StopTime.Dispose();
+        //    HOperatorSet.CountSeconds(out hv_StopTime);
+        //    //输出结果
+        //    hv_runtime.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_runtime = (hv_StopTime - hv_StartTime) * 1000;
+        //        RunTime = hv_runtime;
+        //    }
+        //    hv_distanceY.Dispose();
+        //    using (HDevDisposeHelper dh = new HDevDisposeHelper())
+        //    {
+        //        hv_distanceY = ((hv_Y1 + hv_Y2) + hv_Y3) / 3;
+        //        DistanceY = hv_distanceY * 0.0069;
+        //    }
 
-            DispImage(ho_Image);
-            outWindow.SetColor("red");
-            outWindow.SetLineWidth(2);
-            outWindow.DispLine(hv_ButtomRowEdge1, hv_ButtomColumnEdge1, hv_ButtomRowEdge2, hv_ButtomColumnEdge2);
-            outWindow.DispCircle(hv_P1Row, hv_P1Col, 20);
-            outWindow.DispCircle(hv_P2Row, hv_P2Col, 20);
-            outWindow.DispCircle(hv_P3Row, hv_P3Col, 20);
+        //    DispImage(ho_Image);
+        //    outWindow.SetColor("red");
+        //    outWindow.SetLineWidth(2);
+        //    outWindow.DispLine(hv_ButtomRowEdge1, hv_ButtomColumnEdge1, hv_ButtomRowEdge2, hv_ButtomColumnEdge2);
+        //    outWindow.DispCircle(hv_P1Row, hv_P1Col, 20);
+        //    outWindow.DispCircle(hv_P2Row, hv_P2Col, 20);
+        //    outWindow.DispCircle(hv_P3Row, hv_P3Col, 20);
 
-            ho_Image.Dispose();
+        //    ho_Image.Dispose();
 
-            hv_Width.Dispose();
-            hv_Height.Dispose();
-            hv_StartTime.Dispose();
-            hv_MaxCircleRow.Dispose();
-            hv_MaxCircleColumn.Dispose();
-            hv_MaxCircleRadius.Dispose();
-            hv_MinCircleRow.Dispose();
-            hv_MinCircleColumn.Dispose();
-            hv_MinCircleRadius.Dispose();
-            hv_TwoCirclePhi.Dispose();
-            hv_P1Row.Dispose();
-            hv_P1Col.Dispose();
-            hv_P2Row.Dispose();
-            hv_P2Col.Dispose();
-            hv_P3Row.Dispose();
-            hv_P3Col.Dispose();
-            hv_ButtomRowEdge1.Dispose();
-            hv_ButtomColumnEdge1.Dispose();
-            hv_ButtomRowEdge2.Dispose();
-            hv_ButtomColumnEdge2.Dispose();
-            hv_Y1.Dispose();
-            hv_Y2.Dispose();
-            hv_Y3.Dispose();
-            hv_StopTime.Dispose();
-            hv_runtime.Dispose();
-            hv_distanceY.Dispose();
-        }
+        //    hv_Width.Dispose();
+        //    hv_Height.Dispose();
+        //    hv_StartTime.Dispose();
+        //    hv_MaxCircleRow.Dispose();
+        //    hv_MaxCircleColumn.Dispose();
+        //    hv_MaxCircleRadius.Dispose();
+        //    hv_MinCircleRow.Dispose();
+        //    hv_MinCircleColumn.Dispose();
+        //    hv_MinCircleRadius.Dispose();
+        //    hv_TwoCirclePhi.Dispose();
+        //    hv_P1Row.Dispose();
+        //    hv_P1Col.Dispose();
+        //    hv_P2Row.Dispose();
+        //    hv_P2Col.Dispose();
+        //    hv_P3Row.Dispose();
+        //    hv_P3Col.Dispose();
+        //    hv_ButtomRowEdge1.Dispose();
+        //    hv_ButtomColumnEdge1.Dispose();
+        //    hv_ButtomRowEdge2.Dispose();
+        //    hv_ButtomColumnEdge2.Dispose();
+        //    hv_Y1.Dispose();
+        //    hv_Y2.Dispose();
+        //    hv_Y3.Dispose();
+        //    hv_StopTime.Dispose();
+        //    hv_runtime.Dispose();
+        //    hv_distanceY.Dispose();
+        //}
         #endregion
 
         //抓取底部边缘
@@ -1719,531 +1729,531 @@ namespace HalconAlgorithm
         }
 
         //测量项10：获取L1、L2距离
-        private static void gen_L1L2_Measure10(HObject ho_Image, HTuple hv_CenterRow, HTuple hv_CenterColumn,
-    HTuple hv_MinCircleRadius, HTuple hv_BasePhi, HTuple hv_Width, HTuple hv_Height,
-    out HTuple hv_RightCircleRowEdge1, out HTuple hv_RightCircleColumnEdge1, out HTuple hv_LeftCircleRowEdge1,
-    out HTuple hv_LeftCircleColumnEdge1, out HTuple hv_RightCircleRowEdge2, out HTuple hv_RightCircleColumnEdge2,
-    out HTuple hv_LeftCircleRowEdge2, out HTuple hv_LeftCircleColumnEdge2)
-        {
-            // Local iconic variables 
-            HObject ho_Rect1, ho_RightRect1, ho_LeftRect1;
-            HObject ho_Rect2, ho_RightRect2, ho_LeftRect2;
-            // Local control variables 
-            HTuple hv_HomMat2D1 = new HTuple(), hv_RightRect1Area = new HTuple();
-            HTuple hv_RightRect1Row = new HTuple(), hv_RightRect1Column = new HTuple();
-            HTuple hv_RightRect1Phi = new HTuple(), hv_MeasureHandle1 = new HTuple();
-            HTuple hv_HomMat2D2 = new HTuple(), hv_LeftRect1Area = new HTuple();
-            HTuple hv_LeftRect1Row = new HTuple(), hv_LeftRect1Column = new HTuple();
-            HTuple hv_LeftRect1Phi = new HTuple(), hv_MeasureHandle3 = new HTuple();
-            HTuple hv_RightRect2Area = new HTuple(), hv_RightRect2Row = new HTuple();
-            HTuple hv_RightRect2Column = new HTuple(), hv_RightRect2Phi = new HTuple();
-            HTuple hv_MeasureHandle2 = new HTuple(), hv_LeftRect2Area = new HTuple();
-            HTuple hv_LeftRect2Row = new HTuple(), hv_LeftRect2Column = new HTuple();
-            HTuple hv_LeftRect2Phi = new HTuple(), hv_MeasureHandle4 = new HTuple();
-            HTuple hv_Amplitude = new HTuple(), hv_Distance = new HTuple();
-            // Initialize local and output iconic variables 
-            HOperatorSet.GenEmptyObj(out ho_Rect1);
-            HOperatorSet.GenEmptyObj(out ho_RightRect1);
-            HOperatorSet.GenEmptyObj(out ho_LeftRect1);
-            HOperatorSet.GenEmptyObj(out ho_Rect2);
-            HOperatorSet.GenEmptyObj(out ho_RightRect2);
-            HOperatorSet.GenEmptyObj(out ho_LeftRect2);
-            hv_RightCircleRowEdge1 = new HTuple();
-            hv_RightCircleColumnEdge1 = new HTuple();
-            hv_LeftCircleRowEdge1 = new HTuple();
-            hv_LeftCircleColumnEdge1 = new HTuple();
-            hv_RightCircleRowEdge2 = new HTuple();
-            hv_RightCircleColumnEdge2 = new HTuple();
-            hv_LeftCircleRowEdge2 = new HTuple();
-            hv_LeftCircleColumnEdge2 = new HTuple();
-            try
-            {
-                //生成基准矩形
-                using (HDevDisposeHelper dh = new HDevDisposeHelper())
-                {
-                    ho_Rect1.Dispose();
-                    HOperatorSet.GenRectangle2(out ho_Rect1, hv_CenterRow - 100, hv_CenterColumn + hv_MinCircleRadius,
-                        0, 100, 20);
-                }
-                //生成测量矩形
-                hv_HomMat2D1.Dispose();
-                HOperatorSet.VectorAngleToRigid(hv_CenterRow, hv_CenterColumn, 0, hv_CenterRow,
-                    hv_CenterColumn, hv_BasePhi, out hv_HomMat2D1);
-                ho_RightRect1.Dispose();
-                HOperatorSet.AffineTransRegion(ho_Rect1, out ho_RightRect1, hv_HomMat2D1, "nearest_neighbor");
-                hv_RightRect1Area.Dispose(); hv_RightRect1Row.Dispose(); hv_RightRect1Column.Dispose();
-                HOperatorSet.AreaCenter(ho_RightRect1, out hv_RightRect1Area, out hv_RightRect1Row,
-                    out hv_RightRect1Column);
-                hv_RightRect1Phi.Dispose();
-                HOperatorSet.OrientationRegion(ho_RightRect1, out hv_RightRect1Phi);
-                hv_MeasureHandle1.Dispose();
-                HOperatorSet.GenMeasureRectangle2(hv_RightRect1Row, hv_RightRect1Column, hv_RightRect1Phi,
-                    100, 50, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle1);
+    //    private static void gen_L1L2_Measure10(HObject ho_Image, HTuple hv_CenterRow, HTuple hv_CenterColumn,
+    //HTuple hv_MinCircleRadius, HTuple hv_BasePhi, HTuple hv_Width, HTuple hv_Height,
+    //out HTuple hv_RightCircleRowEdge1, out HTuple hv_RightCircleColumnEdge1, out HTuple hv_LeftCircleRowEdge1,
+    //out HTuple hv_LeftCircleColumnEdge1, out HTuple hv_RightCircleRowEdge2, out HTuple hv_RightCircleColumnEdge2,
+    //out HTuple hv_LeftCircleRowEdge2, out HTuple hv_LeftCircleColumnEdge2)
+    //    {
+    //        // Local iconic variables 
+    //        HObject ho_Rect1, ho_RightRect1, ho_LeftRect1;
+    //        HObject ho_Rect2, ho_RightRect2, ho_LeftRect2;
+    //        // Local control variables 
+    //        HTuple hv_HomMat2D1 = new HTuple(), hv_RightRect1Area = new HTuple();
+    //        HTuple hv_RightRect1Row = new HTuple(), hv_RightRect1Column = new HTuple();
+    //        HTuple hv_RightRect1Phi = new HTuple(), hv_MeasureHandle1 = new HTuple();
+    //        HTuple hv_HomMat2D2 = new HTuple(), hv_LeftRect1Area = new HTuple();
+    //        HTuple hv_LeftRect1Row = new HTuple(), hv_LeftRect1Column = new HTuple();
+    //        HTuple hv_LeftRect1Phi = new HTuple(), hv_MeasureHandle3 = new HTuple();
+    //        HTuple hv_RightRect2Area = new HTuple(), hv_RightRect2Row = new HTuple();
+    //        HTuple hv_RightRect2Column = new HTuple(), hv_RightRect2Phi = new HTuple();
+    //        HTuple hv_MeasureHandle2 = new HTuple(), hv_LeftRect2Area = new HTuple();
+    //        HTuple hv_LeftRect2Row = new HTuple(), hv_LeftRect2Column = new HTuple();
+    //        HTuple hv_LeftRect2Phi = new HTuple(), hv_MeasureHandle4 = new HTuple();
+    //        HTuple hv_Amplitude = new HTuple(), hv_Distance = new HTuple();
+    //        // Initialize local and output iconic variables 
+    //        HOperatorSet.GenEmptyObj(out ho_Rect1);
+    //        HOperatorSet.GenEmptyObj(out ho_RightRect1);
+    //        HOperatorSet.GenEmptyObj(out ho_LeftRect1);
+    //        HOperatorSet.GenEmptyObj(out ho_Rect2);
+    //        HOperatorSet.GenEmptyObj(out ho_RightRect2);
+    //        HOperatorSet.GenEmptyObj(out ho_LeftRect2);
+    //        hv_RightCircleRowEdge1 = new HTuple();
+    //        hv_RightCircleColumnEdge1 = new HTuple();
+    //        hv_LeftCircleRowEdge1 = new HTuple();
+    //        hv_LeftCircleColumnEdge1 = new HTuple();
+    //        hv_RightCircleRowEdge2 = new HTuple();
+    //        hv_RightCircleColumnEdge2 = new HTuple();
+    //        hv_LeftCircleRowEdge2 = new HTuple();
+    //        hv_LeftCircleColumnEdge2 = new HTuple();
+    //        try
+    //        {
+    //            //生成基准矩形
+    //            using (HDevDisposeHelper dh = new HDevDisposeHelper())
+    //            {
+    //                ho_Rect1.Dispose();
+    //                HOperatorSet.GenRectangle2(out ho_Rect1, hv_CenterRow - 100, hv_CenterColumn + hv_MinCircleRadius,
+    //                    0, 100, 20);
+    //            }
+    //            //生成测量矩形
+    //            hv_HomMat2D1.Dispose();
+    //            HOperatorSet.VectorAngleToRigid(hv_CenterRow, hv_CenterColumn, 0, hv_CenterRow,
+    //                hv_CenterColumn, hv_BasePhi, out hv_HomMat2D1);
+    //            ho_RightRect1.Dispose();
+    //            HOperatorSet.AffineTransRegion(ho_Rect1, out ho_RightRect1, hv_HomMat2D1, "nearest_neighbor");
+    //            hv_RightRect1Area.Dispose(); hv_RightRect1Row.Dispose(); hv_RightRect1Column.Dispose();
+    //            HOperatorSet.AreaCenter(ho_RightRect1, out hv_RightRect1Area, out hv_RightRect1Row,
+    //                out hv_RightRect1Column);
+    //            hv_RightRect1Phi.Dispose();
+    //            HOperatorSet.OrientationRegion(ho_RightRect1, out hv_RightRect1Phi);
+    //            hv_MeasureHandle1.Dispose();
+    //            HOperatorSet.GenMeasureRectangle2(hv_RightRect1Row, hv_RightRect1Column, hv_RightRect1Phi,
+    //                100, 50, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle1);
 
-                using (HDevDisposeHelper dh = new HDevDisposeHelper())
-                {
-                    hv_HomMat2D2.Dispose();
-                    HOperatorSet.VectorAngleToRigid(hv_CenterRow, hv_CenterColumn, 0, hv_CenterRow,
-                        hv_CenterColumn, hv_BasePhi + ((new HTuple(180)).TupleRad()), out hv_HomMat2D2);
-                }
-                ho_LeftRect1.Dispose();
-                HOperatorSet.AffineTransRegion(ho_Rect1, out ho_LeftRect1, hv_HomMat2D2, "nearest_neighbor");
-                hv_LeftRect1Area.Dispose(); hv_LeftRect1Row.Dispose(); hv_LeftRect1Column.Dispose();
-                HOperatorSet.AreaCenter(ho_LeftRect1, out hv_LeftRect1Area, out hv_LeftRect1Row,
-                    out hv_LeftRect1Column);
-                hv_LeftRect1Phi.Dispose();
-                HOperatorSet.OrientationRegion(ho_LeftRect1, out hv_LeftRect1Phi);
-                hv_MeasureHandle3.Dispose();
-                HOperatorSet.GenMeasureRectangle2(hv_LeftRect1Row, hv_LeftRect1Column, hv_LeftRect1Phi,
-                    100, 50, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle3);
-                //生成基准矩形
-                using (HDevDisposeHelper dh = new HDevDisposeHelper())
-                {
-                    ho_Rect2.Dispose();
-                    HOperatorSet.GenRectangle2(out ho_Rect2, hv_CenterRow + 100, hv_CenterColumn + hv_MinCircleRadius,
-                        0, 100, 20);
-                }
-                //生成测量矩形
-                ho_RightRect2.Dispose();
-                HOperatorSet.AffineTransRegion(ho_Rect2, out ho_RightRect2, hv_HomMat2D1, "nearest_neighbor");
-                hv_RightRect2Area.Dispose(); hv_RightRect2Row.Dispose(); hv_RightRect2Column.Dispose();
-                HOperatorSet.AreaCenter(ho_RightRect2, out hv_RightRect2Area, out hv_RightRect2Row,
-                    out hv_RightRect2Column);
-                hv_RightRect2Phi.Dispose();
-                HOperatorSet.OrientationRegion(ho_RightRect2, out hv_RightRect2Phi);
-                hv_MeasureHandle2.Dispose();
-                HOperatorSet.GenMeasureRectangle2(hv_RightRect2Row, hv_RightRect2Column, hv_RightRect2Phi,
-                    100, 50, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle2);
+    //            using (HDevDisposeHelper dh = new HDevDisposeHelper())
+    //            {
+    //                hv_HomMat2D2.Dispose();
+    //                HOperatorSet.VectorAngleToRigid(hv_CenterRow, hv_CenterColumn, 0, hv_CenterRow,
+    //                    hv_CenterColumn, hv_BasePhi + ((new HTuple(180)).TupleRad()), out hv_HomMat2D2);
+    //            }
+    //            ho_LeftRect1.Dispose();
+    //            HOperatorSet.AffineTransRegion(ho_Rect1, out ho_LeftRect1, hv_HomMat2D2, "nearest_neighbor");
+    //            hv_LeftRect1Area.Dispose(); hv_LeftRect1Row.Dispose(); hv_LeftRect1Column.Dispose();
+    //            HOperatorSet.AreaCenter(ho_LeftRect1, out hv_LeftRect1Area, out hv_LeftRect1Row,
+    //                out hv_LeftRect1Column);
+    //            hv_LeftRect1Phi.Dispose();
+    //            HOperatorSet.OrientationRegion(ho_LeftRect1, out hv_LeftRect1Phi);
+    //            hv_MeasureHandle3.Dispose();
+    //            HOperatorSet.GenMeasureRectangle2(hv_LeftRect1Row, hv_LeftRect1Column, hv_LeftRect1Phi,
+    //                100, 50, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle3);
+    //            //生成基准矩形
+    //            using (HDevDisposeHelper dh = new HDevDisposeHelper())
+    //            {
+    //                ho_Rect2.Dispose();
+    //                HOperatorSet.GenRectangle2(out ho_Rect2, hv_CenterRow + 100, hv_CenterColumn + hv_MinCircleRadius,
+    //                    0, 100, 20);
+    //            }
+    //            //生成测量矩形
+    //            ho_RightRect2.Dispose();
+    //            HOperatorSet.AffineTransRegion(ho_Rect2, out ho_RightRect2, hv_HomMat2D1, "nearest_neighbor");
+    //            hv_RightRect2Area.Dispose(); hv_RightRect2Row.Dispose(); hv_RightRect2Column.Dispose();
+    //            HOperatorSet.AreaCenter(ho_RightRect2, out hv_RightRect2Area, out hv_RightRect2Row,
+    //                out hv_RightRect2Column);
+    //            hv_RightRect2Phi.Dispose();
+    //            HOperatorSet.OrientationRegion(ho_RightRect2, out hv_RightRect2Phi);
+    //            hv_MeasureHandle2.Dispose();
+    //            HOperatorSet.GenMeasureRectangle2(hv_RightRect2Row, hv_RightRect2Column, hv_RightRect2Phi,
+    //                100, 50, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle2);
 
-                ho_LeftRect2.Dispose();
-                HOperatorSet.AffineTransRegion(ho_Rect2, out ho_LeftRect2, hv_HomMat2D2, "nearest_neighbor");
-                hv_LeftRect2Area.Dispose(); hv_LeftRect2Row.Dispose(); hv_LeftRect2Column.Dispose();
-                HOperatorSet.AreaCenter(ho_LeftRect2, out hv_LeftRect2Area, out hv_LeftRect2Row,
-                    out hv_LeftRect2Column);
-                hv_LeftRect2Phi.Dispose();
-                HOperatorSet.OrientationRegion(ho_LeftRect2, out hv_LeftRect2Phi);
-                hv_MeasureHandle4.Dispose();
-                HOperatorSet.GenMeasureRectangle2(hv_LeftRect2Row, hv_LeftRect2Column, hv_LeftRect2Phi,
-                    100, 50, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle4);
-                //抓取边缘点
-                hv_RightCircleRowEdge1.Dispose(); hv_RightCircleColumnEdge1.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
-                HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle1, 1, 30, "all", "all", out hv_RightCircleRowEdge1,
-                    out hv_RightCircleColumnEdge1, out hv_Amplitude, out hv_Distance);
-                hv_LeftCircleRowEdge1.Dispose(); hv_LeftCircleColumnEdge1.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
-                HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle3, 1, 30, "all", "all", out hv_LeftCircleRowEdge1,
-                    out hv_LeftCircleColumnEdge1, out hv_Amplitude, out hv_Distance);
-                hv_RightCircleRowEdge2.Dispose(); hv_RightCircleColumnEdge2.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
-                HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle2, 1, 30, "all", "all", out hv_RightCircleRowEdge2,
-                    out hv_RightCircleColumnEdge2, out hv_Amplitude, out hv_Distance);
-                hv_LeftCircleRowEdge2.Dispose(); hv_LeftCircleColumnEdge2.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
-                HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle4, 1, 30, "all", "all", out hv_LeftCircleRowEdge2,
-                    out hv_LeftCircleColumnEdge2, out hv_Amplitude, out hv_Distance);
-                ho_Rect1.Dispose();
-                ho_RightRect1.Dispose();
-                ho_LeftRect1.Dispose();
-                ho_Rect2.Dispose();
-                ho_RightRect2.Dispose();
-                ho_LeftRect2.Dispose();
+    //            ho_LeftRect2.Dispose();
+    //            HOperatorSet.AffineTransRegion(ho_Rect2, out ho_LeftRect2, hv_HomMat2D2, "nearest_neighbor");
+    //            hv_LeftRect2Area.Dispose(); hv_LeftRect2Row.Dispose(); hv_LeftRect2Column.Dispose();
+    //            HOperatorSet.AreaCenter(ho_LeftRect2, out hv_LeftRect2Area, out hv_LeftRect2Row,
+    //                out hv_LeftRect2Column);
+    //            hv_LeftRect2Phi.Dispose();
+    //            HOperatorSet.OrientationRegion(ho_LeftRect2, out hv_LeftRect2Phi);
+    //            hv_MeasureHandle4.Dispose();
+    //            HOperatorSet.GenMeasureRectangle2(hv_LeftRect2Row, hv_LeftRect2Column, hv_LeftRect2Phi,
+    //                100, 50, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle4);
+    //            //抓取边缘点
+    //            hv_RightCircleRowEdge1.Dispose(); hv_RightCircleColumnEdge1.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
+    //            HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle1, 1, 30, "all", "all", out hv_RightCircleRowEdge1,
+    //                out hv_RightCircleColumnEdge1, out hv_Amplitude, out hv_Distance);
+    //            hv_LeftCircleRowEdge1.Dispose(); hv_LeftCircleColumnEdge1.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
+    //            HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle3, 1, 30, "all", "all", out hv_LeftCircleRowEdge1,
+    //                out hv_LeftCircleColumnEdge1, out hv_Amplitude, out hv_Distance);
+    //            hv_RightCircleRowEdge2.Dispose(); hv_RightCircleColumnEdge2.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
+    //            HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle2, 1, 30, "all", "all", out hv_RightCircleRowEdge2,
+    //                out hv_RightCircleColumnEdge2, out hv_Amplitude, out hv_Distance);
+    //            hv_LeftCircleRowEdge2.Dispose(); hv_LeftCircleColumnEdge2.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
+    //            HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle4, 1, 30, "all", "all", out hv_LeftCircleRowEdge2,
+    //                out hv_LeftCircleColumnEdge2, out hv_Amplitude, out hv_Distance);
+    //            ho_Rect1.Dispose();
+    //            ho_RightRect1.Dispose();
+    //            ho_LeftRect1.Dispose();
+    //            ho_Rect2.Dispose();
+    //            ho_RightRect2.Dispose();
+    //            ho_LeftRect2.Dispose();
 
-                hv_HomMat2D1.Dispose();
-                hv_RightRect1Area.Dispose();
-                hv_RightRect1Row.Dispose();
-                hv_RightRect1Column.Dispose();
-                hv_RightRect1Phi.Dispose();
-                hv_MeasureHandle1.Dispose();
-                hv_HomMat2D2.Dispose();
-                hv_LeftRect1Area.Dispose();
-                hv_LeftRect1Row.Dispose();
-                hv_LeftRect1Column.Dispose();
-                hv_LeftRect1Phi.Dispose();
-                hv_MeasureHandle3.Dispose();
-                hv_RightRect2Area.Dispose();
-                hv_RightRect2Row.Dispose();
-                hv_RightRect2Column.Dispose();
-                hv_RightRect2Phi.Dispose();
-                hv_MeasureHandle2.Dispose();
-                hv_LeftRect2Area.Dispose();
-                hv_LeftRect2Row.Dispose();
-                hv_LeftRect2Column.Dispose();
-                hv_LeftRect2Phi.Dispose();
-                hv_MeasureHandle4.Dispose();
-                hv_Amplitude.Dispose();
-                hv_Distance.Dispose();
+    //            hv_HomMat2D1.Dispose();
+    //            hv_RightRect1Area.Dispose();
+    //            hv_RightRect1Row.Dispose();
+    //            hv_RightRect1Column.Dispose();
+    //            hv_RightRect1Phi.Dispose();
+    //            hv_MeasureHandle1.Dispose();
+    //            hv_HomMat2D2.Dispose();
+    //            hv_LeftRect1Area.Dispose();
+    //            hv_LeftRect1Row.Dispose();
+    //            hv_LeftRect1Column.Dispose();
+    //            hv_LeftRect1Phi.Dispose();
+    //            hv_MeasureHandle3.Dispose();
+    //            hv_RightRect2Area.Dispose();
+    //            hv_RightRect2Row.Dispose();
+    //            hv_RightRect2Column.Dispose();
+    //            hv_RightRect2Phi.Dispose();
+    //            hv_MeasureHandle2.Dispose();
+    //            hv_LeftRect2Area.Dispose();
+    //            hv_LeftRect2Row.Dispose();
+    //            hv_LeftRect2Column.Dispose();
+    //            hv_LeftRect2Phi.Dispose();
+    //            hv_MeasureHandle4.Dispose();
+    //            hv_Amplitude.Dispose();
+    //            hv_Distance.Dispose();
 
-                return;
-            }
-            catch (HalconException HDevExpDefaultException)
-            {
-                ho_Rect1.Dispose();
-                ho_RightRect1.Dispose();
-                ho_LeftRect1.Dispose();
-                ho_Rect2.Dispose();
-                ho_RightRect2.Dispose();
-                ho_LeftRect2.Dispose();
+    //            return;
+    //        }
+    //        catch (HalconException HDevExpDefaultException)
+    //        {
+    //            ho_Rect1.Dispose();
+    //            ho_RightRect1.Dispose();
+    //            ho_LeftRect1.Dispose();
+    //            ho_Rect2.Dispose();
+    //            ho_RightRect2.Dispose();
+    //            ho_LeftRect2.Dispose();
 
-                hv_HomMat2D1.Dispose();
-                hv_RightRect1Area.Dispose();
-                hv_RightRect1Row.Dispose();
-                hv_RightRect1Column.Dispose();
-                hv_RightRect1Phi.Dispose();
-                hv_MeasureHandle1.Dispose();
-                hv_HomMat2D2.Dispose();
-                hv_LeftRect1Area.Dispose();
-                hv_LeftRect1Row.Dispose();
-                hv_LeftRect1Column.Dispose();
-                hv_LeftRect1Phi.Dispose();
-                hv_MeasureHandle3.Dispose();
-                hv_RightRect2Area.Dispose();
-                hv_RightRect2Row.Dispose();
-                hv_RightRect2Column.Dispose();
-                hv_RightRect2Phi.Dispose();
-                hv_MeasureHandle2.Dispose();
-                hv_LeftRect2Area.Dispose();
-                hv_LeftRect2Row.Dispose();
-                hv_LeftRect2Column.Dispose();
-                hv_LeftRect2Phi.Dispose();
-                hv_MeasureHandle4.Dispose();
-                hv_Amplitude.Dispose();
-                hv_Distance.Dispose();
+    //            hv_HomMat2D1.Dispose();
+    //            hv_RightRect1Area.Dispose();
+    //            hv_RightRect1Row.Dispose();
+    //            hv_RightRect1Column.Dispose();
+    //            hv_RightRect1Phi.Dispose();
+    //            hv_MeasureHandle1.Dispose();
+    //            hv_HomMat2D2.Dispose();
+    //            hv_LeftRect1Area.Dispose();
+    //            hv_LeftRect1Row.Dispose();
+    //            hv_LeftRect1Column.Dispose();
+    //            hv_LeftRect1Phi.Dispose();
+    //            hv_MeasureHandle3.Dispose();
+    //            hv_RightRect2Area.Dispose();
+    //            hv_RightRect2Row.Dispose();
+    //            hv_RightRect2Column.Dispose();
+    //            hv_RightRect2Phi.Dispose();
+    //            hv_MeasureHandle2.Dispose();
+    //            hv_LeftRect2Area.Dispose();
+    //            hv_LeftRect2Row.Dispose();
+    //            hv_LeftRect2Column.Dispose();
+    //            hv_LeftRect2Phi.Dispose();
+    //            hv_MeasureHandle4.Dispose();
+    //            hv_Amplitude.Dispose();
+    //            hv_Distance.Dispose();
 
-                throw HDevExpDefaultException;
-            }
-        }
+    //            throw HDevExpDefaultException;
+    //        }
+    //    }
 
         //测量项34：获取L1、L2距离
-        private static void gen_L1L2_Measure34(HObject ho_Image, HTuple hv_MinCircleRow, HTuple hv_MinCircleColumn,
-    HTuple hv_MinCircleRadius, HTuple hv_TwoCirclePhi, HTuple hv_Width, HTuple hv_Height,
-    out HTuple hv_RightCircleRowEdge1, out HTuple hv_RightCircleColumnEdge1, out HTuple hv_LeftCircleRowEdge1,
-    out HTuple hv_LeftCircleColumnEdge1, out HTuple hv_RightCircleRowEdge2, out HTuple hv_RightCircleColumnEdge2,
-    out HTuple hv_LeftCircleRowEdge2, out HTuple hv_LeftCircleColumnEdge2)
-        {
-            // Local iconic variables 
-            HObject ho_Rect1, ho_RightRect1, ho_LeftRect1;
-            HObject ho_Rect2, ho_RightRect2, ho_LeftRect2;
-            // Local control variables 
-            HTuple hv_HomMat2D1 = new HTuple(), hv_RightRect1Area = new HTuple();
-            HTuple hv_RightRect1Row = new HTuple(), hv_RightRect1Column = new HTuple();
-            HTuple hv_RightRect1Phi = new HTuple(), hv_MeasureHandle1 = new HTuple();
-            HTuple hv_HomMat2D2 = new HTuple(), hv_LeftRect1Area = new HTuple();
-            HTuple hv_LeftRect1Row = new HTuple(), hv_LeftRect1Column = new HTuple();
-            HTuple hv_LeftRect1Phi = new HTuple(), hv_MeasureHandle3 = new HTuple();
-            HTuple hv_RightRect2Area = new HTuple(), hv_RightRect2Row = new HTuple();
-            HTuple hv_RightRect2Column = new HTuple(), hv_RightRect2Phi = new HTuple();
-            HTuple hv_MeasureHandle2 = new HTuple(), hv_LeftRect2Area = new HTuple();
-            HTuple hv_LeftRect2Row = new HTuple(), hv_LeftRect2Column = new HTuple();
-            HTuple hv_LeftRect2Phi = new HTuple(), hv_MeasureHandle4 = new HTuple();
-            HTuple hv_Amplitude = new HTuple(), hv_Distance = new HTuple();
-            // Initialize local and output iconic variables 
-            HOperatorSet.GenEmptyObj(out ho_Rect1);
-            HOperatorSet.GenEmptyObj(out ho_RightRect1);
-            HOperatorSet.GenEmptyObj(out ho_LeftRect1);
-            HOperatorSet.GenEmptyObj(out ho_Rect2);
-            HOperatorSet.GenEmptyObj(out ho_RightRect2);
-            HOperatorSet.GenEmptyObj(out ho_LeftRect2);
-            hv_RightCircleRowEdge1 = new HTuple();
-            hv_RightCircleColumnEdge1 = new HTuple();
-            hv_LeftCircleRowEdge1 = new HTuple();
-            hv_LeftCircleColumnEdge1 = new HTuple();
-            hv_RightCircleRowEdge2 = new HTuple();
-            hv_RightCircleColumnEdge2 = new HTuple();
-            hv_LeftCircleRowEdge2 = new HTuple();
-            hv_LeftCircleColumnEdge2 = new HTuple();
-            //生成基准矩形
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                ho_Rect1.Dispose();
-                HOperatorSet.GenRectangle2(out ho_Rect1, hv_MinCircleRow - 100, hv_MinCircleColumn + hv_MinCircleRadius,
-                    0, 100, 20);
-            }
-            //生成测量矩形
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_HomMat2D1.Dispose();
-                HOperatorSet.VectorAngleToRigid(hv_MinCircleRow, hv_MinCircleColumn, 0, hv_MinCircleRow,
-                    hv_MinCircleColumn, hv_TwoCirclePhi + ((new HTuple(90)).TupleRad()), out hv_HomMat2D1);
-            }
-            ho_RightRect1.Dispose();
-            HOperatorSet.AffineTransRegion(ho_Rect1, out ho_RightRect1, hv_HomMat2D1, "nearest_neighbor");
-            hv_RightRect1Area.Dispose(); hv_RightRect1Row.Dispose(); hv_RightRect1Column.Dispose();
-            HOperatorSet.AreaCenter(ho_RightRect1, out hv_RightRect1Area, out hv_RightRect1Row,
-                out hv_RightRect1Column);
-            hv_RightRect1Phi.Dispose();
-            HOperatorSet.OrientationRegion(ho_RightRect1, out hv_RightRect1Phi);
-            hv_MeasureHandle1.Dispose();
-            HOperatorSet.GenMeasureRectangle2(hv_RightRect1Row, hv_RightRect1Column, hv_RightRect1Phi,
-                100, 50, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle1);
+    //    private static void gen_L1L2_Measure34(HObject ho_Image, HTuple hv_MinCircleRow, HTuple hv_MinCircleColumn,
+    //HTuple hv_MinCircleRadius, HTuple hv_TwoCirclePhi, HTuple hv_Width, HTuple hv_Height,
+    //out HTuple hv_RightCircleRowEdge1, out HTuple hv_RightCircleColumnEdge1, out HTuple hv_LeftCircleRowEdge1,
+    //out HTuple hv_LeftCircleColumnEdge1, out HTuple hv_RightCircleRowEdge2, out HTuple hv_RightCircleColumnEdge2,
+    //out HTuple hv_LeftCircleRowEdge2, out HTuple hv_LeftCircleColumnEdge2)
+    //    {
+    //        // Local iconic variables 
+    //        HObject ho_Rect1, ho_RightRect1, ho_LeftRect1;
+    //        HObject ho_Rect2, ho_RightRect2, ho_LeftRect2;
+    //        // Local control variables 
+    //        HTuple hv_HomMat2D1 = new HTuple(), hv_RightRect1Area = new HTuple();
+    //        HTuple hv_RightRect1Row = new HTuple(), hv_RightRect1Column = new HTuple();
+    //        HTuple hv_RightRect1Phi = new HTuple(), hv_MeasureHandle1 = new HTuple();
+    //        HTuple hv_HomMat2D2 = new HTuple(), hv_LeftRect1Area = new HTuple();
+    //        HTuple hv_LeftRect1Row = new HTuple(), hv_LeftRect1Column = new HTuple();
+    //        HTuple hv_LeftRect1Phi = new HTuple(), hv_MeasureHandle3 = new HTuple();
+    //        HTuple hv_RightRect2Area = new HTuple(), hv_RightRect2Row = new HTuple();
+    //        HTuple hv_RightRect2Column = new HTuple(), hv_RightRect2Phi = new HTuple();
+    //        HTuple hv_MeasureHandle2 = new HTuple(), hv_LeftRect2Area = new HTuple();
+    //        HTuple hv_LeftRect2Row = new HTuple(), hv_LeftRect2Column = new HTuple();
+    //        HTuple hv_LeftRect2Phi = new HTuple(), hv_MeasureHandle4 = new HTuple();
+    //        HTuple hv_Amplitude = new HTuple(), hv_Distance = new HTuple();
+    //        // Initialize local and output iconic variables 
+    //        HOperatorSet.GenEmptyObj(out ho_Rect1);
+    //        HOperatorSet.GenEmptyObj(out ho_RightRect1);
+    //        HOperatorSet.GenEmptyObj(out ho_LeftRect1);
+    //        HOperatorSet.GenEmptyObj(out ho_Rect2);
+    //        HOperatorSet.GenEmptyObj(out ho_RightRect2);
+    //        HOperatorSet.GenEmptyObj(out ho_LeftRect2);
+    //        hv_RightCircleRowEdge1 = new HTuple();
+    //        hv_RightCircleColumnEdge1 = new HTuple();
+    //        hv_LeftCircleRowEdge1 = new HTuple();
+    //        hv_LeftCircleColumnEdge1 = new HTuple();
+    //        hv_RightCircleRowEdge2 = new HTuple();
+    //        hv_RightCircleColumnEdge2 = new HTuple();
+    //        hv_LeftCircleRowEdge2 = new HTuple();
+    //        hv_LeftCircleColumnEdge2 = new HTuple();
+    //        //生成基准矩形
+    //        using (HDevDisposeHelper dh = new HDevDisposeHelper())
+    //        {
+    //            ho_Rect1.Dispose();
+    //            HOperatorSet.GenRectangle2(out ho_Rect1, hv_MinCircleRow - 100, hv_MinCircleColumn + hv_MinCircleRadius,
+    //                0, 100, 20);
+    //        }
+    //        //生成测量矩形
+    //        using (HDevDisposeHelper dh = new HDevDisposeHelper())
+    //        {
+    //            hv_HomMat2D1.Dispose();
+    //            HOperatorSet.VectorAngleToRigid(hv_MinCircleRow, hv_MinCircleColumn, 0, hv_MinCircleRow,
+    //                hv_MinCircleColumn, hv_TwoCirclePhi + ((new HTuple(90)).TupleRad()), out hv_HomMat2D1);
+    //        }
+    //        ho_RightRect1.Dispose();
+    //        HOperatorSet.AffineTransRegion(ho_Rect1, out ho_RightRect1, hv_HomMat2D1, "nearest_neighbor");
+    //        hv_RightRect1Area.Dispose(); hv_RightRect1Row.Dispose(); hv_RightRect1Column.Dispose();
+    //        HOperatorSet.AreaCenter(ho_RightRect1, out hv_RightRect1Area, out hv_RightRect1Row,
+    //            out hv_RightRect1Column);
+    //        hv_RightRect1Phi.Dispose();
+    //        HOperatorSet.OrientationRegion(ho_RightRect1, out hv_RightRect1Phi);
+    //        hv_MeasureHandle1.Dispose();
+    //        HOperatorSet.GenMeasureRectangle2(hv_RightRect1Row, hv_RightRect1Column, hv_RightRect1Phi,
+    //            100, 50, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle1);
 
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                hv_HomMat2D2.Dispose();
-                HOperatorSet.VectorAngleToRigid(hv_MinCircleRow, hv_MinCircleColumn, 0, hv_MinCircleRow,
-                    hv_MinCircleColumn, hv_TwoCirclePhi - ((new HTuple(90)).TupleRad()), out hv_HomMat2D2);
-            }
-            ho_LeftRect1.Dispose();
-            HOperatorSet.AffineTransRegion(ho_Rect1, out ho_LeftRect1, hv_HomMat2D2, "nearest_neighbor");
-            hv_LeftRect1Area.Dispose(); hv_LeftRect1Row.Dispose(); hv_LeftRect1Column.Dispose();
-            HOperatorSet.AreaCenter(ho_LeftRect1, out hv_LeftRect1Area, out hv_LeftRect1Row,
-                out hv_LeftRect1Column);
-            hv_LeftRect1Phi.Dispose();
-            HOperatorSet.OrientationRegion(ho_LeftRect1, out hv_LeftRect1Phi);
-            hv_MeasureHandle3.Dispose();
-            HOperatorSet.GenMeasureRectangle2(hv_LeftRect1Row, hv_LeftRect1Column, hv_LeftRect1Phi,
-                100, 50, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle3);
-            //生成基准矩形
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                ho_Rect2.Dispose();
-                HOperatorSet.GenRectangle2(out ho_Rect2, hv_MinCircleRow + 100, hv_MinCircleColumn + hv_MinCircleRadius,
-                    0, 100, 20);
-            }
-            //生成测量矩形
-            ho_RightRect2.Dispose();
-            HOperatorSet.AffineTransRegion(ho_Rect2, out ho_RightRect2, hv_HomMat2D1, "nearest_neighbor");
-            hv_RightRect2Area.Dispose(); hv_RightRect2Row.Dispose(); hv_RightRect2Column.Dispose();
-            HOperatorSet.AreaCenter(ho_RightRect2, out hv_RightRect2Area, out hv_RightRect2Row,
-                out hv_RightRect2Column);
-            hv_RightRect2Phi.Dispose();
-            HOperatorSet.OrientationRegion(ho_RightRect2, out hv_RightRect2Phi);
-            hv_MeasureHandle2.Dispose();
-            HOperatorSet.GenMeasureRectangle2(hv_RightRect2Row, hv_RightRect2Column, hv_RightRect2Phi,
-                100, 50, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle2);
+    //        using (HDevDisposeHelper dh = new HDevDisposeHelper())
+    //        {
+    //            hv_HomMat2D2.Dispose();
+    //            HOperatorSet.VectorAngleToRigid(hv_MinCircleRow, hv_MinCircleColumn, 0, hv_MinCircleRow,
+    //                hv_MinCircleColumn, hv_TwoCirclePhi - ((new HTuple(90)).TupleRad()), out hv_HomMat2D2);
+    //        }
+    //        ho_LeftRect1.Dispose();
+    //        HOperatorSet.AffineTransRegion(ho_Rect1, out ho_LeftRect1, hv_HomMat2D2, "nearest_neighbor");
+    //        hv_LeftRect1Area.Dispose(); hv_LeftRect1Row.Dispose(); hv_LeftRect1Column.Dispose();
+    //        HOperatorSet.AreaCenter(ho_LeftRect1, out hv_LeftRect1Area, out hv_LeftRect1Row,
+    //            out hv_LeftRect1Column);
+    //        hv_LeftRect1Phi.Dispose();
+    //        HOperatorSet.OrientationRegion(ho_LeftRect1, out hv_LeftRect1Phi);
+    //        hv_MeasureHandle3.Dispose();
+    //        HOperatorSet.GenMeasureRectangle2(hv_LeftRect1Row, hv_LeftRect1Column, hv_LeftRect1Phi,
+    //            100, 50, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle3);
+    //        //生成基准矩形
+    //        using (HDevDisposeHelper dh = new HDevDisposeHelper())
+    //        {
+    //            ho_Rect2.Dispose();
+    //            HOperatorSet.GenRectangle2(out ho_Rect2, hv_MinCircleRow + 100, hv_MinCircleColumn + hv_MinCircleRadius,
+    //                0, 100, 20);
+    //        }
+    //        //生成测量矩形
+    //        ho_RightRect2.Dispose();
+    //        HOperatorSet.AffineTransRegion(ho_Rect2, out ho_RightRect2, hv_HomMat2D1, "nearest_neighbor");
+    //        hv_RightRect2Area.Dispose(); hv_RightRect2Row.Dispose(); hv_RightRect2Column.Dispose();
+    //        HOperatorSet.AreaCenter(ho_RightRect2, out hv_RightRect2Area, out hv_RightRect2Row,
+    //            out hv_RightRect2Column);
+    //        hv_RightRect2Phi.Dispose();
+    //        HOperatorSet.OrientationRegion(ho_RightRect2, out hv_RightRect2Phi);
+    //        hv_MeasureHandle2.Dispose();
+    //        HOperatorSet.GenMeasureRectangle2(hv_RightRect2Row, hv_RightRect2Column, hv_RightRect2Phi,
+    //            100, 50, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle2);
 
-            ho_LeftRect2.Dispose();
-            HOperatorSet.AffineTransRegion(ho_Rect2, out ho_LeftRect2, hv_HomMat2D2, "nearest_neighbor");
-            hv_LeftRect2Area.Dispose(); hv_LeftRect2Row.Dispose(); hv_LeftRect2Column.Dispose();
-            HOperatorSet.AreaCenter(ho_LeftRect2, out hv_LeftRect2Area, out hv_LeftRect2Row,
-                out hv_LeftRect2Column);
-            hv_LeftRect2Phi.Dispose();
-            HOperatorSet.OrientationRegion(ho_LeftRect2, out hv_LeftRect2Phi);
-            hv_MeasureHandle4.Dispose();
-            HOperatorSet.GenMeasureRectangle2(hv_LeftRect2Row, hv_LeftRect2Column, hv_LeftRect2Phi,
-                100, 50, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle4);
-            //抓取边缘点
-            hv_RightCircleRowEdge1.Dispose(); hv_RightCircleColumnEdge1.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
-            HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle1, 1, 30, "all", "all", out hv_RightCircleRowEdge1,
-                out hv_RightCircleColumnEdge1, out hv_Amplitude, out hv_Distance);
-            hv_LeftCircleRowEdge1.Dispose(); hv_LeftCircleColumnEdge1.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
-            HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle3, 1, 30, "all", "all", out hv_LeftCircleRowEdge1,
-                out hv_LeftCircleColumnEdge1, out hv_Amplitude, out hv_Distance);
-            hv_RightCircleRowEdge2.Dispose(); hv_RightCircleColumnEdge2.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
-            HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle2, 1, 30, "all", "all", out hv_RightCircleRowEdge2,
-                out hv_RightCircleColumnEdge2, out hv_Amplitude, out hv_Distance);
-            hv_LeftCircleRowEdge2.Dispose(); hv_LeftCircleColumnEdge2.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
-            HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle4, 1, 30, "all", "all", out hv_LeftCircleRowEdge2,
-                out hv_LeftCircleColumnEdge2, out hv_Amplitude, out hv_Distance);
-            ho_Rect1.Dispose();
-            ho_RightRect1.Dispose();
-            ho_LeftRect1.Dispose();
-            ho_Rect2.Dispose();
-            ho_RightRect2.Dispose();
-            ho_LeftRect2.Dispose();
+    //        ho_LeftRect2.Dispose();
+    //        HOperatorSet.AffineTransRegion(ho_Rect2, out ho_LeftRect2, hv_HomMat2D2, "nearest_neighbor");
+    //        hv_LeftRect2Area.Dispose(); hv_LeftRect2Row.Dispose(); hv_LeftRect2Column.Dispose();
+    //        HOperatorSet.AreaCenter(ho_LeftRect2, out hv_LeftRect2Area, out hv_LeftRect2Row,
+    //            out hv_LeftRect2Column);
+    //        hv_LeftRect2Phi.Dispose();
+    //        HOperatorSet.OrientationRegion(ho_LeftRect2, out hv_LeftRect2Phi);
+    //        hv_MeasureHandle4.Dispose();
+    //        HOperatorSet.GenMeasureRectangle2(hv_LeftRect2Row, hv_LeftRect2Column, hv_LeftRect2Phi,
+    //            100, 50, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle4);
+    //        //抓取边缘点
+    //        hv_RightCircleRowEdge1.Dispose(); hv_RightCircleColumnEdge1.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
+    //        HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle1, 1, 30, "all", "all", out hv_RightCircleRowEdge1,
+    //            out hv_RightCircleColumnEdge1, out hv_Amplitude, out hv_Distance);
+    //        hv_LeftCircleRowEdge1.Dispose(); hv_LeftCircleColumnEdge1.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
+    //        HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle3, 1, 30, "all", "all", out hv_LeftCircleRowEdge1,
+    //            out hv_LeftCircleColumnEdge1, out hv_Amplitude, out hv_Distance);
+    //        hv_RightCircleRowEdge2.Dispose(); hv_RightCircleColumnEdge2.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
+    //        HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle2, 1, 30, "all", "all", out hv_RightCircleRowEdge2,
+    //            out hv_RightCircleColumnEdge2, out hv_Amplitude, out hv_Distance);
+    //        hv_LeftCircleRowEdge2.Dispose(); hv_LeftCircleColumnEdge2.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
+    //        HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle4, 1, 30, "all", "all", out hv_LeftCircleRowEdge2,
+    //            out hv_LeftCircleColumnEdge2, out hv_Amplitude, out hv_Distance);
+    //        ho_Rect1.Dispose();
+    //        ho_RightRect1.Dispose();
+    //        ho_LeftRect1.Dispose();
+    //        ho_Rect2.Dispose();
+    //        ho_RightRect2.Dispose();
+    //        ho_LeftRect2.Dispose();
 
-            hv_HomMat2D1.Dispose();
-            hv_RightRect1Area.Dispose();
-            hv_RightRect1Row.Dispose();
-            hv_RightRect1Column.Dispose();
-            hv_RightRect1Phi.Dispose();
-            hv_MeasureHandle1.Dispose();
-            hv_HomMat2D2.Dispose();
-            hv_LeftRect1Area.Dispose();
-            hv_LeftRect1Row.Dispose();
-            hv_LeftRect1Column.Dispose();
-            hv_LeftRect1Phi.Dispose();
-            hv_MeasureHandle3.Dispose();
-            hv_RightRect2Area.Dispose();
-            hv_RightRect2Row.Dispose();
-            hv_RightRect2Column.Dispose();
-            hv_RightRect2Phi.Dispose();
-            hv_MeasureHandle2.Dispose();
-            hv_LeftRect2Area.Dispose();
-            hv_LeftRect2Row.Dispose();
-            hv_LeftRect2Column.Dispose();
-            hv_LeftRect2Phi.Dispose();
-            hv_MeasureHandle4.Dispose();
-            hv_Amplitude.Dispose();
-            hv_Distance.Dispose();
+    //        hv_HomMat2D1.Dispose();
+    //        hv_RightRect1Area.Dispose();
+    //        hv_RightRect1Row.Dispose();
+    //        hv_RightRect1Column.Dispose();
+    //        hv_RightRect1Phi.Dispose();
+    //        hv_MeasureHandle1.Dispose();
+    //        hv_HomMat2D2.Dispose();
+    //        hv_LeftRect1Area.Dispose();
+    //        hv_LeftRect1Row.Dispose();
+    //        hv_LeftRect1Column.Dispose();
+    //        hv_LeftRect1Phi.Dispose();
+    //        hv_MeasureHandle3.Dispose();
+    //        hv_RightRect2Area.Dispose();
+    //        hv_RightRect2Row.Dispose();
+    //        hv_RightRect2Column.Dispose();
+    //        hv_RightRect2Phi.Dispose();
+    //        hv_MeasureHandle2.Dispose();
+    //        hv_LeftRect2Area.Dispose();
+    //        hv_LeftRect2Row.Dispose();
+    //        hv_LeftRect2Column.Dispose();
+    //        hv_LeftRect2Phi.Dispose();
+    //        hv_MeasureHandle4.Dispose();
+    //        hv_Amplitude.Dispose();
+    //        hv_Distance.Dispose();
 
-            return;
-        }
+    //        return;
+    //    }
 
         //测量项46：获取P1、P2、P3坐标
-        private static void gen_p1p2p3_Measure46(HObject ho_Image, HTuple hv_MinCircleRow, HTuple hv_MinCircleColumn,
-    HTuple hv_MinCircleRadius, HTuple hv_MaxCircleColumn, HTuple hv_TwoCirclePhi,
-    HTuple hv_Width, HTuple hv_Height, out HTuple hv_P1Row, out HTuple hv_P1Col,
-    out HTuple hv_P2Row, out HTuple hv_P2Col, out HTuple hv_P3Row, out HTuple hv_P3Col)
-        {
-            // Local iconic variables 
-            HObject ho_Rect1, ho_Rect2, ho_Rect3, ho_P1Rect = null;
-            HObject ho_P2Rect = null, ho_P3Rect = null;
-            // Local control variables 
-            HTuple hv_HomMat2D = new HTuple(), hv_P1RectArea = new HTuple();
-            HTuple hv_P1RectRow = new HTuple(), hv_P1RectColumn = new HTuple();
-            HTuple hv_P1RectPhi = new HTuple(), hv_MeasureHandle1 = new HTuple();
-            HTuple hv_P2RectArea = new HTuple(), hv_P2RectRow = new HTuple();
-            HTuple hv_P2RectColumn = new HTuple(), hv_P2RectPhi = new HTuple();
-            HTuple hv_MeasureHandle2 = new HTuple(), hv_P3RectArea = new HTuple();
-            HTuple hv_P3RectRow = new HTuple(), hv_P3RectColumn = new HTuple();
-            HTuple hv_P3RectPhi = new HTuple(), hv_MeasureHandle3 = new HTuple();
-            HTuple hv_Amplitude = new HTuple(), hv_Distance = new HTuple();
-            // Initialize local and output iconic variables 
-            HOperatorSet.GenEmptyObj(out ho_Rect1);
-            HOperatorSet.GenEmptyObj(out ho_Rect2);
-            HOperatorSet.GenEmptyObj(out ho_Rect3);
-            HOperatorSet.GenEmptyObj(out ho_P1Rect);
-            HOperatorSet.GenEmptyObj(out ho_P2Rect);
-            HOperatorSet.GenEmptyObj(out ho_P3Rect);
-            hv_P1Row = new HTuple();
-            hv_P1Col = new HTuple();
-            hv_P2Row = new HTuple();
-            hv_P2Col = new HTuple();
-            hv_P3Row = new HTuple();
-            hv_P3Col = new HTuple();
-            //生成基准矩形
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                ho_Rect1.Dispose();
-                HOperatorSet.GenRectangle2(out ho_Rect1, hv_MinCircleRow, hv_MinCircleColumn + ((hv_MinCircleRadius * 5) / 4),
-                    0, 100, 20);
-            }
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                ho_Rect2.Dispose();
-                HOperatorSet.GenRectangle2(out ho_Rect2, hv_MinCircleRow + ((hv_MinCircleRadius * 4) / 5),
-                    hv_MinCircleColumn + ((hv_MinCircleRadius * 5) / 4), 0, 100, 20);
-            }
-            using (HDevDisposeHelper dh = new HDevDisposeHelper())
-            {
-                ho_Rect3.Dispose();
-                HOperatorSet.GenRectangle2(out ho_Rect3, hv_MinCircleRow - ((hv_MinCircleRadius * 4) / 5),
-                    hv_MinCircleColumn + ((hv_MinCircleRadius * 5) / 4), 0, 100, 20);
-            }
+    //    private static void gen_p1p2p3_Measure46(HObject ho_Image, HTuple hv_MinCircleRow, HTuple hv_MinCircleColumn,
+    //HTuple hv_MinCircleRadius, HTuple hv_MaxCircleColumn, HTuple hv_TwoCirclePhi,
+    //HTuple hv_Width, HTuple hv_Height, out HTuple hv_P1Row, out HTuple hv_P1Col,
+    //out HTuple hv_P2Row, out HTuple hv_P2Col, out HTuple hv_P3Row, out HTuple hv_P3Col)
+    //    {
+    //        // Local iconic variables 
+    //        HObject ho_Rect1, ho_Rect2, ho_Rect3, ho_P1Rect = null;
+    //        HObject ho_P2Rect = null, ho_P3Rect = null;
+    //        // Local control variables 
+    //        HTuple hv_HomMat2D = new HTuple(), hv_P1RectArea = new HTuple();
+    //        HTuple hv_P1RectRow = new HTuple(), hv_P1RectColumn = new HTuple();
+    //        HTuple hv_P1RectPhi = new HTuple(), hv_MeasureHandle1 = new HTuple();
+    //        HTuple hv_P2RectArea = new HTuple(), hv_P2RectRow = new HTuple();
+    //        HTuple hv_P2RectColumn = new HTuple(), hv_P2RectPhi = new HTuple();
+    //        HTuple hv_MeasureHandle2 = new HTuple(), hv_P3RectArea = new HTuple();
+    //        HTuple hv_P3RectRow = new HTuple(), hv_P3RectColumn = new HTuple();
+    //        HTuple hv_P3RectPhi = new HTuple(), hv_MeasureHandle3 = new HTuple();
+    //        HTuple hv_Amplitude = new HTuple(), hv_Distance = new HTuple();
+    //        // Initialize local and output iconic variables 
+    //        HOperatorSet.GenEmptyObj(out ho_Rect1);
+    //        HOperatorSet.GenEmptyObj(out ho_Rect2);
+    //        HOperatorSet.GenEmptyObj(out ho_Rect3);
+    //        HOperatorSet.GenEmptyObj(out ho_P1Rect);
+    //        HOperatorSet.GenEmptyObj(out ho_P2Rect);
+    //        HOperatorSet.GenEmptyObj(out ho_P3Rect);
+    //        hv_P1Row = new HTuple();
+    //        hv_P1Col = new HTuple();
+    //        hv_P2Row = new HTuple();
+    //        hv_P2Col = new HTuple();
+    //        hv_P3Row = new HTuple();
+    //        hv_P3Col = new HTuple();
+    //        //生成基准矩形
+    //        using (HDevDisposeHelper dh = new HDevDisposeHelper())
+    //        {
+    //            ho_Rect1.Dispose();
+    //            HOperatorSet.GenRectangle2(out ho_Rect1, hv_MinCircleRow, hv_MinCircleColumn + ((hv_MinCircleRadius * 5) / 4),
+    //                0, 100, 20);
+    //        }
+    //        using (HDevDisposeHelper dh = new HDevDisposeHelper())
+    //        {
+    //            ho_Rect2.Dispose();
+    //            HOperatorSet.GenRectangle2(out ho_Rect2, hv_MinCircleRow + ((hv_MinCircleRadius * 4) / 5),
+    //                hv_MinCircleColumn + ((hv_MinCircleRadius * 5) / 4), 0, 100, 20);
+    //        }
+    //        using (HDevDisposeHelper dh = new HDevDisposeHelper())
+    //        {
+    //            ho_Rect3.Dispose();
+    //            HOperatorSet.GenRectangle2(out ho_Rect3, hv_MinCircleRow - ((hv_MinCircleRadius * 4) / 5),
+    //                hv_MinCircleColumn + ((hv_MinCircleRadius * 5) / 4), 0, 100, 20);
+    //        }
 
-            if ((int)(new HTuple(hv_MaxCircleColumn.TupleLess(hv_MinCircleColumn))) != 0)
-            {
-                //生成测量矩形
-                using (HDevDisposeHelper dh = new HDevDisposeHelper())
-                {
-                    hv_HomMat2D.Dispose();
-                    HOperatorSet.VectorAngleToRigid(hv_MinCircleRow, hv_MinCircleColumn, 0, hv_MinCircleRow,
-                        hv_MinCircleColumn, hv_TwoCirclePhi - ((new HTuple(90)).TupleRad()), out hv_HomMat2D);
-                }
-                ho_P1Rect.Dispose();
-                HOperatorSet.AffineTransRegion(ho_Rect1, out ho_P1Rect, hv_HomMat2D, "nearest_neighbor");
-                hv_P1RectArea.Dispose(); hv_P1RectRow.Dispose(); hv_P1RectColumn.Dispose();
-                HOperatorSet.AreaCenter(ho_P1Rect, out hv_P1RectArea, out hv_P1RectRow, out hv_P1RectColumn);
-                hv_P1RectPhi.Dispose();
-                HOperatorSet.OrientationRegion(ho_P1Rect, out hv_P1RectPhi);
-                hv_MeasureHandle1.Dispose();
-                HOperatorSet.GenMeasureRectangle2(hv_P1RectRow, hv_P1RectColumn, hv_P1RectPhi,
-                    100, 20, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle1);
+    //        if ((int)(new HTuple(hv_MaxCircleColumn.TupleLess(hv_MinCircleColumn))) != 0)
+    //        {
+    //            //生成测量矩形
+    //            using (HDevDisposeHelper dh = new HDevDisposeHelper())
+    //            {
+    //                hv_HomMat2D.Dispose();
+    //                HOperatorSet.VectorAngleToRigid(hv_MinCircleRow, hv_MinCircleColumn, 0, hv_MinCircleRow,
+    //                    hv_MinCircleColumn, hv_TwoCirclePhi - ((new HTuple(90)).TupleRad()), out hv_HomMat2D);
+    //            }
+    //            ho_P1Rect.Dispose();
+    //            HOperatorSet.AffineTransRegion(ho_Rect1, out ho_P1Rect, hv_HomMat2D, "nearest_neighbor");
+    //            hv_P1RectArea.Dispose(); hv_P1RectRow.Dispose(); hv_P1RectColumn.Dispose();
+    //            HOperatorSet.AreaCenter(ho_P1Rect, out hv_P1RectArea, out hv_P1RectRow, out hv_P1RectColumn);
+    //            hv_P1RectPhi.Dispose();
+    //            HOperatorSet.OrientationRegion(ho_P1Rect, out hv_P1RectPhi);
+    //            hv_MeasureHandle1.Dispose();
+    //            HOperatorSet.GenMeasureRectangle2(hv_P1RectRow, hv_P1RectColumn, hv_P1RectPhi,
+    //                100, 20, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle1);
 
-                ho_P2Rect.Dispose();
-                HOperatorSet.AffineTransRegion(ho_Rect2, out ho_P2Rect, hv_HomMat2D, "nearest_neighbor");
-                hv_P2RectArea.Dispose(); hv_P2RectRow.Dispose(); hv_P2RectColumn.Dispose();
-                HOperatorSet.AreaCenter(ho_P2Rect, out hv_P2RectArea, out hv_P2RectRow, out hv_P2RectColumn);
-                hv_P2RectPhi.Dispose();
-                HOperatorSet.OrientationRegion(ho_P2Rect, out hv_P2RectPhi);
-                hv_MeasureHandle2.Dispose();
-                HOperatorSet.GenMeasureRectangle2(hv_P2RectRow, hv_P2RectColumn, hv_P2RectPhi,
-                    100, 20, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle2);
+    //            ho_P2Rect.Dispose();
+    //            HOperatorSet.AffineTransRegion(ho_Rect2, out ho_P2Rect, hv_HomMat2D, "nearest_neighbor");
+    //            hv_P2RectArea.Dispose(); hv_P2RectRow.Dispose(); hv_P2RectColumn.Dispose();
+    //            HOperatorSet.AreaCenter(ho_P2Rect, out hv_P2RectArea, out hv_P2RectRow, out hv_P2RectColumn);
+    //            hv_P2RectPhi.Dispose();
+    //            HOperatorSet.OrientationRegion(ho_P2Rect, out hv_P2RectPhi);
+    //            hv_MeasureHandle2.Dispose();
+    //            HOperatorSet.GenMeasureRectangle2(hv_P2RectRow, hv_P2RectColumn, hv_P2RectPhi,
+    //                100, 20, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle2);
 
-                ho_P3Rect.Dispose();
-                HOperatorSet.AffineTransRegion(ho_Rect3, out ho_P3Rect, hv_HomMat2D, "nearest_neighbor");
-                hv_P3RectArea.Dispose(); hv_P3RectRow.Dispose(); hv_P3RectColumn.Dispose();
-                HOperatorSet.AreaCenter(ho_P3Rect, out hv_P3RectArea, out hv_P3RectRow, out hv_P3RectColumn);
-                hv_P3RectPhi.Dispose();
-                HOperatorSet.OrientationRegion(ho_P3Rect, out hv_P3RectPhi);
-                hv_MeasureHandle3.Dispose();
-                HOperatorSet.GenMeasureRectangle2(hv_P3RectRow, hv_P3RectColumn, hv_P3RectPhi,
-                    100, 20, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle3);
-                //定位P1、P2、P3
-                hv_P1Row.Dispose(); hv_P1Col.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
-                HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle1, 1, 30, "all", "all", out hv_P1Row,
-                    out hv_P1Col, out hv_Amplitude, out hv_Distance);
-                hv_P2Row.Dispose(); hv_P2Col.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
-                HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle2, 1, 30, "all", "all", out hv_P2Row,
-                    out hv_P2Col, out hv_Amplitude, out hv_Distance);
-                hv_P3Row.Dispose(); hv_P3Col.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
-                HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle3, 1, 30, "all", "all", out hv_P3Row,
-                    out hv_P3Col, out hv_Amplitude, out hv_Distance);
-            }
-            else
-            {
-                //生成测量矩形
-                using (HDevDisposeHelper dh = new HDevDisposeHelper())
-                {
-                    hv_HomMat2D.Dispose();
-                    HOperatorSet.VectorAngleToRigid(hv_MinCircleRow, hv_MinCircleColumn, 0, hv_MinCircleRow,
-                        hv_MinCircleColumn, hv_TwoCirclePhi + ((new HTuple(90)).TupleRad()), out hv_HomMat2D);
-                }
-                ho_P1Rect.Dispose();
-                HOperatorSet.AffineTransRegion(ho_Rect1, out ho_P1Rect, hv_HomMat2D, "nearest_neighbor");
-                hv_P1RectArea.Dispose(); hv_P1RectRow.Dispose(); hv_P1RectColumn.Dispose();
-                HOperatorSet.AreaCenter(ho_P1Rect, out hv_P1RectArea, out hv_P1RectRow, out hv_P1RectColumn);
-                hv_P1RectPhi.Dispose();
-                HOperatorSet.OrientationRegion(ho_P1Rect, out hv_P1RectPhi);
-                hv_MeasureHandle1.Dispose();
-                HOperatorSet.GenMeasureRectangle2(hv_P1RectRow, hv_P1RectColumn, hv_P1RectPhi,
-                    100, 20, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle1);
+    //            ho_P3Rect.Dispose();
+    //            HOperatorSet.AffineTransRegion(ho_Rect3, out ho_P3Rect, hv_HomMat2D, "nearest_neighbor");
+    //            hv_P3RectArea.Dispose(); hv_P3RectRow.Dispose(); hv_P3RectColumn.Dispose();
+    //            HOperatorSet.AreaCenter(ho_P3Rect, out hv_P3RectArea, out hv_P3RectRow, out hv_P3RectColumn);
+    //            hv_P3RectPhi.Dispose();
+    //            HOperatorSet.OrientationRegion(ho_P3Rect, out hv_P3RectPhi);
+    //            hv_MeasureHandle3.Dispose();
+    //            HOperatorSet.GenMeasureRectangle2(hv_P3RectRow, hv_P3RectColumn, hv_P3RectPhi,
+    //                100, 20, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle3);
+    //            //定位P1、P2、P3
+    //            hv_P1Row.Dispose(); hv_P1Col.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
+    //            HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle1, 1, 30, "all", "all", out hv_P1Row,
+    //                out hv_P1Col, out hv_Amplitude, out hv_Distance);
+    //            hv_P2Row.Dispose(); hv_P2Col.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
+    //            HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle2, 1, 30, "all", "all", out hv_P2Row,
+    //                out hv_P2Col, out hv_Amplitude, out hv_Distance);
+    //            hv_P3Row.Dispose(); hv_P3Col.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
+    //            HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle3, 1, 30, "all", "all", out hv_P3Row,
+    //                out hv_P3Col, out hv_Amplitude, out hv_Distance);
+    //        }
+    //        else
+    //        {
+    //            //生成测量矩形
+    //            using (HDevDisposeHelper dh = new HDevDisposeHelper())
+    //            {
+    //                hv_HomMat2D.Dispose();
+    //                HOperatorSet.VectorAngleToRigid(hv_MinCircleRow, hv_MinCircleColumn, 0, hv_MinCircleRow,
+    //                    hv_MinCircleColumn, hv_TwoCirclePhi + ((new HTuple(90)).TupleRad()), out hv_HomMat2D);
+    //            }
+    //            ho_P1Rect.Dispose();
+    //            HOperatorSet.AffineTransRegion(ho_Rect1, out ho_P1Rect, hv_HomMat2D, "nearest_neighbor");
+    //            hv_P1RectArea.Dispose(); hv_P1RectRow.Dispose(); hv_P1RectColumn.Dispose();
+    //            HOperatorSet.AreaCenter(ho_P1Rect, out hv_P1RectArea, out hv_P1RectRow, out hv_P1RectColumn);
+    //            hv_P1RectPhi.Dispose();
+    //            HOperatorSet.OrientationRegion(ho_P1Rect, out hv_P1RectPhi);
+    //            hv_MeasureHandle1.Dispose();
+    //            HOperatorSet.GenMeasureRectangle2(hv_P1RectRow, hv_P1RectColumn, hv_P1RectPhi,
+    //                100, 20, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle1);
 
-                ho_P2Rect.Dispose();
-                HOperatorSet.AffineTransRegion(ho_Rect2, out ho_P2Rect, hv_HomMat2D, "nearest_neighbor");
-                hv_P2RectArea.Dispose(); hv_P2RectRow.Dispose(); hv_P2RectColumn.Dispose();
-                HOperatorSet.AreaCenter(ho_P2Rect, out hv_P2RectArea, out hv_P2RectRow, out hv_P2RectColumn);
-                hv_P2RectPhi.Dispose();
-                HOperatorSet.OrientationRegion(ho_P2Rect, out hv_P2RectPhi);
-                hv_MeasureHandle2.Dispose();
-                HOperatorSet.GenMeasureRectangle2(hv_P2RectRow, hv_P2RectColumn, hv_P2RectPhi,
-                    100, 20, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle2);
+    //            ho_P2Rect.Dispose();
+    //            HOperatorSet.AffineTransRegion(ho_Rect2, out ho_P2Rect, hv_HomMat2D, "nearest_neighbor");
+    //            hv_P2RectArea.Dispose(); hv_P2RectRow.Dispose(); hv_P2RectColumn.Dispose();
+    //            HOperatorSet.AreaCenter(ho_P2Rect, out hv_P2RectArea, out hv_P2RectRow, out hv_P2RectColumn);
+    //            hv_P2RectPhi.Dispose();
+    //            HOperatorSet.OrientationRegion(ho_P2Rect, out hv_P2RectPhi);
+    //            hv_MeasureHandle2.Dispose();
+    //            HOperatorSet.GenMeasureRectangle2(hv_P2RectRow, hv_P2RectColumn, hv_P2RectPhi,
+    //                100, 20, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle2);
 
-                ho_P3Rect.Dispose();
-                HOperatorSet.AffineTransRegion(ho_Rect3, out ho_P3Rect, hv_HomMat2D, "nearest_neighbor");
-                hv_P3RectArea.Dispose(); hv_P3RectRow.Dispose(); hv_P3RectColumn.Dispose();
-                HOperatorSet.AreaCenter(ho_P3Rect, out hv_P3RectArea, out hv_P3RectRow, out hv_P3RectColumn);
-                hv_P3RectPhi.Dispose();
-                HOperatorSet.OrientationRegion(ho_P3Rect, out hv_P3RectPhi);
-                hv_MeasureHandle3.Dispose();
-                HOperatorSet.GenMeasureRectangle2(hv_P3RectRow, hv_P3RectColumn, hv_P3RectPhi,
-                    100, 20, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle3);
-                //定位P1、P2、P3
-                hv_P1Row.Dispose(); hv_P1Col.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
-                HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle1, 1, 30, "all", "all", out hv_P1Row,
-                    out hv_P1Col, out hv_Amplitude, out hv_Distance);
-                hv_P2Row.Dispose(); hv_P2Col.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
-                HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle2, 1, 30, "all", "all", out hv_P2Row,
-                    out hv_P2Col, out hv_Amplitude, out hv_Distance);
-                hv_P3Row.Dispose(); hv_P3Col.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
-                HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle3, 1, 30, "all", "all", out hv_P3Row,
-                    out hv_P3Col, out hv_Amplitude, out hv_Distance);
-            }
-            ho_Rect1.Dispose();
-            ho_Rect2.Dispose();
-            ho_Rect3.Dispose();
-            ho_P1Rect.Dispose();
-            ho_P2Rect.Dispose();
-            ho_P3Rect.Dispose();
+    //            ho_P3Rect.Dispose();
+    //            HOperatorSet.AffineTransRegion(ho_Rect3, out ho_P3Rect, hv_HomMat2D, "nearest_neighbor");
+    //            hv_P3RectArea.Dispose(); hv_P3RectRow.Dispose(); hv_P3RectColumn.Dispose();
+    //            HOperatorSet.AreaCenter(ho_P3Rect, out hv_P3RectArea, out hv_P3RectRow, out hv_P3RectColumn);
+    //            hv_P3RectPhi.Dispose();
+    //            HOperatorSet.OrientationRegion(ho_P3Rect, out hv_P3RectPhi);
+    //            hv_MeasureHandle3.Dispose();
+    //            HOperatorSet.GenMeasureRectangle2(hv_P3RectRow, hv_P3RectColumn, hv_P3RectPhi,
+    //                100, 20, hv_Width, hv_Height, "bicubic", out hv_MeasureHandle3);
+    //            //定位P1、P2、P3
+    //            hv_P1Row.Dispose(); hv_P1Col.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
+    //            HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle1, 1, 30, "all", "all", out hv_P1Row,
+    //                out hv_P1Col, out hv_Amplitude, out hv_Distance);
+    //            hv_P2Row.Dispose(); hv_P2Col.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
+    //            HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle2, 1, 30, "all", "all", out hv_P2Row,
+    //                out hv_P2Col, out hv_Amplitude, out hv_Distance);
+    //            hv_P3Row.Dispose(); hv_P3Col.Dispose(); hv_Amplitude.Dispose(); hv_Distance.Dispose();
+    //            HOperatorSet.MeasurePos(ho_Image, hv_MeasureHandle3, 1, 30, "all", "all", out hv_P3Row,
+    //                out hv_P3Col, out hv_Amplitude, out hv_Distance);
+    //        }
+    //        ho_Rect1.Dispose();
+    //        ho_Rect2.Dispose();
+    //        ho_Rect3.Dispose();
+    //        ho_P1Rect.Dispose();
+    //        ho_P2Rect.Dispose();
+    //        ho_P3Rect.Dispose();
 
-            hv_HomMat2D.Dispose();
-            hv_P1RectArea.Dispose();
-            hv_P1RectRow.Dispose();
-            hv_P1RectColumn.Dispose();
-            hv_P1RectPhi.Dispose();
-            hv_MeasureHandle1.Dispose();
-            hv_P2RectArea.Dispose();
-            hv_P2RectRow.Dispose();
-            hv_P2RectColumn.Dispose();
-            hv_P2RectPhi.Dispose();
-            hv_MeasureHandle2.Dispose();
-            hv_P3RectArea.Dispose();
-            hv_P3RectRow.Dispose();
-            hv_P3RectColumn.Dispose();
-            hv_P3RectPhi.Dispose();
-            hv_MeasureHandle3.Dispose();
-            hv_Amplitude.Dispose();
-            hv_Distance.Dispose();
+    //        hv_HomMat2D.Dispose();
+    //        hv_P1RectArea.Dispose();
+    //        hv_P1RectRow.Dispose();
+    //        hv_P1RectColumn.Dispose();
+    //        hv_P1RectPhi.Dispose();
+    //        hv_MeasureHandle1.Dispose();
+    //        hv_P2RectArea.Dispose();
+    //        hv_P2RectRow.Dispose();
+    //        hv_P2RectColumn.Dispose();
+    //        hv_P2RectPhi.Dispose();
+    //        hv_MeasureHandle2.Dispose();
+    //        hv_P3RectArea.Dispose();
+    //        hv_P3RectRow.Dispose();
+    //        hv_P3RectColumn.Dispose();
+    //        hv_P3RectPhi.Dispose();
+    //        hv_MeasureHandle3.Dispose();
+    //        hv_Amplitude.Dispose();
+    //        hv_Distance.Dispose();
 
-            return;
-        }
+    //        return;
+    //    }
 
         //初始化ListView
         public static void InitListView(ListView lv)

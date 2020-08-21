@@ -39,7 +39,6 @@ namespace MyWindow
         int MeasureProject = -1;
         Thread thread_OutLineTest;
         bool IsthreadLoadImageStop = false;
-        string OutLineFilePath = "";
         double Radius, PositionDegree, RunTime, DistanceL1L2, DistanceX1, DistanceY1;
 
 
@@ -327,6 +326,7 @@ namespace MyWindow
         //离线测试线程
         private void thread_OutLineTest_Start()
         {
+            string OutLineFilePath = "";
             while (!IsthreadLoadImageStop)
             {
                 //进行离线测试
@@ -372,10 +372,6 @@ namespace MyWindow
             bt_SaveBmp.Enabled = false;
             bt_StartTest.Enabled = true;
             rbt_Measure9.Enabled = true;
-            rbt_Measure10.Enabled = true;
-            rbt_Measure33.Enabled = true;
-            rbt_Measure34.Enabled = true;
-            rbt_Measure46.Enabled = true;
             bt_StopTest.Enabled = false;
         }
 
@@ -413,11 +409,8 @@ namespace MyWindow
             bt_StartTest.Enabled = true;
             bt_StopGrab.Enabled = true;
             bt_SaveBmp.Enabled = true;
-            rbt_Measure46.Enabled = true;
             rbt_Measure9.Enabled = true;
-            rbt_Measure10.Enabled = true;
-            rbt_Measure33.Enabled = true;
-            rbt_Measure34.Enabled = true;
+            rbt_Measure18C.Enabled = true;
         }
 
         public void ReceiveThreadProcess()
@@ -505,6 +498,18 @@ namespace MyWindow
 
         //选择测试项
         #region
+        private void rbt_Measure18C_CheckedChanged(object sender, EventArgs e)
+        {
+            if (true == rbt_Measure18C.Checked)
+            {
+                MeasureProject = 18;
+            }
+            else
+            {
+                MeasureProject = -1;
+            }
+        }
+
         private void rbt_Measure9_CheckedChanged(object sender, EventArgs e)
         {
             if (true == rbt_Measure9.Checked)
@@ -517,53 +522,6 @@ namespace MyWindow
             }
         }
 
-        private void rbt_Measure10_CheckedChanged(object sender, EventArgs e)
-        {
-            if (true == rbt_Measure10.Checked)
-            {
-                MeasureProject = 10;
-            }
-            else
-            {
-                MeasureProject = -1;
-            }
-        }
-
-        private void rbt_Measure33_CheckedChanged(object sender, EventArgs e)
-        {
-            if (true == rbt_Measure33.Checked)
-            {
-                MeasureProject = 33;
-            }
-            else
-            {
-                MeasureProject = -1;
-            }
-        }
-
-        private void rbt_Measure34_CheckedChanged(object sender, EventArgs e)
-        {
-            if (true == rbt_Measure34.Checked)
-            {
-                MeasureProject = 34;
-            }
-            else
-            {
-                MeasureProject = -1;
-            }
-        }
-
-        private void rbt_Measure46_CheckedChanged(object sender, EventArgs e)
-        {
-            if (true == rbt_Measure46.Checked)
-            {
-                MeasureProject = 46;
-            }
-            else
-            {
-                MeasureProject = -1;
-            }
-        }
         #endregion
 
         //清空测试数据
@@ -821,11 +779,8 @@ namespace MyWindow
             //设置控件状态
             bt_StopTest.Enabled = true;
             bt_StartTest.Enabled = false;
+            rbt_Measure18C.Enabled = false;
             rbt_Measure9.Enabled = false;
-            rbt_Measure10.Enabled = false;
-            rbt_Measure33.Enabled = false;
-            rbt_Measure34.Enabled = false;
-            rbt_Measure46.Enabled = false;
             bt_ClearData.Enabled = false;
             bt_SaveCSV.Enabled = false;
         }
@@ -840,11 +795,8 @@ namespace MyWindow
             //设置控件状态
             bt_StopTest.Enabled = false;
             bt_StartTest.Enabled = true;
+            rbt_Measure18C.Enabled = true;
             rbt_Measure9.Enabled = true;
-            rbt_Measure10.Enabled = true;
-            rbt_Measure33.Enabled = true;
-            rbt_Measure34.Enabled = true;
-            rbt_Measure46.Enabled = true;
             bt_SaveCSV.Enabled = true;
             bt_ClearData.Enabled = true;
         }
@@ -903,6 +855,12 @@ namespace MyWindow
         }
 
         private float x;//定义当前窗体的宽度
+
+        private void gb_measurement_Enter(object sender, EventArgs e)
+        {
+
+        }
+
         private float y;//定义当前窗体的高度
         private void setTag(Control cons)
         {
