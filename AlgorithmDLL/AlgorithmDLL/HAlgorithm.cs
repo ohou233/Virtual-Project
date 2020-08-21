@@ -334,12 +334,11 @@ namespace HalconAlgorithm
         //离线测试
         public static void OutLineMeasure(int MeasureProject, ListView lv, 
             out double Radius, out double PositionDegree, out double RunTime,
-            out double DistanceL1L2, out double DistanceX1, out double DistanceY1, string path)
+               out double DistanceX1, out double DistanceY1, string path)
         {
             Radius = -1;
             PositionDegree = -1;
             RunTime = -1;
-            DistanceL1L2 = -1;
             DistanceX1 = -1;
             DistanceY1 = -1;
             HObject image;
@@ -364,8 +363,9 @@ namespace HalconAlgorithm
                     default:
                         break;
                 }
-                insertLine(lv, RunTime, Radius, PositionDegree, DistanceL1L2, DistanceX1, DistanceY1);
+                insertLine(lv, RunTime, Radius, PositionDegree, DistanceX1, DistanceY1);
                 HOperatorSet.WaitSeconds(0.5);
+
             }
 
             image.Dispose();
@@ -374,13 +374,11 @@ namespace HalconAlgorithm
 
         //在线测试
         public static void InLineMeasure(int MeasureProject, ListView lv, IntPtr buffer, ushort BufferWidth, ushort BufferHeight,
-    out double Radius, out double PositionDegree, out double RunTime,
-    out double DistanceL1L2, out double DistanceX1, out double DistanceY1)
+    out double Radius, out double PositionDegree, out double RunTime, out double DistanceX1, out double DistanceY1)
         {
             Radius = -1;
             PositionDegree = -1;
             RunTime = -1;
-            DistanceL1L2 = -1;
             DistanceX1 = -1;
             DistanceY1 = -1;
             HObject image;
@@ -397,7 +395,7 @@ namespace HalconAlgorithm
                 default:
                     break;
             }
-            insertLine(lv, RunTime, Radius, PositionDegree, DistanceL1L2, DistanceX1, DistanceY1);
+            insertLine(lv, RunTime, Radius, PositionDegree, DistanceX1, DistanceY1);
 
             image.Dispose();
 
@@ -405,7 +403,7 @@ namespace HalconAlgorithm
 
         //测量项
         #region
-        public static void Measure_9(HObject ho_Image, out double CirclrRadius, out double PositionDegree, out double RunTime,
+        public static bool Measure_9(HObject ho_Image, out double CirclrRadius, out double PositionDegree, out double RunTime,
             out double DistanceX1, out double DistanceY1)
         {
             CirclrRadius = -1;
@@ -523,11 +521,9 @@ namespace HalconAlgorithm
             catch (Exception ex)
             {
                 MessageBox.Show("请正确放置工件");
-                return;
+                return false;
             }
-
-           
-
+            
             ho_Image.Dispose();
             ho_BigCircle.Dispose();
 
@@ -566,6 +562,7 @@ namespace HalconAlgorithm
             hv_runtime.Dispose();
             hv_CircleRadius.Dispose();
             hv_PositionDegree.Dispose();
+            return true;
         }
 
         public static void Measure_18(HObject ho_Image)
@@ -2263,7 +2260,6 @@ namespace HalconAlgorithm
             lv.FullRowSelect = true;            //显示整行
             //lv.HoverSelection = true;           //鼠标悬停后自动选择
 
-
             // 添加列表头
             ColumnHeader C1 = new ColumnHeader();
             C1.Text = "Diameter(mm)";
@@ -2282,24 +2278,19 @@ namespace HalconAlgorithm
             C4.Width = 110;
             lv.Columns.Add(C4);
             ColumnHeader C5 = new ColumnHeader();
-            C5.Text = "DistanceL1L2(mm)";
-            C5.Width = 110;
+            C5.Text = "RunTime(ms)";
+             C5.Width = 110;
             lv.Columns.Add(C5);
-            ColumnHeader C6 = new ColumnHeader();
-            C6.Text = "RunTime(ms)";
-             C6.Width = 110;
-            lv.Columns.Add(C6);
         }
 
         //向ListView中插入一行数据
         public static void insertLine(ListView lv, double RunTime, double Radius, double PositionDegree,
-             double DistanceL1L2,  double DistanceX1, double DistanceY1)
+             double DistanceX1, double DistanceY1)
         {
             ListViewItem items = new ListViewItem(Radius.ToString("f5"));
             items.SubItems.Add(PositionDegree.ToString("f5"));
             items.SubItems.Add(DistanceX1.ToString("f5"));
             items.SubItems.Add(DistanceY1.ToString("f5"));
-            items.SubItems.Add(DistanceL1L2.ToString("f5"));
             items.SubItems.Add(RunTime.ToString("f5"));
             lv.Items.Add(items);
   

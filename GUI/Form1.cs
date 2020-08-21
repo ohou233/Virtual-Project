@@ -39,7 +39,7 @@ namespace MyWindow
         int MeasureProject = -1;
         Thread thread_OutLineTest;
         bool IsthreadLoadImageStop = false;
-        double Radius, PositionDegree, RunTime, DistanceL1L2, DistanceX1, DistanceY1;
+        double Radius, PositionDegree, RunTime, DistanceX1, DistanceY1;
 
 
         public MyWindow()
@@ -338,7 +338,7 @@ namespace MyWindow
                     {
                         OutLineFilePath = dialog.FileName;
                         HAlgorithm.OutLineMeasure(MeasureProject, lv_AllFrameData, out Radius, out PositionDegree, out RunTime,
-                            out DistanceL1L2, out DistanceX1, out DistanceY1, OutLineFilePath);
+                         out DistanceX1, out DistanceY1, OutLineFilePath);
                     }
                     else
                     {
@@ -350,7 +350,7 @@ namespace MyWindow
                 else
                 {
                     HAlgorithm.OutLineMeasure(MeasureProject, lv_AllFrameData, out Radius, out PositionDegree, out RunTime,
-                            out DistanceL1L2, out DistanceX1, out DistanceY1, OutLineFilePath);
+                              out DistanceX1, out DistanceY1, OutLineFilePath);
                 }
                 Thread.Sleep(200);
             }
@@ -770,7 +770,7 @@ namespace MyWindow
                             continue;
                         }
                         HAlgorithm.InLineMeasure(MeasureProject, lv_AllFrameData, m_BufForDriver, stFrameInfo.nWidth, stFrameInfo.nHeight,
-        out Radius, out PositionDegree, out RunTime, out DistanceL1L2, out DistanceX1, out DistanceY1);
+        out Radius, out PositionDegree, out RunTime , out DistanceX1, out DistanceY1);
                     }
                     break;
                 }
