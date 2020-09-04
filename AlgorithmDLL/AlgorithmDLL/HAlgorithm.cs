@@ -332,7 +332,7 @@ namespace HalconAlgorithm
         }
 
         //离线测试
-        public static void OutLineMeasure(int MeasureProject, ListView lv, 
+        public static bool OutLineMeasure(int MeasureProject, ListView lv, 
             out double Radius, out double PositionDegree, out double RunTime,
                out double DistanceX1, out double DistanceY1, string path)
         {
@@ -346,6 +346,7 @@ namespace HalconAlgorithm
             image.Dispose();
             HTuple hv_ImageFiles = new HTuple(), hv_Index = new HTuple();
             hv_ImageFiles.Dispose(); hv_Index.Dispose();
+            bool MeasureIsSucced = true;
             
             list_image_files(path, "bmp", new HTuple(), out hv_ImageFiles);
             for (hv_Index = 0; (int)hv_Index <= (int)((new HTuple(hv_ImageFiles.TupleLength()
@@ -355,7 +356,7 @@ namespace HalconAlgorithm
                 switch (MeasureProject)
                 {
                     case 9:
-                        Measure_9(image, out Radius, out PositionDegree, out RunTime, out DistanceX1, out DistanceY1);
+                        MeasureIsSucced = Measure_9(image, out Radius, out PositionDegree, out RunTime, out DistanceX1, out DistanceY1);
                         break;
                     case 18:
                         Measure_18(image);
@@ -363,13 +364,23 @@ namespace HalconAlgorithm
                     default:
                         break;
                 }
-                insertLine(lv, RunTime, Radius, PositionDegree, DistanceX1, DistanceY1);
-                HOperatorSet.WaitSeconds(0.5);
-
+                if(MeasureIsSucced == false)
+                {
+                    break;
+                }
+                else
+                {
+                    insertLine(lv, RunTime, Radius, PositionDegree, DistanceX1, DistanceY1);
+                    HOperatorSet.WaitSeconds(0.5);
+                }
             }
-
+            if (MeasureIsSucced == false)
+            {
+                MessageBox.Show("请加载正确工件图像！");
+                return false;
+            }
             image.Dispose();
-
+            return true;
         }
 
         //在线测试
@@ -520,7 +531,7 @@ namespace HalconAlgorithm
             }
             catch (Exception ex)
             {
-                MessageBox.Show("请正确放置工件");
+                //MessageBox.Show("请正确放置工件");
                 return false;
             }
             

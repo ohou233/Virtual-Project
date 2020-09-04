@@ -34,7 +34,6 @@ namespace MyWindow
         UInt32 m_nBufSizeForSaveImage = 0;
         IntPtr m_BufForSaveImage;
 
-
         bool IsInLine = false;
         int MeasureProject = -1;
         Thread thread_OutLineTest;
@@ -327,6 +326,7 @@ namespace MyWindow
         private void thread_OutLineTest_Start()
         {
             string OutLineFilePath = "";
+            bool MeasureIsSucced;
             while (!IsthreadLoadImageStop)
             {
                 //进行离线测试
@@ -337,7 +337,7 @@ namespace MyWindow
                     if (dialog.ShowDialog(this.Handle))
                     {
                         OutLineFilePath = dialog.FileName;
-                        HAlgorithm.OutLineMeasure(MeasureProject, lv_AllFrameData, out Radius, out PositionDegree, out RunTime,
+                        MeasureIsSucced = HAlgorithm.OutLineMeasure(MeasureProject, lv_AllFrameData, out Radius, out PositionDegree, out RunTime,
                          out DistanceX1, out DistanceY1, OutLineFilePath);
                     }
                     else
@@ -349,10 +349,23 @@ namespace MyWindow
                 }
                 else
                 {
-                    HAlgorithm.OutLineMeasure(MeasureProject, lv_AllFrameData, out Radius, out PositionDegree, out RunTime,
+                    MeasureIsSucced = HAlgorithm.OutLineMeasure(MeasureProject, lv_AllFrameData, out Radius, out PositionDegree, out RunTime,
                               out DistanceX1, out DistanceY1, OutLineFilePath);
                 }
-                Thread.Sleep(200);
+
+                if(MeasureIsSucced == false)
+                {
+                    //设置控件状态
+                    bt_StopTest.Enabled = false;
+                    bt_StartTest.Enabled = true;
+                    rbt_Measure18C.Enabled = true;
+                    rbt_Measure9.Enabled = true;
+                    break;
+                }
+                else
+                {
+                    Thread.Sleep(200);
+                }
             }
         }
 
@@ -876,7 +889,6 @@ namespace MyWindow
         //设置双缓冲区、解决闪屏问题
         public static void SetDouble(Control cc)
         {
-
             cc.GetType().GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance |
                          System.Reflection.BindingFlags.NonPublic).SetValue(cc, true, null);
         }
