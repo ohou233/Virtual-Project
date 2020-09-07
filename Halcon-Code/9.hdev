@@ -307,8 +307,8 @@
 <l>fast_threshold (Image, Regions, 128, 255, 20)</l>
 <l>connection (Regions, ConnectedRegions)</l>
 <c>* 提取两个圆形区域</c>
-<l>select_shape (ConnectedRegions, MinCircleSelectedRegions, ['area','circularity'], 'and', [727440,0.8407], [1.22468e+06,1])</l>
-<l>select_shape (ConnectedRegions, MaxCircleSelectedRegions, ['area','circularity'], 'and', [1.15101e+06,0.6473], [1.68508e+06,0.837])</l>
+<l>select_shape (ConnectedRegions, MinCircleSelectedRegions, ['area','circularity'], 'and', [467889.91,0.95872], [743119.27,0.98991])</l>
+<l>select_shape (ConnectedRegions, MaxCircleSelectedRegions, ['area','circularity'], 'and', [743119.27,0.72202], [1073394.50,0.77523])</l>
 <l>inner_circle (MaxCircleSelectedRegions, MaxCircleRow, MaxCircleColumn, MaxCircleRadius)</l>
 <l>inner_circle (MinCircleSelectedRegions, MinCircleRow, MinCircleColumn, MinCircleRadius)</l>
 <c>* 求两圆心连线方向</c>

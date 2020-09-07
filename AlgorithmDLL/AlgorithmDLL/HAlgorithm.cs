@@ -502,16 +502,16 @@ namespace HalconAlgorithm
                 //输出结果
                 hv_CircleRadius.Dispose();
                 hv_CircleRadius = new HTuple(hv_FitCircleCenterRadius);
-                CirclrRadius = hv_CircleRadius * 2 * 0.0069;
+                CirclrRadius = hv_CircleRadius * 2 * 0.009443;
                 hv_PositionDegree.Dispose();
                 using (HDevDisposeHelper dh = new HDevDisposeHelper())
                 {
-                    hv_PositionDegree = 2 * (((((((hv_X1 * 0.0069) - 19.605)).TuplePow(
-                        2)) + ((((hv_Y1 * 0.0069) - 6.788)).TuplePow(2)))).TupleSqrt());
+                    hv_PositionDegree = 2 * (((((((hv_X1 * 0.009443) - 19.605)).TuplePow(
+                        2)) + ((((hv_Y1 * 0.009443) - 6.788)).TuplePow(2)))).TupleSqrt());
                 }
                 PositionDegree = hv_PositionDegree;
-                DistanceX1 = hv_X1 * 0.0069;
-                DistanceY1 = hv_Y1 * 0.0069;
+                DistanceX1 = hv_X1 * 0.009443;
+                DistanceY1 = hv_Y1 * 0.009443;
 
                 DispImage(ho_Image);
                 outWindow.SetColor("red");
@@ -1711,12 +1711,12 @@ namespace HalconAlgorithm
             //提取两个圆形区域
             ho_MinCircleSelectedRegions.Dispose();
             HOperatorSet.SelectShape(ho_ConnectedRegions, out ho_MinCircleSelectedRegions,
-                (new HTuple("area")).TupleConcat("circularity"), "and", (new HTuple(727440)).TupleConcat(
-                0.8407), (new HTuple(1.22468e+06)).TupleConcat(1));
+                (new HTuple("area")).TupleConcat("circularity"), "and", (new HTuple(467889.91)).TupleConcat(
+                0.95872), (new HTuple(743119.27)).TupleConcat(0.98991));
             ho_MaxCircleSelectedRegions.Dispose();
             HOperatorSet.SelectShape(ho_ConnectedRegions, out ho_MaxCircleSelectedRegions,
-                (new HTuple("area")).TupleConcat("circularity"), "and", (new HTuple(1.15101e+06)).TupleConcat(
-                0.6473), (new HTuple(1.68508e+06)).TupleConcat(0.837));
+                (new HTuple("area")).TupleConcat("circularity"), "and", (new HTuple(743119.27)).TupleConcat(
+               0.72202), (new HTuple(1073394.50)).TupleConcat(0.77523));
             hv_MaxCircleRow.Dispose(); hv_MaxCircleColumn.Dispose(); hv_MaxCircleRadius.Dispose();
             HOperatorSet.InnerCircle(ho_MaxCircleSelectedRegions, out hv_MaxCircleRow, out hv_MaxCircleColumn,
                 out hv_MaxCircleRadius);

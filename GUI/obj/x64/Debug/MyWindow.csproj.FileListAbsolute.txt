@@ -20,15 +20,6 @@ C:\Users\iamxb\Desktop\MyWindow\bin\x64\Debug\halcondotnet.dll
 \\Mac\Home\Desktop\virtual_project\GUI\bin\x64\Debug\MyWindow.exe
 \\Mac\Home\Desktop\virtual_project\GUI\bin\x64\Debug\MyWindow.pdb
 \\Mac\Home\Desktop\virtual_project\GUI\bin\x64\Debug\halcondotnet.dll
-\\Mac\Home\Desktop\VirtualProject\Code\GUI\bin\x64\Debug\MyWindow.exe.config
-\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.exe
-\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.pdb
-\\Mac\Home\Desktop\VirtualProject\Code\GUI\bin\x64\Debug\MyWindow.exe
-\\Mac\Home\Desktop\VirtualProject\Code\GUI\bin\x64\Debug\MyWindow.pdb
-\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.csprojResolveAssemblyReference.cache
-\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.MyWindow.resources
-\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.Properties.Resources.resources
-\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.csproj.GenerateResource.Cache
 C:\Users\iamxb\Desktop\virtual_project\Code\GUI\bin\x64\Debug\MyWindow.exe.config
 C:\Users\iamxb\Desktop\virtual_project\Code\GUI\bin\x64\Debug\MyWindow.exe
 C:\Users\iamxb\Desktop\virtual_project\Code\GUI\bin\x64\Debug\MyWindow.pdb
@@ -41,7 +32,6 @@ C:\Users\iamxb\Desktop\virtual_project\Code\GUI\obj\x64\Debug\MyWindow.csproj.Co
 C:\Users\iamxb\Desktop\virtual_project\Code\GUI\obj\x64\Debug\MyWindow.csproj.CopyComplete
 C:\Users\iamxb\Desktop\virtual_project\Code\GUI\obj\x64\Debug\MyWindow.exe
 C:\Users\iamxb\Desktop\virtual_project\Code\GUI\obj\x64\Debug\MyWindow.pdb
-\\Mac\Home\Desktop\VirtualProject\Code\GUI\bin\x64\Debug\halcondotnet.dll
 C:\Users\iamxb\Desktop\Virtual Project\Code\GUI\bin\x64\Debug\MyWindow.exe.config
 C:\Users\iamxb\Desktop\Virtual Project\Code\GUI\bin\x64\Debug\MyWindow.exe
 C:\Users\iamxb\Desktop\Virtual Project\Code\GUI\bin\x64\Debug\MyWindow.pdb
@@ -54,3 +44,13 @@ C:\Users\iamxb\Desktop\Virtual Project\Code\GUI\obj\x64\Debug\MyWindow.csproj.Co
 C:\Users\iamxb\Desktop\Virtual Project\Code\GUI\obj\x64\Debug\MyWindow.csproj.CopyComplete
 C:\Users\iamxb\Desktop\Virtual Project\Code\GUI\obj\x64\Debug\MyWindow.exe
 C:\Users\iamxb\Desktop\Virtual Project\Code\GUI\obj\x64\Debug\MyWindow.pdb
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\bin\x64\Debug\MyWindow.exe.config
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\bin\x64\Debug\MyWindow.exe
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\bin\x64\Debug\MyWindow.pdb
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.csprojResolveAssemblyReference.cache
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.MyWindow.resources
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.Properties.Resources.resources
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.csproj.GenerateResource.Cache
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.exe
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.pdb
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\bin\x64\Debug\halcondotnet.dll
