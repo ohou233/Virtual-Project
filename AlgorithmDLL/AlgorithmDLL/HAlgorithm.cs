@@ -384,7 +384,7 @@ namespace HalconAlgorithm
         }
 
         //在线测试
-        public static void InLineMeasure(int MeasureProject, ListView lv, IntPtr buffer, ushort BufferWidth, ushort BufferHeight,
+        public static bool InLineMeasure(int MeasureProject, ListView lv, IntPtr buffer, ushort BufferWidth, ushort BufferHeight,
     out double Radius, out double PositionDegree, out double RunTime, out double DistanceX1, out double DistanceY1)
         {
             Radius = -1;
@@ -394,22 +394,31 @@ namespace HalconAlgorithm
             DistanceY1 = -1;
             HObject image;
             HOperatorSet.GenImage1Extern(out image, "byte", BufferWidth, BufferHeight, buffer, IntPtr.Zero);
+            bool MeasureISucced = true;
 
             switch (MeasureProject)
             {
                 case 9:
-                    Measure_9(image, out Radius, out PositionDegree, out RunTime, out DistanceX1, out DistanceY1);
+                    MeasureISucced = Measure_9(image, out Radius, out PositionDegree, out RunTime, out DistanceX1, out DistanceY1);
                     break;
                 case 18:
-                    Measure_18(image);
+                    MeasureISucced = Measure_18(image);
                     break;
                 default:
                     break;
             }
-            insertLine(lv, RunTime, Radius, PositionDegree, DistanceX1, DistanceY1);
-
-            image.Dispose();
-
+            if(MeasureISucced == true)
+            {
+                insertLine(lv, RunTime, Radius, PositionDegree, DistanceX1, DistanceY1);
+                image.Dispose();
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("请正确放置工件！");
+                image.Dispose();
+                return false;
+            }
         }
 
         //测量项
@@ -576,9 +585,10 @@ namespace HalconAlgorithm
             return true;
         }
 
-        public static void Measure_18(HObject ho_Image)
+        public static bool Measure_18(HObject ho_Image)
         {
-            
+
+            return true;
         }
 
         //public static void Measure_10(HObject ho_Image, out double DistanceL1L2, out double DistanceX1, out double RunTime)

@@ -36,8 +36,9 @@ namespace MyWindow
 
         bool IsInLine = false;
         int MeasureProject = -1;
-        Thread thread_OutLineTest;
+        Thread thread_OutLineTest, thread_InLineTest;
         bool IsthreadLoadImageStop = false;
+        bool IsThreadInLineStop = false;
         double Radius, PositionDegree, RunTime, DistanceX1, DistanceY1;
 
 
@@ -739,65 +740,83 @@ namespace MyWindow
             else
             {
                 //进行在线测试
-                MyCamera.MVCC_INTVALUE stParam = new MyCamera.MVCC_INTVALUE();
-                int Ret = m_MyCamera.MV_CC_GetIntValue_NET("PayloadSize", ref stParam);
-                if (MyCamera.MV_OK != Ret)
+                bool InLineTestIsSucceed = false;
+                InLineTestIsSucceed = InLineTest();
+                if(InLineTestIsSucceed == false)
                 {
-                    ShowErrorMsg("Get PayloadSize failed", Ret);
+                    ShowErrorMsg("请正确放置工件！", 0);
                     return;
                 }
+            }
+        }
 
-                UInt32 nPayloadSize = stParam.nCurValue;
-                if (nPayloadSize > m_nBufSizeForDriver)
+        private bool InLineTest()
+        {
+            MyCamera.MVCC_INTVALUE stParam = new MyCamera.MVCC_INTVALUE();
+            int Ret = m_MyCamera.MV_CC_GetIntValue_NET("PayloadSize", ref stParam);
+            if (MyCamera.MV_OK != Ret)
+            {
+                ShowErrorMsg("Get PayloadSize failed", Ret);
+                return false;
+            }
+
+            UInt32 nPayloadSize = stParam.nCurValue;
+            if (nPayloadSize > m_nBufSizeForDriver)
+            {
+                if (m_BufForDriver != IntPtr.Zero)
                 {
-                    if (m_BufForDriver != IntPtr.Zero)
-                    {
-                        Marshal.Release(m_BufForDriver);
-                    }
-                    m_nBufSizeForDriver = nPayloadSize;
-                    m_BufForDriver = Marshal.AllocHGlobal((Int32)m_nBufSizeForDriver);
+                    Marshal.Release(m_BufForDriver);
                 }
+                m_nBufSizeForDriver = nPayloadSize;
+                m_BufForDriver = Marshal.AllocHGlobal((Int32)m_nBufSizeForDriver);
+            }
 
-                if (m_BufForDriver == IntPtr.Zero)
+            if (m_BufForDriver == IntPtr.Zero)
+            {
+                return false;
+            }
+
+            MyCamera.MV_FRAME_OUT_INFO_EX stFrameInfo = new MyCamera.MV_FRAME_OUT_INFO_EX();
+
+            bool MeasureSucceed = false;
+            while (true)
+            {
+                lock (BufForDriverLock)
                 {
-                    return;
-                }
-
-                MyCamera.MV_FRAME_OUT_INFO_EX stFrameInfo = new MyCamera.MV_FRAME_OUT_INFO_EX();
-
-                while (true)
-                {
-                    lock (BufForDriverLock)
-                    {
-                        Ret = m_MyCamera.MV_CC_GetOneFrameTimeout_NET(m_BufForDriver, nPayloadSize, ref stFrameInfo, 1000);
-                        if (Ret == MyCamera.MV_OK)
-                        {
-                            m_stFrameInfo = stFrameInfo;
-                        }
-                    }
-
+                    Ret = m_MyCamera.MV_CC_GetOneFrameTimeout_NET(m_BufForDriver, nPayloadSize, ref stFrameInfo, 1000);
                     if (Ret == MyCamera.MV_OK)
                     {
-                        if (RemoveCustomPixelFormats(stFrameInfo.enPixelType))
-                        {
-                            continue;
-                        }
-                        HAlgorithm.InLineMeasure(MeasureProject, lv_AllFrameData, m_BufForDriver, stFrameInfo.nWidth, stFrameInfo.nHeight,
-        out Radius, out PositionDegree, out RunTime , out DistanceX1, out DistanceY1);
+                        m_stFrameInfo = stFrameInfo;
                     }
+                }
+
+                if (Ret == MyCamera.MV_OK)
+                {
+                    if (RemoveCustomPixelFormats(stFrameInfo.enPixelType))
+                    {
+                        continue;
+                    }
+                    MeasureSucceed = HAlgorithm.InLineMeasure(MeasureProject, lv_AllFrameData, m_BufForDriver, stFrameInfo.nWidth, stFrameInfo.nHeight,
+    out Radius, out PositionDegree, out RunTime, out DistanceX1, out DistanceY1);
+                }
+                if(MeasureSucceed)
+                {
                     break;
                 }
-                bt_StopGrab.Enabled = false;
             }
+
             //设置控件状态
+            bt_StopGrab.Enabled = false;
             bt_StopTest.Enabled = true;
             bt_StartTest.Enabled = false;
             rbt_Measure18C.Enabled = false;
             rbt_Measure9.Enabled = false;
             bt_ClearData.Enabled = false;
             bt_SaveCSV.Enabled = false;
+
+            return true;
         }
- 
+
         //停止测试
         private void bt_StopTest_Click(object sender, EventArgs e)
         {
