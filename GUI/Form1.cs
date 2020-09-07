@@ -38,7 +38,6 @@ namespace MyWindow
         int MeasureProject = -1;
         Thread thread_OutLineTest, thread_InLineTest;
         bool IsthreadLoadImageStop = false;
-        bool IsThreadInLineStop = false;
         double Radius, PositionDegree, RunTime, DistanceX1, DistanceY1;
 
 
@@ -392,6 +391,7 @@ namespace MyWindow
         //选择在线模式
         private void rbt_inLineMode_CheckedChanged(object sender, EventArgs e)
         {
+            IsInLine = true;
             bt_DiscoverCamera.Enabled = true;
             bt_StopTest.Enabled = false;
             bt_StartTest.Enabled = false;
@@ -889,6 +889,11 @@ namespace MyWindow
         private float x;//定义当前窗体的宽度
 
         private void gb_measurement_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void gb_camera_init_Enter(object sender, EventArgs e)
         {
 
         }

@@ -243,6 +243,7 @@
             this.gb_camera_init.TabIndex = 0;
             this.gb_camera_init.TabStop = false;
             this.gb_camera_init.Text = "设备管理";
+            this.gb_camera_init.Enter += new System.EventHandler(this.gb_camera_init_Enter);
             // 
             // cb_DeviceList
             // 
