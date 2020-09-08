@@ -11,3 +11,15 @@ C:\Users\iamxb\Desktop\MyWindow\obj\Debug\MyWindow.pdb
 \\Mac\Home\Desktop\virtual_project\GUI\bin\Debug\MyWindow.exe.config
 \\Mac\Home\Desktop\virtual_project\GUI\obj\Debug\MyWindow.exe
 \\Mac\Home\Desktop\virtual_project\GUI\obj\Debug\MyWindow.pdb
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\bin\Debug\MyWindow.exe.config
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\Debug\MyWindow.exe
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\Debug\MyWindow.pdb
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\bin\Debug\MyWindow.exe
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\bin\Debug\MyWindow.pdb
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\bin\Debug\AlgorithmDLL.dll
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\bin\Debug\MvCameraControl.Net.dll
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\bin\Debug\halcondotnet.dll
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\Debug\MyWindow.csprojResolveAssemblyReference.cache
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\Debug\MyWindow.MyWindow.resources
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\Debug\MyWindow.Properties.Resources.resources
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\Debug\MyWindow.csproj.GenerateResource.Cache

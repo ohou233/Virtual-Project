@@ -94,23 +94,23 @@ namespace MyWindow
                 return;
             }
 
-            ////探测网络最佳包大小(只对GigE相机有效) 
-            //if (device.nTLayerType == MyCamera.MV_GIGE_DEVICE)
-            //{
-            //    int nPacketSize = m_MyCamera.MV_CC_GetOptimalPacketSize_NET();
-            //    if (nPacketSize > 0)
-            //    {
-            //        nRet = m_MyCamera.MV_CC_SetIntValue_NET("GevSCPSPacketSize", (uint)nPacketSize);
-            //        if (nRet != MyCamera.MV_OK)
-            //        {
-            //            ShowErrorMsg("设置网络最佳包大小失败！", nRet);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        ShowErrorMsg("获取网络最佳包大小失败！", nPacketSize);
-            //    }
-            //}
+            //探测网络最佳包大小(只对GigE相机有效) 
+            if (device.nTLayerType == MyCamera.MV_GIGE_DEVICE)
+            {
+                int nPacketSize = m_MyCamera.MV_CC_GetOptimalPacketSize_NET();
+                if (nPacketSize > 0)
+                {
+                    nRet = m_MyCamera.MV_CC_SetIntValue_NET("GevSCPSPacketSize", (uint)nPacketSize);
+                    if (nRet != MyCamera.MV_OK)
+                    {
+                        ShowErrorMsg("设置网络最佳包大小失败！", nRet);
+                    }
+                }
+                else
+                {
+                    ShowErrorMsg("获取网络最佳包大小失败！", nPacketSize);
+                }
+            }
 
             // ch:设置采集连续模式 | en:Set Continues Aquisition Mode
             m_MyCamera.MV_CC_SetEnumValue_NET("AcquisitionMode", (uint)MyCamera.MV_CAM_ACQUISITION_MODE.MV_ACQ_MODE_CONTINUOUS);
@@ -319,6 +319,7 @@ namespace MyWindow
         //选择离线模式
         private void rbt_outLineMode_CheckedChanged(object sender, EventArgs e)
         {
+            IsInLine = false;
             OutLineModeState();
         }
 
@@ -364,6 +365,7 @@ namespace MyWindow
                 }
                 else
                 {
+
                     Thread.Sleep(200);
                 }
             }
@@ -573,6 +575,7 @@ namespace MyWindow
         {
             bt_CloseCamera_Click(null, null);
         }
+
         //保存BMP图像文件
         private void bt_SaveBmp_Click(object sender, EventArgs e)
         {
@@ -723,6 +726,12 @@ namespace MyWindow
                 return;
             }
 
+            //设置控件状态
+            bt_StopTest.Enabled = true;
+            bt_StartTest.Enabled = false;
+            rbt_Measure18C.Enabled = false;
+            rbt_Measure9.Enabled = false;
+
             if (false == IsInLine)
             {
                 //进行离线测试
@@ -747,6 +756,8 @@ namespace MyWindow
                     ShowErrorMsg("请正确放置工件！", 0);
                     return;
                 }
+
+
             }
         }
 
