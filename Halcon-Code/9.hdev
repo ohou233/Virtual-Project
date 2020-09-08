@@ -4,6 +4,9 @@
 <interface/>
 <body>
 <l>list_image_files ('../../Data/BackLight', 'bmp', [], ImageFiles)</l>
+<l>CircleRadius := []</l>
+<l>PositionDegrees := []</l>
+<c></c>
 <l>for Index := 0 to |ImageFiles|-1 by 1</l>
 <l>    read_image (Image, ImageFiles[Index])</l>
 <l>    get_image_size (Image, Width, Height)   </l>
@@ -22,8 +25,8 @@
 <l>    count_seconds (StopTime)</l>
 <l>    runtime := (StopTime-StartTime)*1000</l>
 <c>    *输出结果</c>
-<l>    CircleRadius := FitCircleCenterRadius</l>
-<l>    PositionDegree := 2*sqrt(pow((X1-19.605),2)+pow((Y1-6.788),2))</l>
+<l>    CircleRadius := [CircleRadius, FitCircleCenterRadius*0.009443*2]</l>
+<l>    PositionDegrees := [PositionDegrees, 2*sqrt(pow((X1*0.009443-19.605),2)+pow((Y1*0.009443-6.788),2))]</l>
 <c></c>
 <l>endfor</l>
 <c></c>

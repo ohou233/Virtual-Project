@@ -543,7 +543,7 @@ namespace HalconAlgorithm
                 //MessageBox.Show("请正确放置工件");
                 return false;
             }
-            
+
             ho_Image.Dispose();
             ho_BigCircle.Dispose();
 
@@ -585,9 +585,72 @@ namespace HalconAlgorithm
             return true;
         }
 
-        public static bool Measure_18(HObject ho_Image)
+        public static void gen_FitPoint(out HObject ho_Circle1, HTuple hv_Origin_Row_InImg, HTuple hv_Origin_Column_InImg,
+  HTuple hv_TwoCirclePhi, HTuple hv_p1_XOffest, HTuple hv_p1_YOffest, out HTuple hv_p1_x,
+  out HTuple hv_p1_y)
         {
 
+
+
+            // Local iconic variables 
+
+            // Local control variables 
+
+            HTuple hv_HomMat2D_Img2Base = new HTuple();
+            HTuple hv_Origin_Column_InBase = new HTuple(), hv_Origin_Row_InBase = new HTuple();
+            HTuple hv_p1_XInBase = new HTuple(), hv_p1_YInBase = new HTuple();
+            HTuple hv_HomMat2D_Base2Img = new HTuple();
+            // Initialize local and output iconic variables 
+            HOperatorSet.GenEmptyObj(out ho_Circle1);
+            hv_p1_x = new HTuple();
+            hv_p1_y = new HTuple();
+            //计算图像坐标系到基准坐标系的变换矩阵
+            HOperatorSet.VectorAngleToRigid(0, 0, 0, hv_Origin_Row_InImg, hv_Origin_Column_InImg,
+                hv_TwoCirclePhi, out hv_HomMat2D_Img2Base);
+            //将图像坐标系下的基准点转换到基准坐标系下
+            hv_Origin_Column_InBase.Dispose(); hv_Origin_Row_InBase.Dispose();
+            HOperatorSet.AffineTransPoint2d(hv_HomMat2D_Img2Base, hv_Origin_Column_InImg,
+                hv_Origin_Row_InImg, out hv_Origin_Column_InBase, out hv_Origin_Row_InBase);
+            //在基准坐标系下对基准点进行偏移找拟合点
+            hv_p1_XInBase.Dispose();
+            using (HDevDisposeHelper dh = new HDevDisposeHelper())
+            {
+                hv_p1_XInBase = hv_Origin_Column_InBase - hv_p1_XOffest;
+            }
+            hv_p1_YInBase.Dispose();
+            using (HDevDisposeHelper dh = new HDevDisposeHelper())
+            {
+                hv_p1_YInBase = hv_Origin_Row_InBase - hv_p1_YOffest;
+            }
+            //计算基准坐标系到图像坐标系下的变换矩阵
+            hv_HomMat2D_Base2Img.Dispose();
+            HOperatorSet.HomMat2dInvert(hv_HomMat2D_Img2Base, out hv_HomMat2D_Base2Img);
+            //将基准坐标系下的拟合点转换到图像坐标系下
+            hv_p1_x.Dispose(); hv_p1_y.Dispose();
+            HOperatorSet.AffineTransPoint2d(hv_HomMat2D_Base2Img, hv_p1_XInBase, hv_p1_YInBase,
+                out hv_p1_x, out hv_p1_y);
+            ho_Circle1.Dispose();
+            HOperatorSet.GenCircle(out ho_Circle1, hv_p1_y, hv_p1_x, 30);
+
+            hv_HomMat2D_Img2Base.Dispose();
+            hv_Origin_Column_InBase.Dispose();
+            hv_Origin_Row_InBase.Dispose();
+            hv_p1_XInBase.Dispose();
+            hv_p1_YInBase.Dispose();
+            hv_HomMat2D_Base2Img.Dispose();
+            hv_HomMat2D_Img2Base.Dispose();
+
+            return;
+        }
+
+        //public static bool Measure_9(HObject ho_Image, out double CirclrRadius, out double PositionDegree, out double RunTime,
+        //    out double DistanceX1, out double DistanceY1)
+        //{
+       
+        //}
+
+        public static bool Measure_18(HObject ho_Image)
+        {
             return true;
         }
 

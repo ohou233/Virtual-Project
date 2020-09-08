@@ -3,81 +3,62 @@
 <procedure name="main">
 <interface/>
 <body>
-<l>list_image_files ('//Mac/Home/Desktop/VirtualProject/Data/BackLight', 'bmp', [], ImageFiles)</l>
 <l>PixclRealDis := 0.009443</l>
-<l>p1_XOffest := -22.820 / 0.009443</l>
+<l>p1_XOffest := 22.820 / 0.009443</l>
 <l>p1_YOffest := 3.312 / 0.009443</l>
 <c></c>
-<l>p2_XOffest := -16.390 / 0.009443</l>
+<l>p2_XOffest := 16.390 / 0.009443</l>
 <l>p2_YOffest := 3.312 / 0.009443</l>
 <c></c>
-<l>p3_XOffest := -16.390 / 0.009443</l>
+<l>p3_XOffest := 16.390 / 0.009443</l>
 <l>p3_YOffest := 10.264 / 0.009443</l>
 <c></c>
-<l>p4_XOffest := -22.820 / 0.009443</l>
+<l>p4_XOffest := 22.820 / 0.009443</l>
 <l>p4_YOffest := 10.264 / 0.009443</l>
 <c></c>
-<l>Result := []</l>
+<l>CircleRadius := []</l>
+<l>PositionDegrees := []</l>
 <l>X1s := []</l>
 <l>Y1s := []</l>
 <l>RunTime := []</l>
 <c></c>
-<l>for Index := 0 to |ImageFiles|-1 by 1</l>
-<l>    read_image (Image, ImageFiles[Index])</l>
-<l>    get_image_size (Image, Width, Height)   </l>
-<l>    count_seconds (StartTime)</l>
-<l>    gen_TwoCircle_info(Image, MaxCircleRow, MaxCircleColumn, MaxCircleRadius, MinCircleRow, MinCircleColumn, MinCircleRadius, TwoCirclePhi)</l>
-<l>    vector_angle_to_rigid ((MaxCircleRow+MinCircleRow)/2, (MaxCircleColumn+MinCircleColumn)/2, TwoCirclePhi, (MaxCircleRow+MinCircleRow)/2, (MaxCircleColumn+MinCircleColumn)/2, 0, HomMat2D)</l>
-<l>    affine_trans_image (Image, Image, HomMat2D, 'weighted', 'false')</l>
-<l>    gen_TwoCircle_info(Image, MaxCircleRow, MaxCircleColumn, MaxCircleRadius, MinCircleRow, MinCircleColumn, MinCircleRadius, TwoCirclePhi)</l>
 <c></c>
-<c>    </c>
-<c>    </c>
-<l>    *gen_Edge_Circle (Image, BigCircle, MaxCircleRow, MaxCircleColumn, TwoCirclePhi, Width, Height, rad(45), MaxCircleRadius, LeftTopRowEdge, LeftTopColumnEdge, RightButtomRowEdge, RightButtomColumnEdge, LeftButtomRowEdge, LeftButtomColumnEdge, RightTopRowEdge, RightTopColumnEdge, FitCircleCenterRow, FitCircleCenterCol, FitCircleCenterRadius)</l>
-<c>    *定位底部测量矩形</c>
-<l>    gen_buttom_edge (Image, MaxCircleRow, MaxCircleColumn, MaxCircleRadius*3/2, MaxCircleRadius*3/4, TwoCirclePhi, Width, Height, rad(90), rad(90), MinCircleColumn, MaxCircleColumn, ButtomRowEdge1, ButtomColumnEdge1, ButtomRowEdge2, ButtomColumnEdge2)</l>
-<c>    *定位右侧测量矩形</c>
-<l>    gen_right_edge (Image, MinCircleRow, MinCircleColumn, MinCircleRadius*3/4, MinCircleRadius*6/5, MaxCircleColumn, TwoCirclePhi, Width, Height, rad(180), 0, RightRowEdge1, RightColumnEdge1, RightRowEdge2, RightColumnEdge2)</l>
-<c>   </c>
-<c>    *求底部边缘和右侧边缘交点，即坐标原点</c>
-<l>    intersection_lines (ButtomRowEdge1, ButtomColumnEdge1, ButtomRowEdge2, ButtomColumnEdge2, RightRowEdge1, RightColumnEdge1, RightRowEdge2, RightColumnEdge2, Origin_Row, Origin_Column, IsOverlapping)</l>
-<c>    </c>
-<l>    p1_x := Origin_Column + p1_XOffest</l>
-<l>    p1_y := Origin_Row - p1_YOffest</l>
-<l>    gen_circle (Circle1, p1_y, p1_x, 30)</l>
-<c>    </c>
-<l>    p2_x := Origin_Column + p2_XOffest</l>
-<l>    p2_y := Origin_Row - p2_YOffest</l>
-<l>    gen_circle (Circle2, p2_y, p2_x, 30)</l>
-<c>    </c>
-<l>    p3_x := Origin_Column + p3_XOffest</l>
-<l>    p3_y := Origin_Row - p3_YOffest</l>
-<l>    gen_circle (Circle3, p3_y, p3_x, 30)</l>
-<c>    </c>
-<l>    p4_x := Origin_Column + p4_XOffest</l>
-<l>    p4_y := Origin_Row - p4_YOffest</l>
-<l>    gen_circle (Circle4, p4_y, p4_x, 30)</l>
-<c>    </c>
-<l>    gen_contour_polygon_xld (Contour, [p1_y, p2_y, p3_y, p4_y], [p1_x, p2_x, p3_x, p4_x])</l>
-<l>    fit_circle_contour_xld (Contour, 'algebraic', -1, 0, 0, 3, 2, FitCircleCenterRow, FitCircleCenterCol, FitCircleCenterRadius, StartPhi, EndPhi, PointOrder)</l>
-<l>    gen_circle_contour_xld (ContCircle, FitCircleCenterRow, FitCircleCenterCol, FitCircleCenterRadius, 0, rad(360), 'positive', 1)</l>
-<c>    </c>
-<c>    *计算X1</c>
-<l>    distance_pl (FitCircleCenterRow, FitCircleCenterCol, RightRowEdge1, RightColumnEdge1, RightRowEdge2, RightColumnEdge2, X1)</l>
-<c>    *计算Y1</c>
-<l>    distance_pl (FitCircleCenterRow, FitCircleCenterCol, ButtomRowEdge1, ButtomColumnEdge1, ButtomRowEdge2, ButtomColumnEdge2, Y1)</l>
-<c>    *计算运行时间</c>
-<l>    count_seconds (StopTime)</l>
-<l>    runtime := (StopTime-StartTime)*1000</l>
-<c>    *输出结果</c>
-<l>    CircleRadius := FitCircleCenterRadius</l>
-<l>    PositionDegree := 2*sqrt(pow((X1-19.605),2)+pow((Y1-6.788),2))</l>
+<l>get_image_size (Image, Width, Height)   </l>
+<l>count_seconds (StartTime)</l>
+<l>gen_TwoCircle_info(Image, MaxCircleRow, MaxCircleColumn, MaxCircleRadius, MinCircleRow, MinCircleColumn, MinCircleRadius, TwoCirclePhi)</l>
+<c>*定位底部测量矩形</c>
+<l>gen_buttom_edge (Image, MaxCircleRow, MaxCircleColumn, MaxCircleRadius*3/2, MaxCircleRadius*3/4, TwoCirclePhi, Width, Height, rad(90), rad(90), MinCircleColumn, MaxCircleColumn, ButtomRowEdge1, ButtomColumnEdge1, ButtomRowEdge2, ButtomColumnEdge2)</l>
+<c>*定位右侧测量矩形</c>
+<l>gen_right_edge (Image, MinCircleRow, MinCircleColumn, MinCircleRadius*3/4, MinCircleRadius*6/5, MaxCircleColumn, TwoCirclePhi, Width, Height, rad(180), 0, RightRowEdge1, RightColumnEdge1, RightRowEdge2, RightColumnEdge2)</l>
+<c>*求底部边缘和右侧边缘交点，即坐标原点</c>
+<l>intersection_lines (ButtomRowEdge1, ButtomColumnEdge1, ButtomRowEdge2, ButtomColumnEdge2, RightRowEdge1, RightColumnEdge1, RightRowEdge2, RightColumnEdge2, Origin_Row_InImg, Origin_Column_InImg, IsOverlapping)</l>
+<c>*求取4个拟合点</c>
+<l>gen_FitPoint (Circle1, Origin_Row_InImg, Origin_Column_InImg, TwoCirclePhi, p1_XOffest, p1_YOffest, p1_x, p1_y)</l>
+<l>gen_FitPoint (Circle2, Origin_Row_InImg, Origin_Column_InImg, TwoCirclePhi, p2_XOffest, p2_YOffest, p2_x, p2_y)</l>
+<l>gen_FitPoint (Circle3, Origin_Row_InImg, Origin_Column_InImg, TwoCirclePhi, p3_XOffest, p3_YOffest, p3_x, p3_y)</l>
+<l>gen_FitPoint (Circle4, Origin_Row_InImg, Origin_Column_InImg, TwoCirclePhi, p4_XOffest, p4_YOffest, p4_x, p4_y)</l>
+<c>*利用4个拟合点生成点多边形轮廓，并拟合成圆</c>
+<l>gen_contour_polygon_xld (Contour, [p1_y, p2_y, p3_y, p4_y], [p1_x, p2_x, p3_x, p4_x])</l>
+<l>fit_circle_contour_xld (Contour, 'atukey', -1, 0, 0, 3, 1, FitCircleCenterRow, FitCircleCenterCol, FitCircleCenterRadius, StartPhi, EndPhi, PointOrder)</l>
+<l>gen_circle_contour_xld (ContCircle, FitCircleCenterRow, FitCircleCenterCol, FitCircleCenterRadius, 0, rad(360), 'positive', 1)</l>
+<c>*计算X1</c>
+<l>distance_pl (FitCircleCenterRow, FitCircleCenterCol, RightRowEdge1, RightColumnEdge1, RightRowEdge2, RightColumnEdge2, X1)</l>
+<c>*计算Y1</c>
+<l>distance_pl (FitCircleCenterRow, FitCircleCenterCol, ButtomRowEdge1, ButtomColumnEdge1, ButtomRowEdge2, ButtomColumnEdge2, Y1)</l>
+<c>*计算运行时间</c>
+<l>count_seconds (StopTime)</l>
+<l>runtime := (StopTime-StartTime)*1000</l>
+<c>*输出结果</c>
+<l>CircleRadiu := FitCircleCenterRadius*2*0.009443</l>
+<l>PositionDegree := 2*sqrt(pow((X1*0.009443-19.605),2)+pow((Y1*0.009443-6.788),2))</l>
 <c></c>
-<l>    Result := [Result, CircleRadius]</l>
-<l>    X1s := [X1s, X1]</l>
-<l>    Y1s := [Y1s, Y1]</l>
-<l>    RunTime := [RunTime, runtime]</l>
-<l>endfor</l>
+<l>CircleRadius := [CircleRadius, CircleRadiu]</l>
+<l>PositionDegrees := [PositionDegrees, PositionDegree]</l>
+<l>X1s := [X1s, X1*0.009443]</l>
+<l>Y1s := [Y1s, Y1*0.009443]</l>
+<l>RunTime := [RunTime, runtime]</l>
+<c>    </c>
+<c></c>
 <c></c>
 </body>
 <docu id="main">
@@ -377,6 +358,51 @@
 <parameter id="RightTopColumnEdge"/>
 <parameter id="RightTopRowEdge"/>
 <parameter id="RotatePhi"/>
+</parameters>
+</docu>
+</procedure>
+<procedure name="gen_FitPoint">
+<interface>
+<oo>
+<par name="Circle1" base_type="iconic" dimension="0"/>
+</oo>
+<ic>
+<par name="Origin_Row_InImg" base_type="ctrl" dimension="0"/>
+<par name="Origin_Column_InImg" base_type="ctrl" dimension="0"/>
+<par name="TwoCirclePhi" base_type="ctrl" dimension="0"/>
+<par name="p1_XOffest" base_type="ctrl" dimension="0"/>
+<par name="p1_YOffest" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="p1_x" base_type="ctrl" dimension="0"/>
+<par name="p1_y" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<c>    *计算图像坐标系到基准坐标系的变换矩阵</c>
+<l>    vector_angle_to_rigid (0, 0, 0, Origin_Row_InImg, Origin_Column_InImg, TwoCirclePhi , HomMat2D_Img2Base)</l>
+<c>    *将图像坐标系下的基准点转换到基准坐标系下</c>
+<l>    affine_trans_point_2d (HomMat2D_Img2Base, Origin_Column_InImg, Origin_Row_InImg, Origin_Column_InBase, Origin_Row_InBase)</l>
+<c>    *在基准坐标系下对基准点进行偏移找拟合点</c>
+<l>    p1_XInBase := Origin_Column_InBase-p1_XOffest</l>
+<l>    p1_YInBase := Origin_Row_InBase-p1_YOffest</l>
+<c>    *计算基准坐标系到图像坐标系下的变换矩阵</c>
+<l>    hom_mat2d_invert (HomMat2D_Img2Base, HomMat2D_Base2Img)</l>
+<c>    *将基准坐标系下的拟合点转换到图像坐标系下</c>
+<l>    affine_trans_point_2d (HomMat2D_Base2Img, p1_XInBase, p1_YInBase, p1_x, p1_y)</l>
+<l>    gen_circle (Circle1, p1_y, p1_x, 30)</l>
+<l>return ()</l>
+</body>
+<docu id="gen_FitPoint">
+<parameters>
+<parameter id="Circle1"/>
+<parameter id="Origin_Column_InImg"/>
+<parameter id="Origin_Row_InImg"/>
+<parameter id="TwoCirclePhi"/>
+<parameter id="p1_XOffest"/>
+<parameter id="p1_YOffest"/>
+<parameter id="p1_x"/>
+<parameter id="p1_y"/>
 </parameters>
 </docu>
 </procedure>
