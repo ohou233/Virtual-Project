@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hdevelop file_version="1.2" halcon_version="19.11.0.0">
+<hdevelop file_version="1.2" halcon_version="20.05.0.0">
 <procedure name="main">
 <interface/>
 <body>
@@ -22,7 +22,7 @@
 <l>Y1s := []</l>
 <c></c>
 <l>RunTime := []</l>
-<l>list_image_files ('//mac/Home/Desktop/VirtualProject/Data/BackLight', 'default', [], ImageFiles)</l>
+<l>list_image_files ('C:/Users/iamxb/Desktop/Virtual Project/Data/BackLight', 'default', [], ImageFiles)</l>
 <l>for i := 0 to |ImageFiles|-1 by 1</l>
 <l>    read_image (Image, ImageFiles[i])</l>
 <l>    get_image_size (Image, Width, Height)   </l>
@@ -38,19 +38,23 @@
 <c>    *求底部边缘和右侧边缘交点，即坐标原点</c>
 <l>    intersection_lines (ButtomEdgeRowBegin, ButtomEdgeColBegin, ButtomEdgeRowEnd, ButtomEdgeColEnd, RightEdgeRowBegin, RightEdgeColBegin, RightEdgeRowEnd, RightEdgeColEnd, Origin_Row_InImg, Origin_Column_InImg, IsOverlapping)</l>
 <c>    *求取4个拟合点</c>
-<l>    par_start &lt;ThreadID3&gt; : gen_FitPoint (Image, Circle1, Origin_Row_InImg, Origin_Column_InImg, TwoCirclePhi, p1_XOffest, p1_YOffest, MaxCircleColumn, MinCircleColumn, MaxCircleRow, Width, Height, p1_x, p1_y)</l>
-<l>    par_start &lt;ThreadID4&gt; : gen_FitPoint (Image, Circle2, Origin_Row_InImg, Origin_Column_InImg, TwoCirclePhi, p2_XOffest, p2_YOffest, MaxCircleColumn, MinCircleColumn, MaxCircleRow, Width, Height, p2_x, p2_y)</l>
-<l>    par_start &lt;ThreadID5&gt; : gen_FitPoint (Image, Circle3, Origin_Row_InImg, Origin_Column_InImg, TwoCirclePhi, p3_XOffest, p3_YOffest, MaxCircleColumn, MinCircleColumn, MaxCircleRow, Width, Height, p3_x, p3_y)</l>
-<l>    par_start &lt;ThreadID6&gt; : gen_FitPoint (Image, Circle4, Origin_Row_InImg, Origin_Column_InImg, TwoCirclePhi, p4_XOffest, p4_YOffest, MaxCircleColumn, MinCircleColumn, MaxCircleRow, Width, Height, p4_x, p4_y)</l>
+<l>    par_start&lt;ThreadID3&gt; : gen_FitPoint (Image, Circle1, Origin_Row_InImg, Origin_Column_InImg, TwoCirclePhi, p1_XOffest, p1_YOffest, MaxCircleColumn, MinCircleColumn, MaxCircleRow, Width, Height, p1_x, p1_y, p1_x_fit, p1_y_fit)</l>
+<l>    par_start&lt;ThreadID4&gt; : gen_FitPoint (Image, Circle2, Origin_Row_InImg, Origin_Column_InImg, TwoCirclePhi, p2_XOffest, p2_YOffest, MaxCircleColumn, MinCircleColumn, MaxCircleRow, Width, Height, p2_x, p2_y, p2_x_fit, p2_y_fit)</l>
+<l>    par_start&lt;ThreadID5&gt; : gen_FitPoint (Image, Circle3, Origin_Row_InImg, Origin_Column_InImg, TwoCirclePhi, p3_XOffest, p3_YOffest, MaxCircleColumn, MinCircleColumn, MaxCircleRow, Width, Height, p3_x, p3_y, p3_x_fit, p3_y_fit)</l>
+<l>    par_start&lt;ThreadID6&gt; : gen_FitPoint (Image, Circle4, Origin_Row_InImg, Origin_Column_InImg, TwoCirclePhi, p4_XOffest, p4_YOffest, MaxCircleColumn, MinCircleColumn, MaxCircleRow, Width, Height, p4_x, p4_y, p4_x_fit, p4_y_fit)</l>
 <l>    par_join (ThreadID3)</l>
 <l>    par_join (ThreadID4)</l>
 <l>    par_join (ThreadID5)</l>
 <l>    par_join (ThreadID6)</l>
 <c></c>
-<c>    *利用4个拟合点生成点多边形轮廓，并拟合成圆</c>
-<l>    gen_contour_polygon_xld (Contour, [p1_y, p2_y, p3_y, p4_y], [p1_x, p2_x, p3_x, p4_x])</l>
-<l>    fit_circle_contour_xld (Contour, 'geotukey', -1, 0, 0, 3, 2, FitCircleCenterRow, FitCircleCenterCol, FitCircleCenterRadius, StartPhi, EndPhi, PointOrder)</l>
-<l>    gen_circle_contour_xld (ContCircle, FitCircleCenterRow, FitCircleCenterCol, FitCircleCenterRadius, 0, rad(360), 'positive', 1)</l>
+<c>    *利用4个边缘点生成点多边形轮廓，并拟合成圆</c>
+<l>    gen_contour_polygon_xld (EdgeContour, [p1_y, p2_y, p3_y, p4_y], [p1_x, p2_x, p3_x, p4_x])</l>
+<l>    fit_circle_contour_xld (EdgeContour, 'ahuber', -1, 0, 0, 3, 1,EdgeCircleCenterRow, EdgeCircleCenterCol, EdgeCircleCenterRadius, StartPhi, EndPhi, PointOrder)</l>
+<l>    gen_circle_contour_xld (EdgeCircle, EdgeCircleCenterRow, EdgeCircleCenterCol, EdgeCircleCenterRadius, 0, rad(360), 'positive', 1)</l>
+<c>      *利用4个拟合点生成点多边形轮廓，并拟合成圆</c>
+<l>    gen_contour_polygon_xld (FitContour, [p1_y_fit, p2_y_fit, p3_y_fit, p4_y_fit], [p1_x_fit, p2_x_fit, p3_x_fit, p4_x_fit])</l>
+<l>    fit_circle_contour_xld (FitContour, 'ahuber', -1, 0, 0, 3, 1, FitCircleCenterRow, FitCircleCenterCol, FitCircleCenterRadius, StartPhi, EndPhi, PointOrder)</l>
+<c>  </c>
 <c>    *计算X1</c>
 <l>    distance_pl (FitCircleCenterRow, FitCircleCenterCol, RightEdgeRowBegin, RightEdgeColBegin, RightEdgeRowEnd, RightEdgeColEnd, X1)</l>
 <c>    *计算Y1</c>
@@ -59,7 +63,7 @@
 <l>    count_seconds (StopTime)</l>
 <l>    runtime := (StopTime-StartTime)*1000</l>
 <c>    *输出结果</c>
-<l>    CircleRadiu := FitCircleCenterRadius*2*PixclRealDis</l>
+<l>    CircleRadiu := EdgeCircleCenterRadius*2*PixclRealDis</l>
 <l>    PositionDegree := 2*sqrt(pow((X1*PixclRealDis-19.605),2)+pow((Y1*PixclRealDis-6.788),2))</l>
 <c>    </c>
 <l>    CircleRadius := [CircleRadius, CircleRadiu]</l>
@@ -155,11 +159,11 @@
 <c></c>
 <c>*拟合底部边缘</c>
 <l>create_metrology_model (ButtomMetrologyHandle)</l>
-<l>add_metrology_object_line_measure (ButtomMetrologyHandle, ButtomEdgeRowBegin, ButtomEdgeColBegin, ButtomEdgeRowEnd, ButtomEdgeColEnd, 20, 2, 2, 50, [], [], Index)</l>
+<l>add_metrology_object_line_measure (ButtomMetrologyHandle, ButtomEdgeRowBegin, ButtomEdgeColBegin, ButtomEdgeRowEnd, ButtomEdgeColEnd, 20, 2, 10, 50, [], [], Index)</l>
 <l>apply_metrology_model (Image, ButtomMetrologyHandle)</l>
 <l>get_metrology_object_measures (Contours, ButtomMetrologyHandle, 'all', 'all', ButtomEdgeRows, ButtomEdgeColumns)</l>
 <l>gen_contour_polygon_xld (ButtomEdgeContour, ButtomEdgeRows, ButtomEdgeColumns)</l>
-<l>fit_line_contour_xld (ButtomEdgeContour, 'tukey', -1, 0, 5, 0.4, ButtomEdgeRowBegin, ButtomEdgeColBegin, ButtomEdgeRowEnd, ButtomEdgeColEnd, Nr, Nc, Dist)</l>
+<l>fit_line_contour_xld (ButtomEdgeContour, 'huber', -1, 0, 5, 4, ButtomEdgeRowBegin, ButtomEdgeColBegin, ButtomEdgeRowEnd, ButtomEdgeColEnd, Nr, Nc, Dist)</l>
 <c>    </c>
 <c></c>
 <l>return ()</l>
@@ -260,32 +264,32 @@
 </oc>
 </interface>
 <body>
-<l>gen_rectangle2 (Rectangle1, CenterRow-BaseRectDistRow, CenterColumn+BaseRectDistColumn, BaseRectPhi, 80, 2)</l>
-<l>gen_rectangle2 (Rectangle2, CenterRow+BaseRectDistRow, CenterColumn+BaseRectDistColumn, BaseRectPhi, 80, 2)</l>
+<l>gen_rectangle2 (Rectangle1, CenterRow-BaseRectDistRow, CenterColumn+BaseRectDistColumn, BaseRectPhi, 70, 2)</l>
+<l>gen_rectangle2 (Rectangle2, CenterRow+BaseRectDistRow, CenterColumn+BaseRectDistColumn, BaseRectPhi, 70, 2)</l>
 <c></c>
 <l>if (MaxCircleColumn &gt; CenterColumn)</l>
 <l>    vector_angle_to_rigid (CenterRow, CenterColumn, BaseRectPhi, CenterRow, CenterColumn, BasePhi+rad(180), HomMat2D7)</l>
 <l>    affine_trans_region (Rectangle1, RightMeasureRectionAffineTrans1, HomMat2D7, 'nearest_neighbor')</l>
 <l>    area_center (RightMeasureRectionAffineTrans1, RightMeasureRectArea, RightMeasureRectRow1, RightMeasureRectColumn1)</l>
 <l>    orientation_region (RightMeasureRectionAffineTrans1, RightMeasureRectPhi1)</l>
-<l>    gen_measure_rectangle2 (RightMeasureRectRow1, RightMeasureRectColumn1, RightMeasureRectPhi1, 80, 2, ImageWidth, ImageHeight, 'bicubic', MeasureHandle7)</l>
+<l>    gen_measure_rectangle2 (RightMeasureRectRow1, RightMeasureRectColumn1, RightMeasureRectPhi1, 70, 2, ImageWidth, ImageHeight, 'bicubic', MeasureHandle7)</l>
 <c></c>
 <l>    affine_trans_region (Rectangle2, RightMeasureRectionAffineTrans2, HomMat2D7, 'nearest_neighbor')</l>
 <l>    area_center (RightMeasureRectionAffineTrans2, RightMeasureRectArea, RightMeasureRectRow2, RightMeasureRectColumn2)</l>
 <l>    orientation_region (RightMeasureRectionAffineTrans2, RightMeasureRectPhi2)</l>
-<l>    gen_measure_rectangle2 (RightMeasureRectRow2, RightMeasureRectColumn2, RightMeasureRectPhi2, 80, 2, ImageWidth, ImageHeight, 'bicubic', MeasureHandle8)</l>
+<l>    gen_measure_rectangle2 (RightMeasureRectRow2, RightMeasureRectColumn2, RightMeasureRectPhi2, 70, 2, ImageWidth, ImageHeight, 'bicubic', MeasureHandle8)</l>
 <c></c>
 <l>else</l>
 <l>    vector_angle_to_rigid (CenterRow, CenterColumn, BaseRectPhi, CenterRow, CenterColumn, BasePhi, HomMat2D7)</l>
 <l>    affine_trans_region (Rectangle1, RightMeasureRectionAffineTrans1, HomMat2D7, 'nearest_neighbor')</l>
 <l>    area_center (RightMeasureRectionAffineTrans1, RightMeasureRectArea, RightMeasureRectRow1, RightMeasureRectColumn1)</l>
 <l>    orientation_region (RightMeasureRectionAffineTrans1, RightMeasureRectPhi1)</l>
-<l>    gen_measure_rectangle2 (RightMeasureRectRow1, RightMeasureRectColumn1, RightMeasureRectPhi1, 80, 2, ImageWidth, ImageHeight, 'bicubic', MeasureHandle7)</l>
+<l>    gen_measure_rectangle2 (RightMeasureRectRow1, RightMeasureRectColumn1, RightMeasureRectPhi1, 70, 2, ImageWidth, ImageHeight, 'bicubic', MeasureHandle7)</l>
 <c></c>
 <l>    affine_trans_region (Rectangle2, RightMeasureRectionAffineTrans2, HomMat2D7, 'nearest_neighbor')</l>
 <l>    area_center (RightMeasureRectionAffineTrans2, RightMeasureRectArea, RightMeasureRectRow2, RightMeasureRectColumn2)</l>
 <l>    orientation_region (RightMeasureRectionAffineTrans2, RightMeasureRectPhi2)</l>
-<l>    gen_measure_rectangle2 (RightMeasureRectRow2, RightMeasureRectColumn2, RightMeasureRectPhi2, 80, 2, ImageWidth, ImageHeight, 'bicubic', MeasureHandle8)</l>
+<l>    gen_measure_rectangle2 (RightMeasureRectRow2, RightMeasureRectColumn2, RightMeasureRectPhi2, 70, 2, ImageWidth, ImageHeight, 'bicubic', MeasureHandle8)</l>
 <c></c>
 <l>endif</l>
 <c>* 抓取右侧边缘</c>
@@ -297,11 +301,11 @@
 <c></c>
 <c>*拟合右侧边缘</c>
 <l>create_metrology_model (RightMetrologyHandle)</l>
-<l>add_metrology_object_line_measure (RightMetrologyHandle, RightEdgeRowBegin, RightEdgeColBegin, RightEdgeRowEnd, RightEdgeColEnd, 20, 2, 2, 50, [], [], Index)</l>
+<l>add_metrology_object_line_measure (RightMetrologyHandle, RightEdgeRowBegin, RightEdgeColBegin, RightEdgeRowEnd, RightEdgeColEnd, 20, 2, 10, 50, [], [], Index)</l>
 <l>apply_metrology_model (Image, RightMetrologyHandle)</l>
 <l>get_metrology_object_measures (Contours, RightMetrologyHandle, 'all', 'all', RightEdgeRows, RightEdgeColumns)</l>
 <l>gen_contour_polygon_xld (RightEdgeContour, RightEdgeRows, RightEdgeColumns)</l>
-<l>fit_line_contour_xld (RightEdgeContour, 'tukey', -1, 0, 5, 0.4,RightEdgeRowBegin, RightEdgeColBegin, RightEdgeRowEnd, RightEdgeColEnd, Nr, Nc, Dist)</l>
+<l>fit_line_contour_xld (RightEdgeContour, 'huber', -1, 0, 5, 4,RightEdgeRowBegin, RightEdgeColBegin, RightEdgeRowEnd, RightEdgeColEnd, Nr, Nc, Dist)</l>
 <c></c>
 <l>return ()</l>
 </body>
@@ -435,8 +439,8 @@
 <par name="Origin_Row_InImg" base_type="ctrl" dimension="0"/>
 <par name="Origin_Column_InImg" base_type="ctrl" dimension="0"/>
 <par name="TwoCirclePhi" base_type="ctrl" dimension="0"/>
-<par name="p1_XOffest" base_type="ctrl" dimension="0"/>
-<par name="p1_YOffest" base_type="ctrl" dimension="0"/>
+<par name="p_XOffest" base_type="ctrl" dimension="0"/>
+<par name="p_YOffest" base_type="ctrl" dimension="0"/>
 <par name="MaxCircleColumn" base_type="ctrl" dimension="0"/>
 <par name="MinCircleColumn" base_type="ctrl" dimension="0"/>
 <par name="MaxCircleRow" base_type="ctrl" dimension="0"/>
@@ -444,8 +448,10 @@
 <par name="Height" base_type="ctrl" dimension="0"/>
 </ic>
 <oc>
-<par name="p1_x" base_type="ctrl" dimension="0"/>
-<par name="p1_y" base_type="ctrl" dimension="0"/>
+<par name="p_x" base_type="ctrl" dimension="0"/>
+<par name="p_y" base_type="ctrl" dimension="0"/>
+<par name="p_x_fit" base_type="ctrl" dimension="0"/>
+<par name="p_y_fit" base_type="ctrl" dimension="0"/>
 </oc>
 </interface>
 <body>
@@ -455,31 +461,31 @@
 <l>    affine_trans_point_2d (HomMat2D_Img2Base, Origin_Column_InImg, Origin_Row_InImg, Origin_Column_InBase, Origin_Row_InBase)    </l>
 <c>    *在基准坐标系下对基准点进行偏移找拟合点</c>
 <l>    if(MaxCircleColumn &lt; MinCircleColumn)</l>
-<l>            p1_XInBase := Origin_Column_InBase-p1_XOffest</l>
-<l>            p1_YInBase := Origin_Row_InBase-p1_YOffest</l>
+<l>    p_XInBase := Origin_Column_InBase-p_XOffest</l>
+<l>    p_YInBase := Origin_Row_InBase-p_YOffest</l>
 <l>    else</l>
-<l>            p1_XInBase := Origin_Column_InBase+p1_XOffest</l>
-<l>            p1_YInBase := Origin_Row_InBase+p1_YOffest</l>
+<l>    p_XInBase := Origin_Column_InBase+p_XOffest</l>
+<l>    p_YInBase := Origin_Row_InBase+p_YOffest</l>
 <l>    endif</l>
 <c>        </c>
 <c>    *计算基准坐标系到图像坐标系下的变换矩阵</c>
 <l>    hom_mat2d_invert (HomMat2D_Img2Base, HomMat2D_Base2Img)</l>
 <c>    *将基准坐标系下的拟合点转换到图像坐标系下</c>
-<l>    affine_trans_point_2d (HomMat2D_Base2Img, p1_XInBase, p1_YInBase, p1_x_fit, p1_y_fit)</l>
+<l>    affine_trans_point_2d (HomMat2D_Base2Img, p_XInBase, p_YInBase, p_x_fit, p_y_fit)</l>
 <c>    </c>
 <c>    ***********如采用边缘点则取消注释*******************</c>
-<l>*     p1_x := p1_x_fit</l>
-<l>*     p1_y := p1_y_fit</l>
+<l>* p_x := p_x_fit</l>
+<l>* p_y := p_y_fit</l>
 <c>    ***************************************************</c>
 <c>    </c>
 <c></c>
 <c>    ***********如直接采用手册标记点则取消注释*******************</c>
-<l>    line_orientation (MaxCircleRow, MaxCircleColumn, p1_y_fit, p1_x_fit, MeasureRectPhi1)</l>
-<l>    gen_measure_rectangle2 (p1_y_fit, p1_x_fit, MeasureRectPhi1, 30, 2, Width, Height, 'bicubic', MeasureHandle1)</l>
-<l>    measure_pos (Image, MeasureHandle1, 1.5, 50, 'all', 'all', p1_y, p1_x, Amplitude, Distance)</l>
-<l>    close_measure (MeasureHandle1)</l>
+<l>line_orientation (MaxCircleRow, MaxCircleColumn, p_y_fit, p_x_fit, MeasureRectPhi1)</l>
+<l>gen_measure_rectangle2 (p_y_fit, p_x_fit, MeasureRectPhi1, 30, 2, Width, Height, 'bicubic', MeasureHandle1)</l>
+<l>measure_pos (Image, MeasureHandle1, 1.5, 50, 'all', 'all', p_y, p_x, Amplitude, Distance)</l>
+<l>close_measure (MeasureHandle1)</l>
 <c>    **********************************************************</c>
-<l>    gen_circle (Circle1, p1_y, p1_x, 30)</l>
+<l>gen_circle (Circle1, p_y, p_x, 10)</l>
 <l>return ()</l>
 </body>
 <docu id="gen_FitPoint">
@@ -494,10 +500,12 @@
 <parameter id="Origin_Row_InImg"/>
 <parameter id="TwoCirclePhi"/>
 <parameter id="Width"/>
-<parameter id="p1_XOffest"/>
-<parameter id="p1_YOffest"/>
-<parameter id="p1_x"/>
-<parameter id="p1_y"/>
+<parameter id="p_XOffest"/>
+<parameter id="p_YOffest"/>
+<parameter id="p_x"/>
+<parameter id="p_x_fit"/>
+<parameter id="p_y"/>
+<parameter id="p_y_fit"/>
 </parameters>
 </docu>
 </procedure>
