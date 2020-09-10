@@ -31,7 +31,7 @@
             this.pb_in = new System.Windows.Forms.PictureBox();
             this.pb_out = new System.Windows.Forms.PictureBox();
             this.tp_SetOption = new System.Windows.Forms.TabControl();
-            this.tp_camera_option = new System.Windows.Forms.TabPage();
+            this.tp_2Dcamera_option = new System.Windows.Forms.TabPage();
             this.gb_camera_parameter = new System.Windows.Forms.GroupBox();
             this.bt_SetParam = new System.Windows.Forms.Button();
             this.bt_GetParam = new System.Windows.Forms.Button();
@@ -65,10 +65,11 @@
             this.bt_StopGrab = new System.Windows.Forms.Button();
             this.bt_StartGrab = new System.Windows.Forms.Button();
             this.lv_AllFrameData = new System.Windows.Forms.ListView();
+            this.tp_3Dcamera_option = new System.Windows.Forms.TabPage();
             ((System.ComponentModel.ISupportInitialize)(this.pb_in)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_out)).BeginInit();
             this.tp_SetOption.SuspendLayout();
-            this.tp_camera_option.SuspendLayout();
+            this.tp_2Dcamera_option.SuspendLayout();
             this.gb_camera_parameter.SuspendLayout();
             this.gb_camera_init.SuspendLayout();
             this.tp_process_option.SuspendLayout();
@@ -102,7 +103,8 @@
             // 
             // tp_SetOption
             // 
-            this.tp_SetOption.Controls.Add(this.tp_camera_option);
+            this.tp_SetOption.Controls.Add(this.tp_2Dcamera_option);
+            this.tp_SetOption.Controls.Add(this.tp_3Dcamera_option);
             this.tp_SetOption.Controls.Add(this.tp_process_option);
             this.tp_SetOption.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.tp_SetOption.Location = new System.Drawing.Point(1, 442);
@@ -112,18 +114,18 @@
             this.tp_SetOption.Size = new System.Drawing.Size(509, 325);
             this.tp_SetOption.TabIndex = 2;
             // 
-            // tp_camera_option
+            // tp_2Dcamera_option
             // 
-            this.tp_camera_option.Controls.Add(this.gb_camera_parameter);
-            this.tp_camera_option.Controls.Add(this.gb_camera_init);
-            this.tp_camera_option.Location = new System.Drawing.Point(4, 22);
-            this.tp_camera_option.Margin = new System.Windows.Forms.Padding(2);
-            this.tp_camera_option.Name = "tp_camera_option";
-            this.tp_camera_option.Padding = new System.Windows.Forms.Padding(2);
-            this.tp_camera_option.Size = new System.Drawing.Size(501, 299);
-            this.tp_camera_option.TabIndex = 0;
-            this.tp_camera_option.Text = " 相机设置";
-            this.tp_camera_option.UseVisualStyleBackColor = true;
+            this.tp_2Dcamera_option.Controls.Add(this.gb_camera_parameter);
+            this.tp_2Dcamera_option.Controls.Add(this.gb_camera_init);
+            this.tp_2Dcamera_option.Location = new System.Drawing.Point(4, 22);
+            this.tp_2Dcamera_option.Margin = new System.Windows.Forms.Padding(2);
+            this.tp_2Dcamera_option.Name = "tp_2Dcamera_option";
+            this.tp_2Dcamera_option.Padding = new System.Windows.Forms.Padding(2);
+            this.tp_2Dcamera_option.Size = new System.Drawing.Size(501, 299);
+            this.tp_2Dcamera_option.TabIndex = 0;
+            this.tp_2Dcamera_option.Text = " 2D相机设置";
+            this.tp_2Dcamera_option.UseVisualStyleBackColor = true;
             // 
             // gb_camera_parameter
             // 
@@ -537,6 +539,15 @@
             this.lv_AllFrameData.TabIndex = 3;
             this.lv_AllFrameData.UseCompatibleStateImageBehavior = false;
             // 
+            // tp_3Dcamera_option
+            // 
+            this.tp_3Dcamera_option.Location = new System.Drawing.Point(4, 22);
+            this.tp_3Dcamera_option.Name = "tp_3Dcamera_option";
+            this.tp_3Dcamera_option.Size = new System.Drawing.Size(501, 299);
+            this.tp_3Dcamera_option.TabIndex = 2;
+            this.tp_3Dcamera_option.Text = "3D相机设置";
+            this.tp_3Dcamera_option.UseVisualStyleBackColor = true;
+            // 
             // MyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -556,7 +567,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pb_in)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_out)).EndInit();
             this.tp_SetOption.ResumeLayout(false);
-            this.tp_camera_option.ResumeLayout(false);
+            this.tp_2Dcamera_option.ResumeLayout(false);
             this.gb_camera_parameter.ResumeLayout(false);
             this.gb_camera_parameter.PerformLayout();
             this.gb_camera_init.ResumeLayout(false);
@@ -576,7 +587,7 @@
         private System.Windows.Forms.PictureBox pb_in;
         private System.Windows.Forms.PictureBox pb_out;
         private System.Windows.Forms.TabControl tp_SetOption;
-        private System.Windows.Forms.TabPage tp_camera_option;
+        private System.Windows.Forms.TabPage tp_2Dcamera_option;
         private System.Windows.Forms.TabPage tp_process_option;
         private System.Windows.Forms.GroupBox gb_camera_init;
         private System.Windows.Forms.Button bt_DiscoverCamera;
@@ -610,6 +621,7 @@
         private System.Windows.Forms.RadioButton rbt_Measure18C;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TabPage tp_3Dcamera_option;
     }
 }
 
