@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hdevelop file_version="1.2" halcon_version="19.11.0.0">
+<hdevelop file_version="1.2" halcon_version="20.05.0.0">
 <procedure name="main">
 <interface/>
 <body>
@@ -22,7 +22,7 @@
 <l>Y1s := []</l>
 <c></c>
 <l>RunTime := []</l>
-<l>* list_image_files ('../../Data/BackLight/8', 'default', [], ImageFiles)</l>
+<l>* list_image_files ('../../Data/BackLight/1', 'default', [], ImageFiles)</l>
 <l>list_image_files ('../../Data/BackLight_ALL', 'default', [], ImageFiles)</l>
 <c></c>
 <l>for i := 0 to |ImageFiles|-1 by 1</l>
@@ -50,8 +50,8 @@
 <l>    fit_circle_contour_xld (EdgeContour, 'ahuber', -1, 0, 0, 3, 1,EdgeCircleCenterRow, EdgeCircleCenterCol, EdgeCircleCenterRadius, StartPhi, EndPhi, PointOrder)</l>
 <l>    gen_circle_contour_xld (EdgeCircle, EdgeCircleCenterRow, EdgeCircleCenterCol, EdgeCircleCenterRadius, 0, rad(360), 'positive', 1)</l>
 <c>      *利用4个拟合点生成点多边形轮廓，并拟合成圆</c>
-<l>    gen_contour_polygon_xld (FitContour, [p1_y_fit, p2_y_fit, p3_y_fit, p4_y_fit], [p1_x_fit, p2_x_fit, p3_x_fit, p4_x_fit])</l>
-<l>    fit_circle_contour_xld (FitContour, 'ahuber', -1, 0, 0, 3, 1, FitCircleCenterRow, FitCircleCenterCol, FitCircleCenterRadius, StartPhi, EndPhi, PointOrder)</l>
+<l>*     gen_contour_polygon_xld (FitContour, [p1_y_fit, p2_y_fit, p3_y_fit, p4_y_fit], [p1_x_fit, p2_x_fit, p3_x_fit, p4_x_fit])</l>
+<l>*     fit_circle_contour_xld (FitContour, 'ahuber', -1, 0, 0, 3, 1, FitCircleCenterRow, FitCircleCenterCol, FitCircleCenterRadius, StartPhi, EndPhi, PointOrder)</l>
 <c>  </c>
 <c>    *计算X1</c>
 <l>    distance_pl (EdgeCircleCenterRow, EdgeCircleCenterCol, RightEdgeRowBegin, RightEdgeColBegin, RightEdgeRowEnd, RightEdgeColEnd, X1)</l>
@@ -64,7 +64,7 @@
 <l>    CircleRadiu := EdgeCircleCenterRadius*2*PixclRealDis</l>
 <l>    PositionDegree := 2*sqrt(pow((X1*PixclRealDis-19.605),2)+pow((Y1*PixclRealDis-6.788),2))</l>
 <c>    </c>
-<l>    CircleRadius := [CircleRadius, CircleRadiu-0.03]</l>
+<l>    CircleRadius := [CircleRadius, CircleRadiu]</l>
 <l>    PositionDegrees := [PositionDegrees, PositionDegree]</l>
 <l>    X1s := [X1s, X1*PixclRealDis]</l>
 <l>    Y1s := [Y1s, Y1*PixclRealDis]</l>
@@ -118,8 +118,8 @@
 </oc>
 </interface>
 <body>
-<l>gen_rectangle2 (Rectangle1, CenterRow+BaseRectDistRow, CenterCol-BaseRectDistCol, RectBasePhi, 70, 2)</l>
-<l>gen_rectangle2 (Rectangle2, CenterRow+BaseRectDistRow, CenterCol+BaseRectDistCol, RectBasePhi, 70, 2)</l>
+<l>gen_rectangle2 (Rectangle1, CenterRow+BaseRectDistRow, CenterCol-BaseRectDistCol, RectBasePhi, 70, 50)</l>
+<l>gen_rectangle2 (Rectangle2, CenterRow+BaseRectDistRow, CenterCol+BaseRectDistCol, RectBasePhi, 70, 50)</l>
 <c></c>
 <l>if (MaxCircleColumn &gt; MinCircleColumn)</l>
 <l>    vector_angle_to_rigid (CenterRow, CenterCol, -RectBasePhi, CenterRow, CenterCol, BasePhi+RotatePhi, HomMat2D5)</l>
@@ -149,15 +149,15 @@
 <c></c>
 <l>endif</l>
 <c>* 抓取底部边缘</c>
-<l>measure_pos (Image, MeasureHandle5, 5, 100, 'all', 'all', ButtomEdgeRowBegin, ButtomEdgeColBegin, ButtomAmplitude, ButtomDistance)</l>
-<l>measure_pos (Image, MeasureHandle6, 5, 100, 'all', 'all', ButtomEdgeRowEnd, ButtomEdgeColEnd, ButtomAmplitude, ButtomDistance)</l>
+<l>measure_pos (Image, MeasureHandle5, 5, 50, 'all', 'all', ButtomEdgeRowBegin, ButtomEdgeColBegin, ButtomAmplitude, ButtomDistance)</l>
+<l>measure_pos (Image, MeasureHandle6, 5, 50, 'all', 'all', ButtomEdgeRowEnd, ButtomEdgeColEnd, ButtomAmplitude, ButtomDistance)</l>
 <c></c>
 <l>close_measure (MeasureHandle5)</l>
 <l>close_measure (MeasureHandle6)</l>
 <c></c>
 <c>*拟合底部边缘</c>
 <l>create_metrology_model (ButtomMetrologyHandle)</l>
-<l>add_metrology_object_line_measure (ButtomMetrologyHandle, ButtomEdgeRowBegin, ButtomEdgeColBegin, ButtomEdgeRowEnd, ButtomEdgeColEnd, 20, 2, 2, 50, [], [], Index)</l>
+<l>add_metrology_object_line_measure (ButtomMetrologyHandle, ButtomEdgeRowBegin, ButtomEdgeColBegin, ButtomEdgeRowEnd, ButtomEdgeColEnd, 100, 100, 2, 50, [], [], Index)</l>
 <l>apply_metrology_model (Image, ButtomMetrologyHandle)</l>
 <l>get_metrology_object_measures (Contours, ButtomMetrologyHandle, 'all', 'all', ButtomEdgeRows, ButtomEdgeColumns)</l>
 <l>gen_contour_polygon_xld (ButtomEdgeContour, ButtomEdgeRows, ButtomEdgeColumns)</l>
@@ -262,8 +262,8 @@
 </oc>
 </interface>
 <body>
-<l>gen_rectangle2 (Rectangle1, CenterRow-BaseRectDistRow, CenterColumn+BaseRectDistColumn, BaseRectPhi, 70, 2)</l>
-<l>gen_rectangle2 (Rectangle2, CenterRow+BaseRectDistRow, CenterColumn+BaseRectDistColumn, BaseRectPhi, 70, 2)</l>
+<l>gen_rectangle2 (Rectangle1, CenterRow-BaseRectDistRow, CenterColumn+BaseRectDistColumn, BaseRectPhi, 70, 50)</l>
+<l>gen_rectangle2 (Rectangle2, CenterRow+BaseRectDistRow, CenterColumn+BaseRectDistColumn, BaseRectPhi, 70, 50)</l>
 <c></c>
 <l>if (MaxCircleColumn &gt; CenterColumn)</l>
 <l>    vector_angle_to_rigid (CenterRow, CenterColumn, BaseRectPhi, CenterRow, CenterColumn, BasePhi+rad(180), HomMat2D7)</l>
@@ -291,15 +291,15 @@
 <c></c>
 <l>endif</l>
 <c>* 抓取右侧边缘</c>
-<l>measure_pos (Image, MeasureHandle7, 5, 100, 'all', 'all', RightEdgeRowBegin, RightEdgeColBegin, RightAmplitude, RightDistance)</l>
-<l>measure_pos (Image, MeasureHandle8, 5, 100, 'all', 'all', RightEdgeRowEnd, RightEdgeColEnd, RightAmplitude, RightDistance)</l>
+<l>measure_pos (Image, MeasureHandle7, 5, 50, 'all', 'all', RightEdgeRowBegin, RightEdgeColBegin, RightAmplitude, RightDistance)</l>
+<l>measure_pos (Image, MeasureHandle8, 5, 50, 'all', 'all', RightEdgeRowEnd, RightEdgeColEnd, RightAmplitude, RightDistance)</l>
 <c></c>
 <l>close_measure (MeasureHandle7)</l>
 <l>close_measure (MeasureHandle8)</l>
 <c></c>
 <c>*拟合右侧边缘</c>
 <l>create_metrology_model (RightMetrologyHandle)</l>
-<l>add_metrology_object_line_measure (RightMetrologyHandle, RightEdgeRowBegin, RightEdgeColBegin, RightEdgeRowEnd, RightEdgeColEnd, 20, 2, 2, 50, [], [], Index)</l>
+<l>add_metrology_object_line_measure (RightMetrologyHandle, RightEdgeRowBegin, RightEdgeColBegin, RightEdgeRowEnd, RightEdgeColEnd, 100, 100, 2, 50, [], [], Index)</l>
 <l>apply_metrology_model (Image, RightMetrologyHandle)</l>
 <l>get_metrology_object_measures (Contours, RightMetrologyHandle, 'all', 'all', RightEdgeRows, RightEdgeColumns)</l>
 <l>gen_contour_polygon_xld (RightEdgeContour, RightEdgeRows, RightEdgeColumns)</l>
