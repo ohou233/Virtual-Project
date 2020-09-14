@@ -36,7 +36,8 @@ namespace MyWindow
 
         bool IsInLine = false;
         int MeasureProject = -1;
-        Thread thread_OutLineTest, thread_RealTimeTest;
+        Thread thread_OutLineTest;
+        Thread thread_RealTimeTest;
         bool IsthreadLoadImageStop = false;
         double Radius, PositionDegree, RunTime, DistanceX1, DistanceY1;
 
@@ -54,6 +55,7 @@ namespace MyWindow
             HAlgorithm.InitListView2D(lv_AllFrameData);
 
             thread_OutLineTest = new Thread(new ThreadStart(thread_OutLineTest_Start));
+            thread_RealTimeTest = new Thread(new ThreadStart(thread_RealTimeTest_Start));
         }
 
         //打开相机
@@ -431,6 +433,7 @@ namespace MyWindow
             rbt_Measure18C.Enabled = true;
         }
 
+        //实时显示线程函数
         public void ReceiveThreadProcess()
         {
             MyCamera.MVCC_INTVALUE stParam = new MyCamera.MVCC_INTVALUE();
@@ -577,6 +580,7 @@ namespace MyWindow
 
         }
 
+        //安全退出
         private void MyWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             bt_CloseCamera_Click(null, null);
@@ -707,6 +711,7 @@ namespace MyWindow
 
         }
 
+        //判断读取的像素类型
         private Boolean IsMonoData(MyCamera.MvGvspPixelType enGvspPixelType)
         {
             switch (enGvspPixelType)
@@ -737,6 +742,7 @@ namespace MyWindow
             bt_StartTest.Enabled = false;
             rbt_Measure18C.Enabled = false;
             rbt_Measure9.Enabled = false;
+            cb_ReadTimeTest.Enabled = false;
 
             if (false == IsInLine)
             {
@@ -775,12 +781,14 @@ namespace MyWindow
             }
         }
 
+        //实时测试线程函数
         private void thread_RealTimeTest_Start()
         {
             InLineTest();
             Thread.Sleep(500);
         }
 
+        //在线测试
         private void InLineTest()
         {
             MyCamera.MVCC_INTVALUE stParam = new MyCamera.MVCC_INTVALUE();
@@ -853,6 +861,11 @@ namespace MyWindow
             {
                 thread_OutLineTest.Abort();
             }
+            if(true == IsInLine && thread_RealTimeTest.ThreadState == ThreadState.Running)
+            {
+                thread_RealTimeTest.Abort();
+                cb_ReadTimeTest.Enabled = true;
+            }
             //设置控件状态
             bt_StopTest.Enabled = false;
             bt_StartTest.Enabled = true;
@@ -899,14 +912,6 @@ namespace MyWindow
 
             sw.Flush();
             sw.Close();
-        }
-
-        private void cb_ReadTimeTest_CheckedChanged(object sender, EventArgs e)
-        {
-            if(cb_ReadTimeTest.Checked == false && thread_RealTimeTest.ThreadState == ThreadState.Running)
-            {
-                thread_RealTimeTest.Abort();
-            }
         }
 
         // 控件大小随窗体大小等比例缩放

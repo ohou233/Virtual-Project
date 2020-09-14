@@ -551,13 +551,13 @@
             // cb_ReadTimeTest
             // 
             this.cb_ReadTimeTest.AutoSize = true;
-            this.cb_ReadTimeTest.Location = new System.Drawing.Point(60, 76);
+            this.cb_ReadTimeTest.Enabled = false;
+            this.cb_ReadTimeTest.Location = new System.Drawing.Point(61, 76);
             this.cb_ReadTimeTest.Name = "cb_ReadTimeTest";
             this.cb_ReadTimeTest.Size = new System.Drawing.Size(91, 20);
             this.cb_ReadTimeTest.TabIndex = 10;
             this.cb_ReadTimeTest.Text = "实时测试";
             this.cb_ReadTimeTest.UseVisualStyleBackColor = true;
-            this.cb_ReadTimeTest.CheckedChanged += new System.EventHandler(this.cb_ReadTimeTest_CheckedChanged);
             // 
             // MyWindow
             // 
