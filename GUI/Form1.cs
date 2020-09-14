@@ -36,7 +36,7 @@ namespace MyWindow
 
         bool IsInLine = false;
         int MeasureProject = -1;
-        Thread thread_OutLineTest, thread_InLineTest;
+        Thread thread_OutLineTest, thread_RealTimeTest;
         bool IsthreadLoadImageStop = false;
         double Radius, PositionDegree, RunTime, DistanceX1, DistanceY1;
 
@@ -51,7 +51,7 @@ namespace MyWindow
             Control.CheckForIllegalCrossThreadCalls = false;
             OutLineModeState();
  
-            HAlgorithm.InitListView(lv_AllFrameData);
+            HAlgorithm.InitListView2D(lv_AllFrameData);
 
             thread_OutLineTest = new Thread(new ThreadStart(thread_OutLineTest_Start));
         }
@@ -319,6 +319,7 @@ namespace MyWindow
         //选择离线模式
         private void rbt_outLineMode_CheckedChanged(object sender, EventArgs e)
         {
+            cb_ReadTimeTest.Enabled = false;
             IsInLine = false;
             OutLineModeState();
         }
@@ -393,6 +394,7 @@ namespace MyWindow
         //选择在线模式
         private void rbt_inLineMode_CheckedChanged(object sender, EventArgs e)
         {
+            cb_ReadTimeTest.Enabled = true;
             IsInLine = true;
             bt_DiscoverCamera.Enabled = true;
             bt_StopTest.Enabled = false;
@@ -519,6 +521,8 @@ namespace MyWindow
             if (true == rbt_Measure18C.Checked)
             {
                 MeasureProject = 18;
+                HAlgorithm.ClearListView(lv_AllFrameData);
+                HAlgorithm.InitListView3D(lv_AllFrameData);
             }
             else
             {
@@ -531,6 +535,8 @@ namespace MyWindow
             if (true == rbt_Measure9.Checked)
             {
                 MeasureProject = 9;
+                HAlgorithm.ClearListView(lv_AllFrameData);
+                HAlgorithm.InitListView2D(lv_AllFrameData);
             }
             else
             {
@@ -544,7 +550,7 @@ namespace MyWindow
         private void bt_ClearData_Click(object sender, EventArgs e)
         {
             HAlgorithm.ClearListView(lv_AllFrameData);
-            HAlgorithm.InitListView(lv_AllFrameData);
+            HAlgorithm.InitListView2D(lv_AllFrameData);
         }
 
         //保存CSV数据文件
@@ -749,26 +755,40 @@ namespace MyWindow
             else
             {
                 //进行在线测试
-                bool InLineTestIsSucceed = false;
-                InLineTestIsSucceed = InLineTest();
-                if(InLineTestIsSucceed == false)
+                if(cb_ReadTimeTest.Checked == false)
                 {
-                    ShowErrorMsg("请正确放置工件！", 0);
-                    return;
+                    InLineTest();
                 }
+                else
+                {
+                    if (thread_RealTimeTest.ThreadState == ThreadState.Unstarted)
+                    {
+                        thread_RealTimeTest.Start();
+                    }
 
-
+                    if (thread_RealTimeTest.ThreadState == ThreadState.Stopped || thread_RealTimeTest.ThreadState == ThreadState.Aborted)
+                    {
+                        thread_RealTimeTest = new Thread(new ThreadStart(thread_RealTimeTest_Start));
+                        thread_RealTimeTest.Start();
+                    }
+                }
             }
         }
 
-        private bool InLineTest()
+        private void thread_RealTimeTest_Start()
+        {
+            InLineTest();
+            Thread.Sleep(500);
+        }
+
+        private void InLineTest()
         {
             MyCamera.MVCC_INTVALUE stParam = new MyCamera.MVCC_INTVALUE();
             int Ret = m_MyCamera.MV_CC_GetIntValue_NET("PayloadSize", ref stParam);
             if (MyCamera.MV_OK != Ret)
             {
                 ShowErrorMsg("Get PayloadSize failed", Ret);
-                return false;
+                return;
             }
 
             UInt32 nPayloadSize = stParam.nCurValue;
@@ -784,12 +804,11 @@ namespace MyWindow
 
             if (m_BufForDriver == IntPtr.Zero)
             {
-                return false;
+                return;
             }
 
             MyCamera.MV_FRAME_OUT_INFO_EX stFrameInfo = new MyCamera.MV_FRAME_OUT_INFO_EX();
 
-            bool MeasureSucceed = false;
             while (true)
             {
                 lock (BufForDriverLock)
@@ -807,11 +826,12 @@ namespace MyWindow
                     {
                         continue;
                     }
-                    MeasureSucceed = HAlgorithm.InLineMeasure(MeasureProject, lv_AllFrameData, m_BufForDriver, stFrameInfo.nWidth, stFrameInfo.nHeight,
-    out Radius, out PositionDegree, out RunTime, out DistanceX1, out DistanceY1);
-                }
-                if(MeasureSucceed)
-                {
+                    if( ! HAlgorithm.InLineMeasure(MeasureProject, lv_AllFrameData, m_BufForDriver, stFrameInfo.nWidth, 
+                        stFrameInfo.nHeight, out Radius, out PositionDegree, out RunTime, out DistanceX1, out DistanceY1) && 
+                            thread_RealTimeTest.ThreadState == ThreadState.Running)
+                    {
+                        thread_RealTimeTest.Abort();
+                    }
                     break;
                 }
             }
@@ -824,8 +844,6 @@ namespace MyWindow
             rbt_Measure9.Enabled = false;
             bt_ClearData.Enabled = false;
             bt_SaveCSV.Enabled = false;
-
-            return true;
         }
 
         //停止测试
@@ -883,6 +901,14 @@ namespace MyWindow
             sw.Close();
         }
 
+        private void cb_ReadTimeTest_CheckedChanged(object sender, EventArgs e)
+        {
+            if(cb_ReadTimeTest.Checked == false && thread_RealTimeTest.ThreadState == ThreadState.Running)
+            {
+                thread_RealTimeTest.Abort();
+            }
+        }
+
         // 控件大小随窗体大小等比例缩放
         #region 
         void changeSize()
@@ -898,18 +924,8 @@ namespace MyWindow
         }
 
         private float x;//定义当前窗体的宽度
-
-        private void gb_measurement_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void gb_camera_init_Enter(object sender, EventArgs e)
-        {
-
-        }
-
         private float y;//定义当前窗体的高度
+
         private void setTag(Control cons)
         {
             foreach (Control con in cons.Controls)

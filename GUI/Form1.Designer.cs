@@ -48,6 +48,7 @@
             this.bt_DiscoverCamera = new System.Windows.Forms.Button();
             this.bt_CloseCamera = new System.Windows.Forms.Button();
             this.bt_OpenCamera = new System.Windows.Forms.Button();
+            this.tp_3Dcamera_option = new System.Windows.Forms.TabPage();
             this.tp_process_option = new System.Windows.Forms.TabPage();
             this.gb_Test = new System.Windows.Forms.GroupBox();
             this.bt_StartTest = new System.Windows.Forms.Button();
@@ -65,7 +66,7 @@
             this.bt_StopGrab = new System.Windows.Forms.Button();
             this.bt_StartGrab = new System.Windows.Forms.Button();
             this.lv_AllFrameData = new System.Windows.Forms.ListView();
-            this.tp_3Dcamera_option = new System.Windows.Forms.TabPage();
+            this.cb_ReadTimeTest = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pb_in)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_out)).BeginInit();
             this.tp_SetOption.SuspendLayout();
@@ -245,7 +246,6 @@
             this.gb_camera_init.TabIndex = 0;
             this.gb_camera_init.TabStop = false;
             this.gb_camera_init.Text = "设备管理";
-            this.gb_camera_init.Enter += new System.EventHandler(this.gb_camera_init_Enter);
             // 
             // cb_DeviceList
             // 
@@ -322,6 +322,15 @@
             this.bt_OpenCamera.UseVisualStyleBackColor = true;
             this.bt_OpenCamera.Click += new System.EventHandler(this.bt_OpenCamera_Click);
             // 
+            // tp_3Dcamera_option
+            // 
+            this.tp_3Dcamera_option.Location = new System.Drawing.Point(4, 22);
+            this.tp_3Dcamera_option.Name = "tp_3Dcamera_option";
+            this.tp_3Dcamera_option.Size = new System.Drawing.Size(501, 299);
+            this.tp_3Dcamera_option.TabIndex = 2;
+            this.tp_3Dcamera_option.Text = "3D相机设置";
+            this.tp_3Dcamera_option.UseVisualStyleBackColor = true;
+            // 
             // tp_process_option
             // 
             this.tp_process_option.Controls.Add(this.gb_Test);
@@ -339,14 +348,15 @@
             // 
             // gb_Test
             // 
+            this.gb_Test.Controls.Add(this.cb_ReadTimeTest);
             this.gb_Test.Controls.Add(this.bt_StartTest);
             this.gb_Test.Controls.Add(this.bt_StopTest);
             this.gb_Test.Font = new System.Drawing.Font("宋体", 12F);
-            this.gb_Test.Location = new System.Drawing.Point(14, 211);
+            this.gb_Test.Location = new System.Drawing.Point(7, 190);
             this.gb_Test.Margin = new System.Windows.Forms.Padding(2);
             this.gb_Test.Name = "gb_Test";
             this.gb_Test.Padding = new System.Windows.Forms.Padding(2);
-            this.gb_Test.Size = new System.Drawing.Size(215, 80);
+            this.gb_Test.Size = new System.Drawing.Size(215, 101);
             this.gb_Test.TabIndex = 9;
             this.gb_Test.TabStop = false;
             this.gb_Test.Text = "测试指令";
@@ -384,7 +394,7 @@
             this.gb_measurement.Controls.Add(this.rbt_Measure9);
             this.gb_measurement.Controls.Add(this.rbt_Measure18C);
             this.gb_measurement.Font = new System.Drawing.Font("宋体", 12F);
-            this.gb_measurement.Location = new System.Drawing.Point(14, 127);
+            this.gb_measurement.Location = new System.Drawing.Point(7, 107);
             this.gb_measurement.Margin = new System.Windows.Forms.Padding(2);
             this.gb_measurement.Name = "gb_measurement";
             this.gb_measurement.Padding = new System.Windows.Forms.Padding(2);
@@ -392,7 +402,6 @@
             this.gb_measurement.TabIndex = 6;
             this.gb_measurement.TabStop = false;
             this.gb_measurement.Text = "测量项";
-            this.gb_measurement.Enter += new System.EventHandler(this.gb_measurement_Enter);
             // 
             // label2
             // 
@@ -496,7 +505,7 @@
             this.gb_image_grab.Controls.Add(this.bt_StopGrab);
             this.gb_image_grab.Controls.Add(this.bt_StartGrab);
             this.gb_image_grab.Font = new System.Drawing.Font("宋体", 12F);
-            this.gb_image_grab.Location = new System.Drawing.Point(14, 26);
+            this.gb_image_grab.Location = new System.Drawing.Point(7, 7);
             this.gb_image_grab.Name = "gb_image_grab";
             this.gb_image_grab.Size = new System.Drawing.Size(215, 96);
             this.gb_image_grab.TabIndex = 4;
@@ -539,14 +548,16 @@
             this.lv_AllFrameData.TabIndex = 3;
             this.lv_AllFrameData.UseCompatibleStateImageBehavior = false;
             // 
-            // tp_3Dcamera_option
+            // cb_ReadTimeTest
             // 
-            this.tp_3Dcamera_option.Location = new System.Drawing.Point(4, 22);
-            this.tp_3Dcamera_option.Name = "tp_3Dcamera_option";
-            this.tp_3Dcamera_option.Size = new System.Drawing.Size(501, 299);
-            this.tp_3Dcamera_option.TabIndex = 2;
-            this.tp_3Dcamera_option.Text = "3D相机设置";
-            this.tp_3Dcamera_option.UseVisualStyleBackColor = true;
+            this.cb_ReadTimeTest.AutoSize = true;
+            this.cb_ReadTimeTest.Location = new System.Drawing.Point(60, 76);
+            this.cb_ReadTimeTest.Name = "cb_ReadTimeTest";
+            this.cb_ReadTimeTest.Size = new System.Drawing.Size(91, 20);
+            this.cb_ReadTimeTest.TabIndex = 10;
+            this.cb_ReadTimeTest.Text = "实时测试";
+            this.cb_ReadTimeTest.UseVisualStyleBackColor = true;
+            this.cb_ReadTimeTest.CheckedChanged += new System.EventHandler(this.cb_ReadTimeTest_CheckedChanged);
             // 
             // MyWindow
             // 
@@ -574,6 +585,7 @@
             this.gb_camera_init.PerformLayout();
             this.tp_process_option.ResumeLayout(false);
             this.gb_Test.ResumeLayout(false);
+            this.gb_Test.PerformLayout();
             this.gb_measurement.ResumeLayout(false);
             this.gb_measurement.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -622,6 +634,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TabPage tp_3Dcamera_option;
+        private System.Windows.Forms.CheckBox cb_ReadTimeTest;
     }
 }
 
