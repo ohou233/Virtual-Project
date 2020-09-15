@@ -66,7 +66,6 @@
             this.bt_StopGrab = new System.Windows.Forms.Button();
             this.bt_StartGrab = new System.Windows.Forms.Button();
             this.lv_AllFrameData = new System.Windows.Forms.ListView();
-            this.cb_ReadTimeTest = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pb_in)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_out)).BeginInit();
             this.tp_SetOption.SuspendLayout();
@@ -348,7 +347,6 @@
             // 
             // gb_Test
             // 
-            this.gb_Test.Controls.Add(this.cb_ReadTimeTest);
             this.gb_Test.Controls.Add(this.bt_StartTest);
             this.gb_Test.Controls.Add(this.bt_StopTest);
             this.gb_Test.Font = new System.Drawing.Font("宋体", 12F);
@@ -548,17 +546,6 @@
             this.lv_AllFrameData.TabIndex = 3;
             this.lv_AllFrameData.UseCompatibleStateImageBehavior = false;
             // 
-            // cb_ReadTimeTest
-            // 
-            this.cb_ReadTimeTest.AutoSize = true;
-            this.cb_ReadTimeTest.Enabled = false;
-            this.cb_ReadTimeTest.Location = new System.Drawing.Point(61, 76);
-            this.cb_ReadTimeTest.Name = "cb_ReadTimeTest";
-            this.cb_ReadTimeTest.Size = new System.Drawing.Size(91, 20);
-            this.cb_ReadTimeTest.TabIndex = 10;
-            this.cb_ReadTimeTest.Text = "实时测试";
-            this.cb_ReadTimeTest.UseVisualStyleBackColor = true;
-            // 
             // MyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -585,7 +572,6 @@
             this.gb_camera_init.PerformLayout();
             this.tp_process_option.ResumeLayout(false);
             this.gb_Test.ResumeLayout(false);
-            this.gb_Test.PerformLayout();
             this.gb_measurement.ResumeLayout(false);
             this.gb_measurement.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -634,7 +620,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TabPage tp_3Dcamera_option;
-        private System.Windows.Forms.CheckBox cb_ReadTimeTest;
     }
 }
 

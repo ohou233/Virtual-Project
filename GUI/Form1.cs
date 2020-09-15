@@ -37,7 +37,6 @@ namespace MyWindow
         bool IsInLine = false;
         int MeasureProject = -1;
         Thread thread_OutLineTest;
-        Thread thread_RealTimeTest;
         bool IsthreadLoadImageStop = false;
         double Radius, PositionDegree, RunTime, DistanceX1, DistanceY1;
 
@@ -55,7 +54,6 @@ namespace MyWindow
             HAlgorithm.InitListView2D(lv_AllFrameData);
 
             thread_OutLineTest = new Thread(new ThreadStart(thread_OutLineTest_Start));
-            thread_RealTimeTest = new Thread(new ThreadStart(thread_RealTimeTest_Start));
         }
 
         //打开相机
@@ -321,7 +319,6 @@ namespace MyWindow
         //选择离线模式
         private void rbt_outLineMode_CheckedChanged(object sender, EventArgs e)
         {
-            cb_ReadTimeTest.Enabled = false;
             IsInLine = false;
             OutLineModeState();
         }
@@ -398,7 +395,6 @@ namespace MyWindow
         //选择在线模式
         private void rbt_inLineMode_CheckedChanged(object sender, EventArgs e)
         {
-            cb_ReadTimeTest.Enabled = true;
             IsInLine = true;
             bt_DiscoverCamera.Enabled = true;
             bt_StopTest.Enabled = false;
@@ -744,7 +740,6 @@ namespace MyWindow
             bt_StartTest.Enabled = false;
             rbt_Measure18C.Enabled = false;
             rbt_Measure9.Enabled = false;
-            cb_ReadTimeTest.Enabled = false;
 
             if (false == IsInLine)
             {
@@ -763,31 +758,8 @@ namespace MyWindow
             else
             {
                 //进行在线测试
-                if(cb_ReadTimeTest.Checked == false)
-                {
-                    InLineTest();
-                }
-                else
-                {
-                    if (thread_RealTimeTest.ThreadState == ThreadState.Unstarted)
-                    {
-                        thread_RealTimeTest.Start();
-                    }
-
-                    if (thread_RealTimeTest.ThreadState == ThreadState.Stopped || thread_RealTimeTest.ThreadState == ThreadState.Aborted)
-                    {
-                        thread_RealTimeTest = new Thread(new ThreadStart(thread_RealTimeTest_Start));
-                        thread_RealTimeTest.Start();
-                    }
-                }
+                InLineTest();
             }
-        }
-
-        //实时测试线程函数
-        private void thread_RealTimeTest_Start()
-        {
-            InLineTest();
-            Thread.Sleep(500);
         }
 
         //在线测试
@@ -836,12 +808,8 @@ namespace MyWindow
                     {
                         continue;
                     }
-                    if( ! HAlgorithm.InLineMeasure(MeasureProject, lv_AllFrameData, m_BufForDriver, stFrameInfo.nWidth, 
-                        stFrameInfo.nHeight, out Radius, out PositionDegree, out RunTime, out DistanceX1, out DistanceY1) && 
-                            cb_ReadTimeTest.Checked == true && thread_RealTimeTest.ThreadState == ThreadState.Running)
-                    {
-                        thread_RealTimeTest.Abort();
-                    }
+                    HAlgorithm.InLineMeasure(MeasureProject, lv_AllFrameData, m_BufForDriver, stFrameInfo.nWidth,
+                        stFrameInfo.nHeight, out Radius, out PositionDegree, out RunTime, out DistanceX1, out DistanceY1);
                     break;
                 }
             }
@@ -975,11 +943,6 @@ namespace MyWindow
             if(false == IsInLine)
             {
                 thread_OutLineTest.Abort();
-            }
-            if(true == IsInLine && thread_RealTimeTest.ThreadState == ThreadState.Running)
-            {
-                thread_RealTimeTest.Abort();
-                cb_ReadTimeTest.Enabled = true;
             }
             //设置控件状态
             bt_StopTest.Enabled = false;
