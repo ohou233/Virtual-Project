@@ -378,6 +378,7 @@ namespace HalconAlgorithm
                     {
                         insertLine3D(lv, RunTime);
                     }
+                    image.Dispose();
                     HOperatorSet.WaitSeconds(0.5);
                 }
             }
@@ -386,7 +387,6 @@ namespace HalconAlgorithm
                 MessageBox.Show("请加载正确工件图像！");
                 return false;
             }
-            image.Dispose();
             return true;
         }
 
@@ -815,19 +815,40 @@ namespace HalconAlgorithm
                 DistanceY1 = hv_Y1 * hv_PixclRealDis;
 
                 DispImage(ho_Image);
-                outWindow.SetColor("red");
-                outWindow.SetLineWidth(2);
-                outWindow.SetDraw("margin");
-                outWindow.DispCircle(hv_EdgeCircleCenterRow, hv_EdgeCircleCenterCol, hv_EdgeCircleCenterRadius);
-                outWindow.DispLine(hv_ButtomEdgeRowBegin,hv_ButtomEdgeColBegin, hv_ButtomEdgeRowEnd, hv_ButtomEdgeColEnd);
-                outWindow.DispLine(hv_RightEdgeRowBegin, hv_RightEdgeColBegin, hv_RightEdgeRowEnd, hv_RightEdgeColEnd);
 
-                double RightCenterRow = (hv_RightEdgeRowBegin + hv_RightEdgeRowEnd) / 2;
-                double RightCenterCol = (hv_RightEdgeColBegin + hv_RightEdgeColEnd) / 2;
-                double ButtomCenterRow = (hv_ButtomEdgeRowBegin + hv_ButtomEdgeRowEnd) / 2;
-                double ButtomCenterCol = (hv_ButtomEdgeColBegin + hv_ButtomEdgeColEnd) / 2;
-                outWindow.DispArrow(hv_EdgeCircleCenterRow, hv_EdgeCircleCenterCol, (HTuple)RightCenterRow, (HTuple)RightCenterCol, (HTuple)6);
-                outWindow.DispArrow(hv_EdgeCircleCenterRow, hv_EdgeCircleCenterCol, (HTuple)ButtomCenterRow, (HTuple)ButtomCenterCol, (HTuple)6);
+                //不同颜色显示图像
+                if (PositionDegree < 0 || PositionDegree > 0.6 || CircleRadius < 9.40 || CircleRadius > 9.50)
+                {
+                    outWindow.SetColor("red");
+                    outWindow.SetLineWidth(2);
+                    outWindow.SetDraw("margin");
+                    outWindow.DispCircle(hv_EdgeCircleCenterRow, hv_EdgeCircleCenterCol, hv_EdgeCircleCenterRadius);
+                    outWindow.DispLine(hv_ButtomEdgeRowBegin, hv_ButtomEdgeColBegin, hv_ButtomEdgeRowEnd, hv_ButtomEdgeColEnd);
+                    outWindow.DispLine(hv_RightEdgeRowBegin, hv_RightEdgeColBegin, hv_RightEdgeRowEnd, hv_RightEdgeColEnd);
+
+                    double RightCenterRow = (hv_RightEdgeRowBegin + hv_RightEdgeRowEnd) / 2;
+                    double RightCenterCol = (hv_RightEdgeColBegin + hv_RightEdgeColEnd) / 2;
+                    double ButtomCenterRow = (hv_ButtomEdgeRowBegin + hv_ButtomEdgeRowEnd) / 2;
+                    double ButtomCenterCol = (hv_ButtomEdgeColBegin + hv_ButtomEdgeColEnd) / 2;
+                    outWindow.DispArrow(hv_EdgeCircleCenterRow, hv_EdgeCircleCenterCol, (HTuple)RightCenterRow, (HTuple)RightCenterCol, (HTuple)6);
+                    outWindow.DispArrow(hv_EdgeCircleCenterRow, hv_EdgeCircleCenterCol, (HTuple)ButtomCenterRow, (HTuple)ButtomCenterCol, (HTuple)6);
+                }
+                else
+                {
+                    outWindow.SetColor("green");
+                    outWindow.SetLineWidth(2);
+                    outWindow.SetDraw("margin");
+                    outWindow.DispCircle(hv_EdgeCircleCenterRow, hv_EdgeCircleCenterCol, hv_EdgeCircleCenterRadius);
+                    outWindow.DispLine(hv_ButtomEdgeRowBegin, hv_ButtomEdgeColBegin, hv_ButtomEdgeRowEnd, hv_ButtomEdgeColEnd);
+                    outWindow.DispLine(hv_RightEdgeRowBegin, hv_RightEdgeColBegin, hv_RightEdgeRowEnd, hv_RightEdgeColEnd);
+
+                    double RightCenterRow = (hv_RightEdgeRowBegin + hv_RightEdgeRowEnd) / 2;
+                    double RightCenterCol = (hv_RightEdgeColBegin + hv_RightEdgeColEnd) / 2;
+                    double ButtomCenterRow = (hv_ButtomEdgeRowBegin + hv_ButtomEdgeRowEnd) / 2;
+                    double ButtomCenterCol = (hv_ButtomEdgeColBegin + hv_ButtomEdgeColEnd) / 2;
+                    outWindow.DispArrow(hv_EdgeCircleCenterRow, hv_EdgeCircleCenterCol, (HTuple)RightCenterRow, (HTuple)RightCenterCol, (HTuple)6);
+                    outWindow.DispArrow(hv_EdgeCircleCenterRow, hv_EdgeCircleCenterCol, (HTuple)ButtomCenterRow, (HTuple)ButtomCenterCol, (HTuple)6);
+                }
             }
             catch (Exception ex)
             {
@@ -1497,5 +1518,10 @@ namespace HalconAlgorithm
         {
             lv.Clear();
         }
+
+
+
+
+
     }
 }

@@ -343,6 +343,7 @@ namespace MyWindow
                         OutLineFilePath = dialog.FileName;
                         MeasureIsSucced = HAlgorithm.OutLineMeasure(MeasureProject, lv_AllFrameData, out Radius, out PositionDegree, out RunTime,
                          out DistanceX1, out DistanceY1, OutLineFilePath);
+
                     }
                     else
                     {
@@ -357,7 +358,7 @@ namespace MyWindow
                               out DistanceX1, out DistanceY1, OutLineFilePath);
                 }
 
-                if(MeasureIsSucced == false)
+                if (MeasureIsSucced == false)
                 {
                     //设置控件状态
                     bt_StopTest.Enabled = false;
@@ -372,6 +373,7 @@ namespace MyWindow
                     Thread.Sleep(200);
                 }
             }
+
         }
 
         //处于离线模式时的控件状态
@@ -836,7 +838,7 @@ namespace MyWindow
                     }
                     if( ! HAlgorithm.InLineMeasure(MeasureProject, lv_AllFrameData, m_BufForDriver, stFrameInfo.nWidth, 
                         stFrameInfo.nHeight, out Radius, out PositionDegree, out RunTime, out DistanceX1, out DistanceY1) && 
-                            thread_RealTimeTest.ThreadState == ThreadState.Running)
+                            cb_ReadTimeTest.Checked == true && thread_RealTimeTest.ThreadState == ThreadState.Running)
                     {
                         thread_RealTimeTest.Abort();
                     }
@@ -844,6 +846,11 @@ namespace MyWindow
                 }
             }
 
+            //保存异常图像
+            if(PositionDegree <0 || PositionDegree >0.06 || Radius <9.40 || Radius > 9.50)
+            {
+                SaveErrorBMP();
+            }
             //设置控件状态
             bt_StopGrab.Enabled = false;
             bt_StopTest.Enabled = true;
@@ -852,6 +859,114 @@ namespace MyWindow
             rbt_Measure9.Enabled = false;
             bt_ClearData.Enabled = false;
             bt_SaveCSV.Enabled = false;
+        }
+
+        private void SaveErrorBMP()
+        {
+            if (false == m_bGrabbing)
+            {
+                ShowErrorMsg("不处于采集图像状态", 0);
+                return;
+            }
+
+            if (RemoveCustomPixelFormats(m_stFrameInfo.enPixelType))
+            {
+                ShowErrorMsg("不支持的像素格式", 0);
+                return;
+            }
+
+            IntPtr pTemp = IntPtr.Zero;
+            MyCamera.MvGvspPixelType enDstPixelType = MyCamera.MvGvspPixelType.PixelType_Gvsp_Undefined;
+            if (m_stFrameInfo.enPixelType == MyCamera.MvGvspPixelType.PixelType_Gvsp_Mono8 || m_stFrameInfo.enPixelType == MyCamera.MvGvspPixelType.PixelType_Gvsp_BGR8_Packed)
+            {
+                pTemp = m_BufForDriver;
+                enDstPixelType = m_stFrameInfo.enPixelType;
+            }
+            else
+            {
+                UInt32 nSaveImageNeedSize = 0;
+                MyCamera.MV_PIXEL_CONVERT_PARAM stConverPixelParam = new MyCamera.MV_PIXEL_CONVERT_PARAM();
+
+                lock (BufForDriverLock)
+                {
+                    if (m_stFrameInfo.nFrameLen == 0)
+                    {
+                        ShowErrorMsg("保存失败", 0);
+                        return;
+                    }
+
+                    if (IsMonoData(m_stFrameInfo.enPixelType))
+                    {
+                        enDstPixelType = MyCamera.MvGvspPixelType.PixelType_Gvsp_Mono8;
+                        nSaveImageNeedSize = (uint)m_stFrameInfo.nWidth * m_stFrameInfo.nHeight;
+                    }
+                    else
+                    {
+                        ShowErrorMsg("不存在的像素格式！", 0);
+                        return;
+                    }
+
+                    if (m_nBufSizeForSaveImage < nSaveImageNeedSize)
+                    {
+                        if (m_BufForSaveImage != IntPtr.Zero)
+                        {
+                            Marshal.Release(m_BufForSaveImage);
+                        }
+                        m_nBufSizeForSaveImage = nSaveImageNeedSize;
+                        m_BufForSaveImage = Marshal.AllocHGlobal((Int32)m_nBufSizeForSaveImage);
+                    }
+
+                    stConverPixelParam.nWidth = m_stFrameInfo.nWidth;
+                    stConverPixelParam.nHeight = m_stFrameInfo.nHeight;
+                    stConverPixelParam.pSrcData = m_BufForDriver;
+                    stConverPixelParam.nSrcDataLen = m_stFrameInfo.nFrameLen;
+                    stConverPixelParam.enSrcPixelType = m_stFrameInfo.enPixelType;
+                    stConverPixelParam.enDstPixelType = enDstPixelType;
+                    stConverPixelParam.pDstBuffer = m_BufForSaveImage;
+                    stConverPixelParam.nDstBufferSize = m_nBufSizeForSaveImage;
+                    int nRet = m_MyCamera.MV_CC_ConvertPixelType_NET(ref stConverPixelParam);
+                    if (MyCamera.MV_OK != nRet)
+                    {
+                        ShowErrorMsg("转换像素类型失败！", nRet);
+                        return;
+                    }
+                    pTemp = m_BufForSaveImage;
+                }
+            }
+
+            string SaveString = "./" + DateTime.Now.ToString() + ".bmp";
+            lock (BufForDriverLock)
+            {
+                if (enDstPixelType == MyCamera.MvGvspPixelType.PixelType_Gvsp_Mono8)
+                {
+                    //************************Mono8 转 Bitmap*******************************
+                    Bitmap bmp = new Bitmap(m_stFrameInfo.nWidth, m_stFrameInfo.nHeight, m_stFrameInfo.nWidth * 1, PixelFormat.Format8bppIndexed, pTemp);
+
+                    ColorPalette cp = bmp.Palette;
+                    // 初始化调色板
+                    for (int i = 0; i < 256; i++)
+                    {
+                        cp.Entries[i] = Color.FromArgb(i, i, i);
+                    }
+                    bmp.Palette = cp;
+                    bmp.Save(SaveString, ImageFormat.Bmp);
+                }
+                else
+                {
+                    //*********************BGR8 转 Bitmap**************************
+                    try
+                    {
+                        Bitmap bmp = new Bitmap(m_stFrameInfo.nWidth, m_stFrameInfo.nHeight, m_stFrameInfo.nWidth * 3, PixelFormat.Format24bppRgb, pTemp);
+                        bmp.Save(SaveString, ImageFormat.Bmp);
+                    }
+                    catch
+                    {
+                        ShowErrorMsg("保存失败！", 0);
+                    }
+                }
+            }
+
+            ShowErrorMsg("保存成功！", 0);
         }
 
         //停止测试
