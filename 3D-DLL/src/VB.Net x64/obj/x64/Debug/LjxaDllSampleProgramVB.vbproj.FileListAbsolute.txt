@@ -1,0 +1,17 @@
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\obj\x64\Debug\LjxaDllSampleProgramVB.vbprojAssemblyReference.cache
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\obj\x64\Debug\LjxaDllSampleProgramVB.Form1.resources
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\obj\x64\Debug\LjxaDllSampleProgramVB.Resources.resources
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\obj\x64\Debug\LjxaDllSampleProgramVB.vbproj.GenerateResource.cache
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\bin\x64\Debug\LjxaDllSampleProgramVB.exe.config
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\bin\x64\Debug\LjxaDllSampleProgramVB.exe
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\bin\x64\Debug\LjxaDllSampleProgramVB.pdb
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\bin\x64\Debug\LjxaDllSampleProgramVB.xml
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\bin\x64\Debug\LJXADriverFor.Net.dll
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\bin\x64\Debug\LjxaWindows.dll
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\bin\x64\Debug\HelixToolkit.Wpf.dll
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\bin\x64\Debug\RainbowConvertor.dll
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\bin\x64\Debug\LJXAImageReader.dll
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\obj\x64\Debug\LjxaDllSampleProgramVB.vbproj.CopyComplete
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\obj\x64\Debug\LjxaDllSampleProgramVB.exe
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\obj\x64\Debug\LjxaDllSampleProgramVB.xml
+C:\Users\C140209\source\repos\LjxaDllSampleProgramVB\obj\x64\Debug\LjxaDllSampleProgramVB.pdb

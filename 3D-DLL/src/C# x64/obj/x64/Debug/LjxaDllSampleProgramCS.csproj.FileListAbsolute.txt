@@ -1,0 +1,29 @@
+C:\Users\C140209\source\repos\LjxaDllSampleProgramCS\bin\x64\Debug\LjxaDllSampleProgramCS.exe.config
+C:\Users\C140209\source\repos\LjxaDllSampleProgramCS\bin\x64\Debug\LjxaDllSampleProgramCS.exe
+C:\Users\C140209\source\repos\LjxaDllSampleProgramCS\bin\x64\Debug\LjxaDllSampleProgramCS.pdb
+C:\Users\C140209\source\repos\LjxaDllSampleProgramCS\bin\x64\Debug\LJXADriverFor.Net.dll
+C:\Users\C140209\source\repos\LjxaDllSampleProgramCS\bin\x64\Debug\LjxaWindows.dll
+C:\Users\C140209\source\repos\LjxaDllSampleProgramCS\bin\x64\Debug\HelixToolkit.Wpf.dll
+C:\Users\C140209\source\repos\LjxaDllSampleProgramCS\bin\x64\Debug\RainbowConvertor.dll
+C:\Users\C140209\source\repos\LjxaDllSampleProgramCS\bin\x64\Debug\LJXAImageReader.dll
+C:\Users\C140209\source\repos\LjxaDllSampleProgramCS\obj\x64\Debug\LjxaDllSampleProgramCS.Form1.resources
+C:\Users\C140209\source\repos\LjxaDllSampleProgramCS\obj\x64\Debug\LjxaDllSampleProgramCS.Properties.Resources.resources
+C:\Users\C140209\source\repos\LjxaDllSampleProgramCS\obj\x64\Debug\LjxaDllSampleProgramCS.csproj.GenerateResource.cache
+C:\Users\C140209\source\repos\LjxaDllSampleProgramCS\obj\x64\Debug\LjxaDllSampleProgramCS.csproj.CopyComplete
+C:\Users\C140209\source\repos\LjxaDllSampleProgramCS\obj\x64\Debug\LjxaDllSampleProgramCS.exe
+C:\Users\C140209\source\repos\LjxaDllSampleProgramCS\obj\x64\Debug\LjxaDllSampleProgramCS.pdb
+C:\Users\C140209\source\repos\LjxaDllSampleProgramCS\obj\x64\Debug\LjxaDllSampleProgramCS.csprojAssemblyReference.cache
+\\Mac\Home\Desktop\简化版DLL\src\C# x64\bin\x64\Debug\LjxaDllSampleProgramCS.exe.config
+\\Mac\Home\Desktop\简化版DLL\src\C# x64\obj\x64\Debug\LjxaDllSampleProgramCS.exe
+\\Mac\Home\Desktop\简化版DLL\src\C# x64\obj\x64\Debug\LjxaDllSampleProgramCS.pdb
+\\Mac\Home\Desktop\简化版DLL\src\C# x64\obj\x64\Debug\LjxaDllSampleProgramCS.csprojResolveAssemblyReference.cache
+\\Mac\Home\Desktop\简化版DLL\src\C# x64\obj\x64\Debug\LjxaDllSampleProgramCS.Form1.resources
+\\Mac\Home\Desktop\简化版DLL\src\C# x64\obj\x64\Debug\LjxaDllSampleProgramCS.Properties.Resources.resources
+\\Mac\Home\Desktop\简化版DLL\src\C# x64\obj\x64\Debug\LjxaDllSampleProgramCS.csproj.GenerateResource.Cache
+\\Mac\Home\Desktop\简化版DLL\src\C# x64\bin\x64\Debug\LjxaDllSampleProgramCS.exe
+\\Mac\Home\Desktop\简化版DLL\src\C# x64\bin\x64\Debug\LjxaDllSampleProgramCS.pdb
+\\Mac\Home\Desktop\简化版DLL\src\C# x64\bin\x64\Debug\LJXADriverFor.Net.dll
+\\Mac\Home\Desktop\简化版DLL\src\C# x64\bin\x64\Debug\LjxaWindows.dll
+\\Mac\Home\Desktop\简化版DLL\src\C# x64\bin\x64\Debug\HelixToolkit.Wpf.dll
+\\Mac\Home\Desktop\简化版DLL\src\C# x64\bin\x64\Debug\RainbowConvertor.dll
+\\Mac\Home\Desktop\简化版DLL\src\C# x64\bin\x64\Debug\LJXAImageReader.dll
