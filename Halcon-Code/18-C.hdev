@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="19.11.0.0">
+<procedure name="main">
+<interface/>
+<body>
+<l>dev_close_window ()</l>
+<l>read_image (ImageZ, '//mac/Home/Desktop/VirtualProject/Data/3d-Image/正面1.tif')</l>
+<l>dev_open_window_fit_image (ImageZ, 0, 0, -1, -1, WindowHandle)</l>
+<l>dev_display (ImageZ)</l>
+<l>get_image_size (ImageZ, Width, Height)</l>
+<c></c>
+<l>convert_image_type (ImageZ, ImageZ, 'real')</l>
+<c></c>
+<l>gen_image_const (ImageX, 'real',  Width, Height)</l>
+<l>gen_image_const (ImageY, 'real',  Width, Height)</l>
+<c></c>
+<l>gen_image_surface_first_order (ImageX, 'real', 0.0125, 0, 0, 0, 0, Width, Height)</l>
+<l>gen_image_surface_first_order (ImageY, 'real', 0, 0.02, 0, 0, 0, Width, Height)</l>
+<c>*</c>
+<c></c>
+<l>xyz_to_object_model_3d (ImageX, ImageY, ImageZ, ObjectModel3D)</l>
+<l>visualize_object_model_3d (WindowHandle, ObjectModel3D, [], [], [], [], [], [], [], PoseOut)</l>
+</body>
+<docu id="main">
+<parameters/>
+</docu>
+</procedure>
+</hdevelop>

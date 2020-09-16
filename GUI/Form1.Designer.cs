@@ -62,21 +62,30 @@
             this.bt_ClearData = new System.Windows.Forms.Button();
             this.bt_SaveCSV = new System.Windows.Forms.Button();
             this.bt_SaveBmp = new System.Windows.Forms.Button();
+            this.lv_AllFrameData = new System.Windows.Forms.ListView();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.bt_OpenDevice = new System.Windows.Forms.Button();
+            this.bt_CloseDevice = new System.Windows.Forms.Button();
             this.gb_image_grab = new System.Windows.Forms.GroupBox();
             this.bt_StopGrab = new System.Windows.Forms.Button();
             this.bt_StartGrab = new System.Windows.Forms.Button();
-            this.lv_AllFrameData = new System.Windows.Forms.ListView();
+            this.bt_acquire_stop = new System.Windows.Forms.Button();
+            this.bt_acquire_start = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.pb_in)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_out)).BeginInit();
             this.tp_SetOption.SuspendLayout();
             this.tp_2Dcamera_option.SuspendLayout();
             this.gb_camera_parameter.SuspendLayout();
             this.gb_camera_init.SuspendLayout();
+            this.tp_3Dcamera_option.SuspendLayout();
             this.tp_process_option.SuspendLayout();
             this.gb_Test.SuspendLayout();
             this.gb_measurement.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.gb_image_grab.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // pb_in
@@ -230,6 +239,7 @@
             // 
             // gb_camera_init
             // 
+            this.gb_camera_init.Controls.Add(this.gb_image_grab);
             this.gb_camera_init.Controls.Add(this.cb_DeviceList);
             this.gb_camera_init.Controls.Add(this.rbt_outLineMode);
             this.gb_camera_init.Controls.Add(this.rbt_inLineMode);
@@ -249,7 +259,7 @@
             // cb_DeviceList
             // 
             this.cb_DeviceList.FormattingEnabled = true;
-            this.cb_DeviceList.Location = new System.Drawing.Point(15, 34);
+            this.cb_DeviceList.Location = new System.Drawing.Point(15, 29);
             this.cb_DeviceList.Margin = new System.Windows.Forms.Padding(2);
             this.cb_DeviceList.Name = "cb_DeviceList";
             this.cb_DeviceList.Size = new System.Drawing.Size(192, 24);
@@ -285,11 +295,11 @@
             // 
             // bt_DiscoverCamera
             // 
-            this.bt_DiscoverCamera.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_DiscoverCamera.Location = new System.Drawing.Point(56, 83);
+            this.bt_DiscoverCamera.Font = new System.Drawing.Font("宋体", 10F);
+            this.bt_DiscoverCamera.Location = new System.Drawing.Point(53, 67);
             this.bt_DiscoverCamera.Margin = new System.Windows.Forms.Padding(2);
             this.bt_DiscoverCamera.Name = "bt_DiscoverCamera";
-            this.bt_DiscoverCamera.Size = new System.Drawing.Size(104, 56);
+            this.bt_DiscoverCamera.Size = new System.Drawing.Size(100, 30);
             this.bt_DiscoverCamera.TabIndex = 2;
             this.bt_DiscoverCamera.Text = "初始化相机";
             this.bt_DiscoverCamera.UseVisualStyleBackColor = true;
@@ -299,10 +309,10 @@
             // 
             this.bt_CloseCamera.Enabled = false;
             this.bt_CloseCamera.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_CloseCamera.Location = new System.Drawing.Point(116, 155);
+            this.bt_CloseCamera.Location = new System.Drawing.Point(110, 106);
             this.bt_CloseCamera.Margin = new System.Windows.Forms.Padding(2);
             this.bt_CloseCamera.Name = "bt_CloseCamera";
-            this.bt_CloseCamera.Size = new System.Drawing.Size(90, 56);
+            this.bt_CloseCamera.Size = new System.Drawing.Size(100, 30);
             this.bt_CloseCamera.TabIndex = 1;
             this.bt_CloseCamera.Text = "关闭相机";
             this.bt_CloseCamera.UseVisualStyleBackColor = true;
@@ -312,10 +322,10 @@
             // 
             this.bt_OpenCamera.Enabled = false;
             this.bt_OpenCamera.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_OpenCamera.Location = new System.Drawing.Point(9, 155);
+            this.bt_OpenCamera.Location = new System.Drawing.Point(6, 106);
             this.bt_OpenCamera.Margin = new System.Windows.Forms.Padding(2);
             this.bt_OpenCamera.Name = "bt_OpenCamera";
-            this.bt_OpenCamera.Size = new System.Drawing.Size(90, 56);
+            this.bt_OpenCamera.Size = new System.Drawing.Size(100, 30);
             this.bt_OpenCamera.TabIndex = 0;
             this.bt_OpenCamera.Text = "打开相机";
             this.bt_OpenCamera.UseVisualStyleBackColor = true;
@@ -323,6 +333,8 @@
             // 
             // tp_3Dcamera_option
             // 
+            this.tp_3Dcamera_option.Controls.Add(this.groupBox2);
+            this.tp_3Dcamera_option.Controls.Add(this.groupBox1);
             this.tp_3Dcamera_option.Location = new System.Drawing.Point(4, 22);
             this.tp_3Dcamera_option.Name = "tp_3Dcamera_option";
             this.tp_3Dcamera_option.Size = new System.Drawing.Size(501, 299);
@@ -335,7 +347,6 @@
             this.tp_process_option.Controls.Add(this.gb_Test);
             this.tp_process_option.Controls.Add(this.gb_measurement);
             this.tp_process_option.Controls.Add(this.groupBox3);
-            this.tp_process_option.Controls.Add(this.gb_image_grab);
             this.tp_process_option.Location = new System.Drawing.Point(4, 22);
             this.tp_process_option.Margin = new System.Windows.Forms.Padding(2);
             this.tp_process_option.Name = "tp_process_option";
@@ -350,11 +361,11 @@
             this.gb_Test.Controls.Add(this.bt_StartTest);
             this.gb_Test.Controls.Add(this.bt_StopTest);
             this.gb_Test.Font = new System.Drawing.Font("宋体", 12F);
-            this.gb_Test.Location = new System.Drawing.Point(7, 190);
+            this.gb_Test.Location = new System.Drawing.Point(17, 103);
             this.gb_Test.Margin = new System.Windows.Forms.Padding(2);
             this.gb_Test.Name = "gb_Test";
             this.gb_Test.Padding = new System.Windows.Forms.Padding(2);
-            this.gb_Test.Size = new System.Drawing.Size(215, 101);
+            this.gb_Test.Size = new System.Drawing.Size(215, 80);
             this.gb_Test.TabIndex = 9;
             this.gb_Test.TabStop = false;
             this.gb_Test.Text = "测试指令";
@@ -392,7 +403,7 @@
             this.gb_measurement.Controls.Add(this.rbt_Measure9);
             this.gb_measurement.Controls.Add(this.rbt_Measure18C);
             this.gb_measurement.Font = new System.Drawing.Font("宋体", 12F);
-            this.gb_measurement.Location = new System.Drawing.Point(7, 107);
+            this.gb_measurement.Location = new System.Drawing.Point(17, 20);
             this.gb_measurement.Margin = new System.Windows.Forms.Padding(2);
             this.gb_measurement.Name = "gb_measurement";
             this.gb_measurement.Padding = new System.Windows.Forms.Padding(2);
@@ -452,9 +463,9 @@
             this.groupBox3.Controls.Add(this.bt_SaveCSV);
             this.groupBox3.Controls.Add(this.bt_SaveBmp);
             this.groupBox3.Font = new System.Drawing.Font("宋体", 12F);
-            this.groupBox3.Location = new System.Drawing.Point(250, 142);
+            this.groupBox3.Location = new System.Drawing.Point(247, 40);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(230, 149);
+            this.groupBox3.Size = new System.Drawing.Size(230, 128);
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "数据";
@@ -464,7 +475,7 @@
             this.bt_ClearData.Enabled = false;
             this.bt_ClearData.Font = new System.Drawing.Font("宋体", 12F);
             this.bt_ClearData.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.bt_ClearData.Location = new System.Drawing.Point(13, 89);
+            this.bt_ClearData.Location = new System.Drawing.Point(17, 80);
             this.bt_ClearData.Name = "bt_ClearData";
             this.bt_ClearData.Size = new System.Drawing.Size(91, 40);
             this.bt_ClearData.TabIndex = 2;
@@ -477,7 +488,7 @@
             this.bt_SaveCSV.Enabled = false;
             this.bt_SaveCSV.Font = new System.Drawing.Font("宋体", 12F);
             this.bt_SaveCSV.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.bt_SaveCSV.Location = new System.Drawing.Point(13, 35);
+            this.bt_SaveCSV.Location = new System.Drawing.Point(17, 26);
             this.bt_SaveCSV.Name = "bt_SaveCSV";
             this.bt_SaveCSV.Size = new System.Drawing.Size(91, 40);
             this.bt_SaveCSV.TabIndex = 1;
@@ -490,51 +501,13 @@
             this.bt_SaveBmp.Enabled = false;
             this.bt_SaveBmp.Font = new System.Drawing.Font("宋体", 12F);
             this.bt_SaveBmp.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.bt_SaveBmp.Location = new System.Drawing.Point(117, 35);
+            this.bt_SaveBmp.Location = new System.Drawing.Point(121, 26);
             this.bt_SaveBmp.Name = "bt_SaveBmp";
             this.bt_SaveBmp.Size = new System.Drawing.Size(90, 40);
             this.bt_SaveBmp.TabIndex = 0;
             this.bt_SaveBmp.Text = "保存BMP";
             this.bt_SaveBmp.UseVisualStyleBackColor = true;
             this.bt_SaveBmp.Click += new System.EventHandler(this.bt_SaveBmp_Click);
-            // 
-            // gb_image_grab
-            // 
-            this.gb_image_grab.Controls.Add(this.bt_StopGrab);
-            this.gb_image_grab.Controls.Add(this.bt_StartGrab);
-            this.gb_image_grab.Font = new System.Drawing.Font("宋体", 12F);
-            this.gb_image_grab.Location = new System.Drawing.Point(7, 7);
-            this.gb_image_grab.Name = "gb_image_grab";
-            this.gb_image_grab.Size = new System.Drawing.Size(215, 96);
-            this.gb_image_grab.TabIndex = 4;
-            this.gb_image_grab.TabStop = false;
-            this.gb_image_grab.Text = "采集图像";
-            // 
-            // bt_StopGrab
-            // 
-            this.bt_StopGrab.Enabled = false;
-            this.bt_StopGrab.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_StopGrab.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.bt_StopGrab.Location = new System.Drawing.Point(112, 35);
-            this.bt_StopGrab.Name = "bt_StopGrab";
-            this.bt_StopGrab.Size = new System.Drawing.Size(90, 40);
-            this.bt_StopGrab.TabIndex = 3;
-            this.bt_StopGrab.Text = "停止采集";
-            this.bt_StopGrab.UseVisualStyleBackColor = true;
-            this.bt_StopGrab.Click += new System.EventHandler(this.bt_StopGrab_Click);
-            // 
-            // bt_StartGrab
-            // 
-            this.bt_StartGrab.Enabled = false;
-            this.bt_StartGrab.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_StartGrab.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.bt_StartGrab.Location = new System.Drawing.Point(12, 35);
-            this.bt_StartGrab.Name = "bt_StartGrab";
-            this.bt_StartGrab.Size = new System.Drawing.Size(90, 40);
-            this.bt_StartGrab.TabIndex = 2;
-            this.bt_StartGrab.Text = "开始采集";
-            this.bt_StartGrab.UseVisualStyleBackColor = true;
-            this.bt_StartGrab.Click += new System.EventHandler(this.bt_StartGrab_Click);
             // 
             // lv_AllFrameData
             // 
@@ -545,6 +518,112 @@
             this.lv_AllFrameData.Size = new System.Drawing.Size(671, 302);
             this.lv_AllFrameData.TabIndex = 3;
             this.lv_AllFrameData.UseCompatibleStateImageBehavior = false;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.bt_CloseDevice);
+            this.groupBox1.Controls.Add(this.bt_OpenDevice);
+            this.groupBox1.Font = new System.Drawing.Font("宋体", 12F);
+            this.groupBox1.Location = new System.Drawing.Point(9, 17);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Size = new System.Drawing.Size(215, 70);
+            this.groupBox1.TabIndex = 1;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "设备管理";
+            // 
+            // bt_OpenDevice
+            // 
+            this.bt_OpenDevice.Enabled = false;
+            this.bt_OpenDevice.Font = new System.Drawing.Font("宋体", 12F);
+            this.bt_OpenDevice.Location = new System.Drawing.Point(6, 27);
+            this.bt_OpenDevice.Margin = new System.Windows.Forms.Padding(2);
+            this.bt_OpenDevice.Name = "bt_OpenDevice";
+            this.bt_OpenDevice.Size = new System.Drawing.Size(100, 30);
+            this.bt_OpenDevice.TabIndex = 1;
+            this.bt_OpenDevice.Text = "打开设备";
+            this.bt_OpenDevice.UseVisualStyleBackColor = true;
+            // 
+            // bt_CloseDevice
+            // 
+            this.bt_CloseDevice.Enabled = false;
+            this.bt_CloseDevice.Font = new System.Drawing.Font("宋体", 12F);
+            this.bt_CloseDevice.Location = new System.Drawing.Point(108, 27);
+            this.bt_CloseDevice.Margin = new System.Windows.Forms.Padding(2);
+            this.bt_CloseDevice.Name = "bt_CloseDevice";
+            this.bt_CloseDevice.Size = new System.Drawing.Size(100, 30);
+            this.bt_CloseDevice.TabIndex = 2;
+            this.bt_CloseDevice.Text = "关闭设备";
+            this.bt_CloseDevice.UseVisualStyleBackColor = true;
+            // 
+            // gb_image_grab
+            // 
+            this.gb_image_grab.Controls.Add(this.bt_StopGrab);
+            this.gb_image_grab.Controls.Add(this.bt_StartGrab);
+            this.gb_image_grab.Font = new System.Drawing.Font("宋体", 12F);
+            this.gb_image_grab.Location = new System.Drawing.Point(1, 148);
+            this.gb_image_grab.Name = "gb_image_grab";
+            this.gb_image_grab.Size = new System.Drawing.Size(215, 82);
+            this.gb_image_grab.TabIndex = 8;
+            this.gb_image_grab.TabStop = false;
+            this.gb_image_grab.Text = "采集图像";
+            // 
+            // bt_StopGrab
+            // 
+            this.bt_StopGrab.Enabled = false;
+            this.bt_StopGrab.Font = new System.Drawing.Font("宋体", 12F);
+            this.bt_StopGrab.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.bt_StopGrab.Location = new System.Drawing.Point(112, 35);
+            this.bt_StopGrab.Name = "bt_StopGrab";
+            this.bt_StopGrab.Size = new System.Drawing.Size(100, 30);
+            this.bt_StopGrab.TabIndex = 3;
+            this.bt_StopGrab.Text = "停止采集";
+            this.bt_StopGrab.UseVisualStyleBackColor = true;
+            // 
+            // bt_StartGrab
+            // 
+            this.bt_StartGrab.Enabled = false;
+            this.bt_StartGrab.Font = new System.Drawing.Font("宋体", 12F);
+            this.bt_StartGrab.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.bt_StartGrab.Location = new System.Drawing.Point(6, 35);
+            this.bt_StartGrab.Name = "bt_StartGrab";
+            this.bt_StartGrab.Size = new System.Drawing.Size(100, 30);
+            this.bt_StartGrab.TabIndex = 2;
+            this.bt_StartGrab.Text = "开始采集";
+            this.bt_StartGrab.UseVisualStyleBackColor = true;
+            // 
+            // bt_acquire_stop
+            // 
+            this.bt_acquire_stop.Location = new System.Drawing.Point(108, 26);
+            this.bt_acquire_stop.Name = "bt_acquire_stop";
+            this.bt_acquire_stop.Size = new System.Drawing.Size(100, 30);
+            this.bt_acquire_stop.TabIndex = 8;
+            this.bt_acquire_stop.Text = "停止获取";
+            this.bt_acquire_stop.UseVisualStyleBackColor = true;
+            // 
+            // bt_acquire_start
+            // 
+            this.bt_acquire_start.Location = new System.Drawing.Point(5, 26);
+            this.bt_acquire_start.Name = "bt_acquire_start";
+            this.bt_acquire_start.Size = new System.Drawing.Size(100, 30);
+            this.bt_acquire_start.TabIndex = 7;
+            this.bt_acquire_start.Text = "开始获取";
+            this.bt_acquire_start.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.bt_acquire_stop);
+            this.groupBox2.Controls.Add(this.bt_acquire_start);
+            this.groupBox2.Font = new System.Drawing.Font("宋体", 12F);
+            this.groupBox2.Location = new System.Drawing.Point(9, 107);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox2.Size = new System.Drawing.Size(215, 70);
+            this.groupBox2.TabIndex = 9;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "采集图像";
             // 
             // MyWindow
             // 
@@ -570,12 +649,15 @@
             this.gb_camera_parameter.PerformLayout();
             this.gb_camera_init.ResumeLayout(false);
             this.gb_camera_init.PerformLayout();
+            this.tp_3Dcamera_option.ResumeLayout(false);
             this.tp_process_option.ResumeLayout(false);
             this.gb_Test.ResumeLayout(false);
             this.gb_measurement.ResumeLayout(false);
             this.gb_measurement.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
             this.gb_image_grab.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -601,9 +683,6 @@
         private System.Windows.Forms.TextBox tb_Gain;
         private System.Windows.Forms.TextBox tb_Exposure;
         private System.Windows.Forms.ListView lv_AllFrameData;
-        private System.Windows.Forms.GroupBox gb_image_grab;
-        private System.Windows.Forms.Button bt_StopGrab;
-        private System.Windows.Forms.Button bt_StartGrab;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button bt_SaveBmp;
         private System.Windows.Forms.GroupBox gb_measurement;
@@ -620,6 +699,15 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TabPage tp_3Dcamera_option;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox gb_image_grab;
+        private System.Windows.Forms.Button bt_StopGrab;
+        private System.Windows.Forms.Button bt_StartGrab;
+        private System.Windows.Forms.Button bt_CloseDevice;
+        private System.Windows.Forms.Button bt_OpenDevice;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button bt_acquire_stop;
+        private System.Windows.Forms.Button bt_acquire_start;
     }
 }
 

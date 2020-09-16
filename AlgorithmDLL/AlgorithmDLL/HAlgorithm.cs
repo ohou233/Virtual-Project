@@ -817,7 +817,7 @@ namespace HalconAlgorithm
                 DispImage(ho_Image);
 
                 //不同颜色显示图像
-                if (PositionDegree < 0 || PositionDegree > 0.6 || CircleRadius < 9.40 || CircleRadius > 9.50)
+                if (PositionDegree < 0 || PositionDegree > 0.06 || CircleRadius < 9.44 || CircleRadius > 9.50)
                 {
                     outWindow.SetColor("red");
                     outWindow.SetLineWidth(2);
