@@ -29,14 +29,14 @@
 <l>    scale_image (ImageConvertedZ, ImageConvertedZ, 1.0, 0 - Min)</l>
 <l>endif</l>
 <c></c>
-<l>threshold (ImageZ, Region, 32858, 65535)</l>
+<l>scale_image (ImageConvertedZ, ImageScaled, 0.164156, -5076)</l>
+<l>threshold (ImageScaled, Regions, 155.34, 233.01)</l>
+<l>opening_rectangle1 (Regions, RegionOpening, 11, 11)</l>
+<l>connection (RegionOpening, ConnectedRegions)</l>
+<l>select_shape (ConnectedRegions, SelectedRegions, 'area', 'and', 160550, 876147)</l>
+<l>union1 (SelectedRegions, RegionUnion)</l>
+<l>reduce_domain (ImageConvertedZ, RegionUnion, ImageReduced)</l>
 <c></c>
-<c></c>
-<l>* threshold (ImageConvertedZ, Region, 32746.7, 34908.5)</l>
-<c></c>
-<l>* threshold (ImageConvertedZ, Region, 156.98, 401.16)</l>
-<l>* threshold (ImageConvertedZ, Region, 10000, Max*1.5)</l>
-<l>*reduce_domain (ImageConvertedZ, Region, ImageReducedZ)</l>
 <c>*设置Z方向缩放系数,最终高度 = ScaleZ * GrayValue值，ScaleZ越小高度值范围也越小，点云效果接近平面，反之越明显</c>
 <c>*确保在0值以上，可通过min_max_gray获取最小值然后拉伸到0以上</c>
 <l>ScaleZ:=0.02</l>

@@ -9,20 +9,174 @@
 <l>dev_display (ImageZ)</l>
 <l>get_image_size (ImageZ, Width, Height)</l>
 <c></c>
-<l>convert_image_type (ImageZ, ImageZ, 'real')</l>
+<l>threshold (ImageZ, Regions, 31113, 32131)</l>
+<l>connection (Regions, ConnectedRegions)</l>
+<l>select_shape (ConnectedRegions, SelectedRegions, 'area', 'and', 170732, 320826)</l>
+<l>union1 (SelectedRegions, RegionUnion)</l>
+<l>scale_image (ImageZ, ImageScaled, 0.125246, -3785)</l>
 <c></c>
-<l>gen_image_const (ImageX, 'real',  Width, Height)</l>
-<l>gen_image_const (ImageY, 'real',  Width, Height)</l>
 <c></c>
-<l>gen_image_surface_first_order (ImageX, 'real', 0.0125, 0, 0, 0, 0, Width, Height)</l>
-<l>gen_image_surface_first_order (ImageY, 'real', 0, 0.02, 0, 0, 0, Width, Height)</l>
-<c>*</c>
+<c>*定位两圆心</c>
+<l>gen_TwoCircle_info(ImageScaled, MaxCircleRow, MaxCircleColumn, MaxCircleRadius, MinCircleRow, MinCircleColumn, MinCircleRadius, TwoCirclePhi)</l>
+<c>*获取底部边缘</c>
+<l>gen_buttom_edge (ImageZ, MaxCircleRow, MaxCircleColumn, MaxCircleRadius*4/3, MaxCircleRadius*1/4, TwoCirclePhi, Width, Height, rad(90), rad(90), MinCircleColumn, MaxCircleColumn, ButtomEdgeRowBegin, ButtomEdgeColBegin, ButtomEdgeRowEnd, ButtomEdgeColEnd)</l>
 <c></c>
-<l>xyz_to_object_model_3d (ImageX, ImageY, ImageZ, ObjectModel3D)</l>
-<l>visualize_object_model_3d (WindowHandle, ObjectModel3D, [], [], [], [], [], [], [], PoseOut)</l>
+<c></c>
+<c></c>
 </body>
 <docu id="main">
 <parameters/>
+</docu>
+</procedure>
+<procedure name="gen_buttom_edge">
+<interface>
+<io>
+<par name="Image" base_type="iconic" dimension="0"/>
+</io>
+<ic>
+<par name="CenterRow" base_type="ctrl" dimension="0"/>
+<par name="CenterCol" base_type="ctrl" dimension="0"/>
+<par name="BaseRectDistRow" base_type="ctrl" dimension="0"/>
+<par name="BaseRectDistCol" base_type="ctrl" dimension="0"/>
+<par name="BasePhi" base_type="ctrl" dimension="0"/>
+<par name="ImageWidth" base_type="ctrl" dimension="0"/>
+<par name="ImageHeight" base_type="ctrl" dimension="0"/>
+<par name="RotatePhi" base_type="ctrl" dimension="0"/>
+<par name="RectBasePhi" base_type="ctrl" dimension="0"/>
+<par name="MinCircleColumn" base_type="ctrl" dimension="0"/>
+<par name="MaxCircleColumn" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="ButtomEdgeRowBegin" base_type="ctrl" dimension="0"/>
+<par name="ButtomEdgeColBegin" base_type="ctrl" dimension="0"/>
+<par name="ButtomEdgeRowEnd" base_type="ctrl" dimension="0"/>
+<par name="ButtomEdgeColEnd" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<l>gen_rectangle2 (Rectangle1, CenterRow+BaseRectDistRow, CenterCol-BaseRectDistCol, RectBasePhi, 70, 50)</l>
+<l>gen_rectangle2 (Rectangle2, CenterRow+BaseRectDistRow, CenterCol+BaseRectDistCol, RectBasePhi, 70, 50)</l>
+<c></c>
+<l>if (MaxCircleColumn &gt; MinCircleColumn)</l>
+<l>    vector_angle_to_rigid (CenterRow, CenterCol, -RectBasePhi, CenterRow, CenterCol, BasePhi+RotatePhi, HomMat2D5)</l>
+<l>    affine_trans_region (Rectangle1, RectButtomMeasureRectionAffineTrans1, HomMat2D5, 'nearest_neighbor')</l>
+<l>    area_center (RectButtomMeasureRectionAffineTrans1, RectButtomMeasureRectArea, RectButtomMeasureRectRow1, RectButtomMeasureRectColumn1)</l>
+<l>    orientation_region (RectButtomMeasureRectionAffineTrans1, RectButtomMeasureRectPhi1)</l>
+<l>    gen_measure_rectangle2 (RectButtomMeasureRectRow1, RectButtomMeasureRectColumn1, RectButtomMeasureRectPhi1, 70, 2, ImageWidth, ImageHeight, 'bicubic', MeasureHandle5)</l>
+<c></c>
+<l>    vector_angle_to_rigid (CenterRow, CenterCol, -RectBasePhi, CenterRow, CenterCol, BasePhi+RotatePhi, HomMat2D6)</l>
+<l>    affine_trans_region (Rectangle2, ButtomMeasureRectRegionAffineTrans2, HomMat2D6, 'nearest_neighbor')</l>
+<l>    area_center (ButtomMeasureRectRegionAffineTrans2, ButtomMeasureRectArea, ButtomMeasureRectRow2, ButtomMeasureRectColumn2)</l>
+<l>    orientation_region (ButtomMeasureRectRegionAffineTrans2, ButtomMeasureRectPhi2)</l>
+<l>    gen_measure_rectangle2 (ButtomMeasureRectRow2, ButtomMeasureRectColumn2, ButtomMeasureRectPhi2, 70, 2, ImageWidth, ImageHeight, 'bicubic', MeasureHandle6)</l>
+<c></c>
+<l>else</l>
+<l>    vector_angle_to_rigid (CenterRow, CenterCol, -RectBasePhi, CenterRow, CenterCol, BasePhi-RotatePhi, HomMat2D5)</l>
+<l>    affine_trans_region (Rectangle1, RectButtomMeasureRectionAffineTrans1, HomMat2D5, 'nearest_neighbor')</l>
+<l>    area_center (RectButtomMeasureRectionAffineTrans1, RectButtomMeasureRectArea, RectButtomMeasureRectRow1, RectButtomMeasureRectColumn1)</l>
+<l>    orientation_region (RectButtomMeasureRectionAffineTrans1, RectButtomMeasureRectPhi1)</l>
+<l>    gen_measure_rectangle2 (RectButtomMeasureRectRow1, RectButtomMeasureRectColumn1, RectButtomMeasureRectPhi1, 70, 2, ImageWidth, ImageHeight, 'bicubic', MeasureHandle5)</l>
+<c></c>
+<l>    vector_angle_to_rigid (CenterRow, CenterCol, -RectBasePhi, CenterRow, CenterCol, BasePhi-RotatePhi, HomMat2D6)</l>
+<l>    affine_trans_region (Rectangle2, ButtomMeasureRectRegionAffineTrans2, HomMat2D6, 'nearest_neighbor')</l>
+<l>    area_center (ButtomMeasureRectRegionAffineTrans2, ButtomMeasureRectArea, ButtomMeasureRectRow2, ButtomMeasureRectColumn2)</l>
+<l>    orientation_region (ButtomMeasureRectRegionAffineTrans2, ButtomMeasureRectPhi2)</l>
+<l>    gen_measure_rectangle2 (ButtomMeasureRectRow2, ButtomMeasureRectColumn2, ButtomMeasureRectPhi2, 70, 2, ImageWidth, ImageHeight, 'bicubic', MeasureHandle6)</l>
+<c></c>
+<l>endif</l>
+<c>* 抓取底部边缘</c>
+<l>measure_pos (Image, MeasureHandle5, 1, 1000, 'positive', 'first', ButtomEdgeRowBegin, ButtomEdgeColBegin, ButtomAmplitude, ButtomDistance)</l>
+<l>measure_pos (Image, MeasureHandle6, 1, 1000, 'negative', 'first', ButtomEdgeRowEnd, ButtomEdgeColEnd, ButtomAmplitude, ButtomDistance)</l>
+<c></c>
+<l>close_measure (MeasureHandle5)</l>
+<l>close_measure (MeasureHandle6)</l>
+<c></c>
+<c>* 拟合底部边缘</c>
+<l>create_metrology_model (ButtomMetrologyHandle)</l>
+<l>add_metrology_object_line_measure (ButtomMetrologyHandle, ButtomEdgeRowBegin, ButtomEdgeColBegin, ButtomEdgeRowEnd, ButtomEdgeColEnd, 100, 10, 2, 50, [], [], Index)</l>
+<l>apply_metrology_model (Image, ButtomMetrologyHandle)</l>
+<l>get_metrology_object_measures (Contours, ButtomMetrologyHandle, 'all', 'all', ButtomEdgeRows, ButtomEdgeColumns)</l>
+<l>gen_contour_polygon_xld (ButtomEdgeContour, ButtomEdgeRows, ButtomEdgeColumns)</l>
+<l>fit_line_contour_xld (ButtomEdgeContour, 'huber', -1, 0, 5, 4, ButtomEdgeRowBegin, ButtomEdgeColBegin, ButtomEdgeRowEnd, ButtomEdgeColEnd, Nr, Nc, Dist)</l>
+<c></c>
+<c></c>
+<l>return ()</l>
+</body>
+<docu id="gen_buttom_edge">
+<parameters>
+<parameter id="BasePhi"/>
+<parameter id="BaseRectDistCol"/>
+<parameter id="BaseRectDistRow"/>
+<parameter id="ButtomEdgeColBegin"/>
+<parameter id="ButtomEdgeColEnd"/>
+<parameter id="ButtomEdgeRowBegin"/>
+<parameter id="ButtomEdgeRowEnd"/>
+<parameter id="CenterCol"/>
+<parameter id="CenterRow"/>
+<parameter id="Image"/>
+<parameter id="ImageHeight"/>
+<parameter id="ImageWidth"/>
+<parameter id="MaxCircleColumn"/>
+<parameter id="MinCircleColumn"/>
+<parameter id="RectBasePhi"/>
+<parameter id="RotatePhi"/>
+</parameters>
+</docu>
+</procedure>
+<procedure name="gen_TwoCircle_info">
+<interface>
+<io>
+<par name="Image" base_type="iconic" dimension="0"/>
+</io>
+<oc>
+<par name="MaxCircleRow" base_type="ctrl" dimension="0"/>
+<par name="MaxCircleColumn" base_type="ctrl" dimension="0"/>
+<par name="MaxCircleRadius" base_type="ctrl" dimension="0"/>
+<par name="MinCircleRow" base_type="ctrl" dimension="0"/>
+<par name="MinCircleColumn" base_type="ctrl" dimension="0"/>
+<par name="MinCircleRadius" base_type="ctrl" dimension="0"/>
+<par name="TwoCirclePhi" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<l>*fast_threshold (Image, Regions, 128, 255, 20)</l>
+<c></c>
+<l>threshold (Image, Regions, 217, 238)</l>
+<c></c>
+<l>connection (Regions, ConnectedRegions)</l>
+<c>* 提取两个圆形区域</c>
+<c></c>
+<c></c>
+<l>select_shape (ConnectedRegions, MinCircleSelectedRegions, 'area', 'and', 128015, 239332)</l>
+<l>select_shape (ConnectedRegions, MaxCircleSelectedRegions, 'area', 'and', 254174, 317254)</l>
+<c></c>
+<l>smallest_circle (MaxCircleSelectedRegions, MaxCircleRow, MaxCircleColumn, MaxCircleRadius)</l>
+<l>smallest_circle (MinCircleSelectedRegions, MinCircleRow, MinCircleColumn, MinCircleRadius)</l>
+<c>* 求两圆心连线方向</c>
+<l>line_orientation (MaxCircleRow, MaxCircleColumn, MinCircleRow, MinCircleColumn, TwoCirclePhi)</l>
+<c></c>
+<c></c>
+<c></c>
+<l>* threshold_sub_pix (Image, Border, 10)</l>
+<l>* select_shape_xld (Border, MinCircleContour, 'area', 'and', 463303, 766055)</l>
+<l>* fit_circle_contour_xld (MinCircleContour, 'algebraic', -1, 0, 0, 3, 2, MinCircleRow, MinCircleColumn, MinCircleRadius, StartPhi, EndPhi, PointOrder)</l>
+<l>* select_shape_xld (Border, MaxCircleContour, 'area', 'and', 738532, 1.03211e+06)</l>
+<l>* fit_circle_contour_xld (MaxCircleContour, 'algebraic', -1, 0, 0, 3, 2, MaxCircleRow, MaxCircleColumn, MaxCircleRadius, StartPhi, EndPhi, PointOrder)</l>
+<l>* line_orientation (MaxCircleRow, MaxCircleColumn, MinCircleRow, MinCircleColumn, TwoCirclePhi)</l>
+<c></c>
+<l>return ()</l>
+</body>
+<docu id="gen_TwoCircle_info">
+<parameters>
+<parameter id="Image"/>
+<parameter id="MaxCircleColumn"/>
+<parameter id="MaxCircleRadius"/>
+<parameter id="MaxCircleRow"/>
+<parameter id="MinCircleColumn"/>
+<parameter id="MinCircleRadius"/>
+<parameter id="MinCircleRow"/>
+<parameter id="TwoCirclePhi"/>
+</parameters>
 </docu>
 </procedure>
 </hdevelop>
