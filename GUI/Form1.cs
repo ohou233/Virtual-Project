@@ -35,7 +35,7 @@ namespace MyWindow
         IntPtr m_BufForSaveImage;
 
         bool IsInLine = false;
-        int MeasureProject = -1;
+        int MeasureProject = 9;
         Thread thread_OutLineTest;
         bool IsthreadLoadImageStop = false;
         double Radius, PositionDegree, RunTime, DistanceX1, DistanceY1;
@@ -360,7 +360,6 @@ namespace MyWindow
                     //设置控件状态
                     bt_StopTest.Enabled = false;
                     bt_StartTest.Enabled = true;
-                    rbt_Measure18C.Enabled = true;
                     rbt_Measure9.Enabled = true;
                     break;
                 }
@@ -428,7 +427,6 @@ namespace MyWindow
             bt_StopGrab.Enabled = true;
             bt_SaveBmp.Enabled = true;
             rbt_Measure9.Enabled = true;
-            rbt_Measure18C.Enabled = true;
         }
 
         //实时显示线程函数
@@ -517,19 +515,6 @@ namespace MyWindow
 
         //选择测试项
         #region
-        private void rbt_Measure18C_CheckedChanged(object sender, EventArgs e)
-        {
-            if (true == rbt_Measure18C.Checked)
-            {
-                MeasureProject = 18;
-                HAlgorithm.ClearListView(lv_AllFrameData);
-                HAlgorithm.InitListView3D(lv_AllFrameData);
-            }
-            else
-            {
-                MeasureProject = -1;
-            }
-        }
 
         private void rbt_Measure9_CheckedChanged(object sender, EventArgs e)
         {
@@ -738,7 +723,6 @@ namespace MyWindow
             //设置控件状态
             bt_StopTest.Enabled = true;
             bt_StartTest.Enabled = false;
-            rbt_Measure18C.Enabled = false;
             rbt_Measure9.Enabled = false;
 
             if (false == IsInLine)
@@ -823,7 +807,6 @@ namespace MyWindow
             bt_StopGrab.Enabled = false;
             bt_StopTest.Enabled = true;
             bt_StartTest.Enabled = false;
-            rbt_Measure18C.Enabled = false;
             rbt_Measure9.Enabled = false;
             bt_ClearData.Enabled = false;
             bt_SaveCSV.Enabled = false;
@@ -947,7 +930,6 @@ namespace MyWindow
             //设置控件状态
             bt_StopTest.Enabled = false;
             bt_StartTest.Enabled = true;
-            rbt_Measure18C.Enabled = true;
             rbt_Measure9.Enabled = true;
             bt_SaveCSV.Enabled = true;
             bt_ClearData.Enabled = true;
