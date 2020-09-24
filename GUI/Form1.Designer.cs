@@ -28,9 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.pb_in = new System.Windows.Forms.PictureBox();
             this.pb_out = new System.Windows.Forms.PictureBox();
             this.tp_SetOption = new System.Windows.Forms.TabControl();
+            this.tp_process_option = new System.Windows.Forms.TabPage();
+            this.gb_Test = new System.Windows.Forms.GroupBox();
+            this.rbt_outLineMode = new System.Windows.Forms.RadioButton();
+            this.rbt_inLineMode = new System.Windows.Forms.RadioButton();
+            this.bt_StartTest = new System.Windows.Forms.Button();
+            this.bt_StopTest = new System.Windows.Forms.Button();
+            this.gb_measurement = new System.Windows.Forms.GroupBox();
+            this.rbt_Measure18 = new System.Windows.Forms.RadioButton();
+            this.rbt_Measure9 = new System.Windows.Forms.RadioButton();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.bt_ClearData = new System.Windows.Forms.Button();
+            this.bt_SaveCSV = new System.Windows.Forms.Button();
+            this.bt_SaveBmp = new System.Windows.Forms.Button();
             this.tp_2Dcamera_option = new System.Windows.Forms.TabPage();
             this.gb_camera_parameter = new System.Windows.Forms.GroupBox();
             this.bt_SetParam = new System.Windows.Forms.Button();
@@ -49,41 +63,45 @@
             this.bt_DiscoverCamera = new System.Windows.Forms.Button();
             this.bt_CloseCamera = new System.Windows.Forms.Button();
             this.bt_OpenCamera = new System.Windows.Forms.Button();
-            this.tp_process_option = new System.Windows.Forms.TabPage();
-            this.gb_Test = new System.Windows.Forms.GroupBox();
-            this.bt_StartTest = new System.Windows.Forms.Button();
-            this.bt_StopTest = new System.Windows.Forms.Button();
-            this.gb_measurement = new System.Windows.Forms.GroupBox();
-            this.rbt_Measure9 = new System.Windows.Forms.RadioButton();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.bt_ClearData = new System.Windows.Forms.Button();
-            this.bt_SaveCSV = new System.Windows.Forms.Button();
-            this.bt_SaveBmp = new System.Windows.Forms.Button();
-            this.lv_AllFrameData = new System.Windows.Forms.ListView();
             this.tp_3Dcamera_option = new System.Windows.Forms.TabPage();
-            this.rbt_Measure18 = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.bt_StopGrab_3D = new System.Windows.Forms.Button();
-            this.bt_StartGrab_3D = new System.Windows.Forms.Button();
-            this.bt_InitCamera3D = new System.Windows.Forms.Button();
-            this.bt_CloseCamera_3D = new System.Windows.Forms.Button();
-            this.bt_OpenCamera_3D = new System.Windows.Forms.Button();
-            this.bt_ClearBufferData = new System.Windows.Forms.Button();
-            this.rbt_outLineMode = new System.Windows.Forms.RadioButton();
-            this.rbt_inLineMode = new System.Windows.Forms.RadioButton();
+            this.lv_AllFrameData = new System.Windows.Forms.ListView();
+            this._checkBoxUseSimpleArray = new System.Windows.Forms.CheckBox();
+            this._checkBoxStartTimer = new System.Windows.Forms.CheckBox();
+            this._textBoxHighSpeedProfileFilePath = new System.Windows.Forms.TextBox();
+            this._buttonHighSpeedProfileFileSave = new System.Windows.Forms.Button();
+            this._labelHighSpeedSavePath = new System.Windows.Forms.Label();
+            this._numericUpDownProfileSaveCount = new System.Windows.Forms.NumericUpDown();
+            this._labelProfileSaveCount = new System.Windows.Forms.Label();
+            this._buttonInitialize = new System.Windows.Forms.Button();
+            this._buttonEthernetOpen = new System.Windows.Forms.Button();
+            this._buttonInitializeHighSpeedDataCommunicationSimpleArray = new System.Windows.Forms.Button();
+            this._buttonPreStartHighSpeedDataCommunication = new System.Windows.Forms.Button();
+            this._buttonStartHighSpeedDataCommunication = new System.Windows.Forms.Button();
+            this._buttonStartMeasure = new System.Windows.Forms.Button();
+            this._buttonStopMeasure = new System.Windows.Forms.Button();
+            this._buttonHighSpeedSaveAsBitmapFile = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this._buttonFinalizeHighSpeedDataCommunication = new System.Windows.Forms.Button();
+            this._buttonStopHighSpeedDataCommunication = new System.Windows.Forms.Button();
+            this._timerHighSpeedReceive = new System.Windows.Forms.Timer(this.components);
+            this._numericUpDownInterval = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pb_in)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_out)).BeginInit();
             this.tp_SetOption.SuspendLayout();
-            this.tp_2Dcamera_option.SuspendLayout();
-            this.gb_camera_parameter.SuspendLayout();
-            this.gb_camera_init.SuspendLayout();
-            this.gb_image_grab.SuspendLayout();
             this.tp_process_option.SuspendLayout();
             this.gb_Test.SuspendLayout();
             this.gb_measurement.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.tp_2Dcamera_option.SuspendLayout();
+            this.gb_camera_parameter.SuspendLayout();
+            this.gb_camera_init.SuspendLayout();
+            this.gb_image_grab.SuspendLayout();
             this.tp_3Dcamera_option.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._numericUpDownProfileSaveCount)).BeginInit();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._numericUpDownInterval)).BeginInit();
             this.SuspendLayout();
             // 
             // pb_in
@@ -120,6 +138,183 @@
             this.tp_SetOption.SelectedIndex = 0;
             this.tp_SetOption.Size = new System.Drawing.Size(509, 325);
             this.tp_SetOption.TabIndex = 2;
+            // 
+            // tp_process_option
+            // 
+            this.tp_process_option.Controls.Add(this.gb_Test);
+            this.tp_process_option.Controls.Add(this.gb_measurement);
+            this.tp_process_option.Controls.Add(this.groupBox3);
+            this.tp_process_option.Location = new System.Drawing.Point(4, 22);
+            this.tp_process_option.Margin = new System.Windows.Forms.Padding(2);
+            this.tp_process_option.Name = "tp_process_option";
+            this.tp_process_option.Padding = new System.Windows.Forms.Padding(2);
+            this.tp_process_option.Size = new System.Drawing.Size(501, 299);
+            this.tp_process_option.TabIndex = 1;
+            this.tp_process_option.Text = "处理设置";
+            this.tp_process_option.UseVisualStyleBackColor = true;
+            // 
+            // gb_Test
+            // 
+            this.gb_Test.Controls.Add(this.rbt_outLineMode);
+            this.gb_Test.Controls.Add(this.rbt_inLineMode);
+            this.gb_Test.Controls.Add(this.bt_StartTest);
+            this.gb_Test.Controls.Add(this.bt_StopTest);
+            this.gb_Test.Font = new System.Drawing.Font("宋体", 12F);
+            this.gb_Test.Location = new System.Drawing.Point(17, 103);
+            this.gb_Test.Margin = new System.Windows.Forms.Padding(2);
+            this.gb_Test.Name = "gb_Test";
+            this.gb_Test.Padding = new System.Windows.Forms.Padding(2);
+            this.gb_Test.Size = new System.Drawing.Size(215, 110);
+            this.gb_Test.TabIndex = 9;
+            this.gb_Test.TabStop = false;
+            this.gb_Test.Text = "测试指令";
+            // 
+            // rbt_outLineMode
+            // 
+            this.rbt_outLineMode.AutoSize = true;
+            this.rbt_outLineMode.Checked = true;
+            this.rbt_outLineMode.Font = new System.Drawing.Font("宋体", 12F);
+            this.rbt_outLineMode.Location = new System.Drawing.Point(112, 75);
+            this.rbt_outLineMode.Margin = new System.Windows.Forms.Padding(2);
+            this.rbt_outLineMode.Name = "rbt_outLineMode";
+            this.rbt_outLineMode.Size = new System.Drawing.Size(90, 20);
+            this.rbt_outLineMode.TabIndex = 10;
+            this.rbt_outLineMode.TabStop = true;
+            this.rbt_outLineMode.Text = "离线模式";
+            this.rbt_outLineMode.UseVisualStyleBackColor = true;
+            this.rbt_outLineMode.CheckedChanged += new System.EventHandler(this.rbt_outLineMode_CheckedChanged_1);
+            // 
+            // rbt_inLineMode
+            // 
+            this.rbt_inLineMode.AutoSize = true;
+            this.rbt_inLineMode.Font = new System.Drawing.Font("宋体", 12F);
+            this.rbt_inLineMode.Location = new System.Drawing.Point(17, 75);
+            this.rbt_inLineMode.Margin = new System.Windows.Forms.Padding(2);
+            this.rbt_inLineMode.Name = "rbt_inLineMode";
+            this.rbt_inLineMode.Size = new System.Drawing.Size(90, 20);
+            this.rbt_inLineMode.TabIndex = 9;
+            this.rbt_inLineMode.Text = "在线模式";
+            this.rbt_inLineMode.UseVisualStyleBackColor = true;
+            this.rbt_inLineMode.CheckedChanged += new System.EventHandler(this.rbt_inLineMode_CheckedChanged_1);
+            // 
+            // bt_StartTest
+            // 
+            this.bt_StartTest.Enabled = false;
+            this.bt_StartTest.Font = new System.Drawing.Font("宋体", 12F);
+            this.bt_StartTest.Location = new System.Drawing.Point(11, 25);
+            this.bt_StartTest.Margin = new System.Windows.Forms.Padding(2);
+            this.bt_StartTest.Name = "bt_StartTest";
+            this.bt_StartTest.Size = new System.Drawing.Size(91, 40);
+            this.bt_StartTest.TabIndex = 7;
+            this.bt_StartTest.Text = "开始测试";
+            this.bt_StartTest.UseVisualStyleBackColor = true;
+            this.bt_StartTest.Click += new System.EventHandler(this.bt_StartTest_Click);
+            // 
+            // bt_StopTest
+            // 
+            this.bt_StopTest.Enabled = false;
+            this.bt_StopTest.Font = new System.Drawing.Font("宋体", 12F);
+            this.bt_StopTest.Location = new System.Drawing.Point(110, 25);
+            this.bt_StopTest.Margin = new System.Windows.Forms.Padding(2);
+            this.bt_StopTest.Name = "bt_StopTest";
+            this.bt_StopTest.Size = new System.Drawing.Size(91, 40);
+            this.bt_StopTest.TabIndex = 8;
+            this.bt_StopTest.Text = "停止测试";
+            this.bt_StopTest.UseVisualStyleBackColor = true;
+            this.bt_StopTest.Click += new System.EventHandler(this.bt_StopTest_Click);
+            // 
+            // gb_measurement
+            // 
+            this.gb_measurement.Controls.Add(this.rbt_Measure18);
+            this.gb_measurement.Controls.Add(this.rbt_Measure9);
+            this.gb_measurement.Font = new System.Drawing.Font("宋体", 12F);
+            this.gb_measurement.Location = new System.Drawing.Point(17, 20);
+            this.gb_measurement.Margin = new System.Windows.Forms.Padding(2);
+            this.gb_measurement.Name = "gb_measurement";
+            this.gb_measurement.Padding = new System.Windows.Forms.Padding(2);
+            this.gb_measurement.Size = new System.Drawing.Size(215, 80);
+            this.gb_measurement.TabIndex = 6;
+            this.gb_measurement.TabStop = false;
+            this.gb_measurement.Text = "测量项";
+            // 
+            // rbt_Measure18
+            // 
+            this.rbt_Measure18.AutoSize = true;
+            this.rbt_Measure18.Font = new System.Drawing.Font("宋体", 10F);
+            this.rbt_Measure18.Location = new System.Drawing.Point(108, 38);
+            this.rbt_Measure18.Margin = new System.Windows.Forms.Padding(2);
+            this.rbt_Measure18.Name = "rbt_Measure18";
+            this.rbt_Measure18.Size = new System.Drawing.Size(102, 18);
+            this.rbt_Measure18.TabIndex = 2;
+            this.rbt_Measure18.Text = "FAI-18C(3D)";
+            this.rbt_Measure18.UseVisualStyleBackColor = true;
+            this.rbt_Measure18.CheckedChanged += new System.EventHandler(this.rbt_Measure18_CheckedChanged);
+            // 
+            // rbt_Measure9
+            // 
+            this.rbt_Measure9.AutoSize = true;
+            this.rbt_Measure9.Enabled = false;
+            this.rbt_Measure9.Font = new System.Drawing.Font("宋体", 10F);
+            this.rbt_Measure9.Location = new System.Drawing.Point(17, 38);
+            this.rbt_Measure9.Margin = new System.Windows.Forms.Padding(2);
+            this.rbt_Measure9.Name = "rbt_Measure9";
+            this.rbt_Measure9.Size = new System.Drawing.Size(88, 18);
+            this.rbt_Measure9.TabIndex = 1;
+            this.rbt_Measure9.Text = "FAI-9(2D)";
+            this.rbt_Measure9.UseVisualStyleBackColor = true;
+            this.rbt_Measure9.CheckedChanged += new System.EventHandler(this.rbt_Measure9_CheckedChanged);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.bt_ClearData);
+            this.groupBox3.Controls.Add(this.bt_SaveCSV);
+            this.groupBox3.Controls.Add(this.bt_SaveBmp);
+            this.groupBox3.Font = new System.Drawing.Font("宋体", 12F);
+            this.groupBox3.Location = new System.Drawing.Point(247, 20);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(230, 128);
+            this.groupBox3.TabIndex = 5;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "数据";
+            // 
+            // bt_ClearData
+            // 
+            this.bt_ClearData.Enabled = false;
+            this.bt_ClearData.Font = new System.Drawing.Font("宋体", 12F);
+            this.bt_ClearData.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.bt_ClearData.Location = new System.Drawing.Point(17, 80);
+            this.bt_ClearData.Name = "bt_ClearData";
+            this.bt_ClearData.Size = new System.Drawing.Size(91, 40);
+            this.bt_ClearData.TabIndex = 2;
+            this.bt_ClearData.Text = "清空数据";
+            this.bt_ClearData.UseVisualStyleBackColor = true;
+            this.bt_ClearData.Click += new System.EventHandler(this.bt_ClearData_Click);
+            // 
+            // bt_SaveCSV
+            // 
+            this.bt_SaveCSV.Enabled = false;
+            this.bt_SaveCSV.Font = new System.Drawing.Font("宋体", 12F);
+            this.bt_SaveCSV.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.bt_SaveCSV.Location = new System.Drawing.Point(17, 26);
+            this.bt_SaveCSV.Name = "bt_SaveCSV";
+            this.bt_SaveCSV.Size = new System.Drawing.Size(91, 40);
+            this.bt_SaveCSV.TabIndex = 1;
+            this.bt_SaveCSV.Text = "保存数据";
+            this.bt_SaveCSV.UseVisualStyleBackColor = true;
+            this.bt_SaveCSV.Click += new System.EventHandler(this.bt_SaveCSV_Click);
+            // 
+            // bt_SaveBmp
+            // 
+            this.bt_SaveBmp.Enabled = false;
+            this.bt_SaveBmp.Font = new System.Drawing.Font("宋体", 12F);
+            this.bt_SaveBmp.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.bt_SaveBmp.Location = new System.Drawing.Point(121, 26);
+            this.bt_SaveBmp.Name = "bt_SaveBmp";
+            this.bt_SaveBmp.Size = new System.Drawing.Size(90, 40);
+            this.bt_SaveBmp.TabIndex = 0;
+            this.bt_SaveBmp.Text = "保存BMP";
+            this.bt_SaveBmp.UseVisualStyleBackColor = true;
+            this.bt_SaveBmp.Click += new System.EventHandler(this.bt_SaveBmp_Click);
             // 
             // tp_2Dcamera_option
             // 
@@ -335,141 +530,42 @@
             this.bt_OpenCamera.UseVisualStyleBackColor = true;
             this.bt_OpenCamera.Click += new System.EventHandler(this.bt_OpenCamera_Click);
             // 
-            // tp_process_option
+            // tp_3Dcamera_option
             // 
-            this.tp_process_option.Controls.Add(this.gb_Test);
-            this.tp_process_option.Controls.Add(this.gb_measurement);
-            this.tp_process_option.Controls.Add(this.groupBox3);
-            this.tp_process_option.Location = new System.Drawing.Point(4, 22);
-            this.tp_process_option.Margin = new System.Windows.Forms.Padding(2);
-            this.tp_process_option.Name = "tp_process_option";
-            this.tp_process_option.Padding = new System.Windows.Forms.Padding(2);
-            this.tp_process_option.Size = new System.Drawing.Size(501, 299);
-            this.tp_process_option.TabIndex = 1;
-            this.tp_process_option.Text = "处理设置";
-            this.tp_process_option.UseVisualStyleBackColor = true;
+            this.tp_3Dcamera_option.Controls.Add(this.groupBox2);
+            this.tp_3Dcamera_option.Controls.Add(this.groupBox1);
+            this.tp_3Dcamera_option.Location = new System.Drawing.Point(4, 22);
+            this.tp_3Dcamera_option.Name = "tp_3Dcamera_option";
+            this.tp_3Dcamera_option.Size = new System.Drawing.Size(501, 299);
+            this.tp_3Dcamera_option.TabIndex = 2;
+            this.tp_3Dcamera_option.Text = "3D相机设置";
+            this.tp_3Dcamera_option.UseVisualStyleBackColor = true;
             // 
-            // gb_Test
+            // groupBox1
             // 
-            this.gb_Test.Controls.Add(this.rbt_outLineMode);
-            this.gb_Test.Controls.Add(this.rbt_inLineMode);
-            this.gb_Test.Controls.Add(this.bt_StartTest);
-            this.gb_Test.Controls.Add(this.bt_StopTest);
-            this.gb_Test.Font = new System.Drawing.Font("宋体", 12F);
-            this.gb_Test.Location = new System.Drawing.Point(17, 103);
-            this.gb_Test.Margin = new System.Windows.Forms.Padding(2);
-            this.gb_Test.Name = "gb_Test";
-            this.gb_Test.Padding = new System.Windows.Forms.Padding(2);
-            this.gb_Test.Size = new System.Drawing.Size(215, 110);
-            this.gb_Test.TabIndex = 9;
-            this.gb_Test.TabStop = false;
-            this.gb_Test.Text = "测试指令";
-            // 
-            // bt_StartTest
-            // 
-            this.bt_StartTest.Enabled = false;
-            this.bt_StartTest.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_StartTest.Location = new System.Drawing.Point(11, 25);
-            this.bt_StartTest.Margin = new System.Windows.Forms.Padding(2);
-            this.bt_StartTest.Name = "bt_StartTest";
-            this.bt_StartTest.Size = new System.Drawing.Size(91, 40);
-            this.bt_StartTest.TabIndex = 7;
-            this.bt_StartTest.Text = "开始测试";
-            this.bt_StartTest.UseVisualStyleBackColor = true;
-            this.bt_StartTest.Click += new System.EventHandler(this.bt_StartTest_Click);
-            // 
-            // bt_StopTest
-            // 
-            this.bt_StopTest.Enabled = false;
-            this.bt_StopTest.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_StopTest.Location = new System.Drawing.Point(110, 25);
-            this.bt_StopTest.Margin = new System.Windows.Forms.Padding(2);
-            this.bt_StopTest.Name = "bt_StopTest";
-            this.bt_StopTest.Size = new System.Drawing.Size(91, 40);
-            this.bt_StopTest.TabIndex = 8;
-            this.bt_StopTest.Text = "停止测试";
-            this.bt_StopTest.UseVisualStyleBackColor = true;
-            this.bt_StopTest.Click += new System.EventHandler(this.bt_StopTest_Click);
-            // 
-            // gb_measurement
-            // 
-            this.gb_measurement.Controls.Add(this.rbt_Measure18);
-            this.gb_measurement.Controls.Add(this.rbt_Measure9);
-            this.gb_measurement.Font = new System.Drawing.Font("宋体", 12F);
-            this.gb_measurement.Location = new System.Drawing.Point(17, 20);
-            this.gb_measurement.Margin = new System.Windows.Forms.Padding(2);
-            this.gb_measurement.Name = "gb_measurement";
-            this.gb_measurement.Padding = new System.Windows.Forms.Padding(2);
-            this.gb_measurement.Size = new System.Drawing.Size(215, 80);
-            this.gb_measurement.TabIndex = 6;
-            this.gb_measurement.TabStop = false;
-            this.gb_measurement.Text = "测量项";
-            // 
-            // rbt_Measure9
-            // 
-            this.rbt_Measure9.AutoSize = true;
-            this.rbt_Measure9.Enabled = false;
-            this.rbt_Measure9.Font = new System.Drawing.Font("宋体", 10F);
-            this.rbt_Measure9.Location = new System.Drawing.Point(17, 38);
-            this.rbt_Measure9.Margin = new System.Windows.Forms.Padding(2);
-            this.rbt_Measure9.Name = "rbt_Measure9";
-            this.rbt_Measure9.Size = new System.Drawing.Size(88, 18);
-            this.rbt_Measure9.TabIndex = 1;
-            this.rbt_Measure9.Text = "FAI-9(2D)";
-            this.rbt_Measure9.UseVisualStyleBackColor = true;
-            this.rbt_Measure9.CheckedChanged += new System.EventHandler(this.rbt_Measure9_CheckedChanged);
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.bt_ClearData);
-            this.groupBox3.Controls.Add(this.bt_SaveCSV);
-            this.groupBox3.Controls.Add(this.bt_SaveBmp);
-            this.groupBox3.Font = new System.Drawing.Font("宋体", 12F);
-            this.groupBox3.Location = new System.Drawing.Point(247, 20);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(230, 128);
-            this.groupBox3.TabIndex = 5;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "数据";
-            // 
-            // bt_ClearData
-            // 
-            this.bt_ClearData.Enabled = false;
-            this.bt_ClearData.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_ClearData.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.bt_ClearData.Location = new System.Drawing.Point(17, 80);
-            this.bt_ClearData.Name = "bt_ClearData";
-            this.bt_ClearData.Size = new System.Drawing.Size(91, 40);
-            this.bt_ClearData.TabIndex = 2;
-            this.bt_ClearData.Text = "清空数据";
-            this.bt_ClearData.UseVisualStyleBackColor = true;
-            this.bt_ClearData.Click += new System.EventHandler(this.bt_ClearData_Click);
-            // 
-            // bt_SaveCSV
-            // 
-            this.bt_SaveCSV.Enabled = false;
-            this.bt_SaveCSV.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_SaveCSV.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.bt_SaveCSV.Location = new System.Drawing.Point(17, 26);
-            this.bt_SaveCSV.Name = "bt_SaveCSV";
-            this.bt_SaveCSV.Size = new System.Drawing.Size(91, 40);
-            this.bt_SaveCSV.TabIndex = 1;
-            this.bt_SaveCSV.Text = "保存数据";
-            this.bt_SaveCSV.UseVisualStyleBackColor = true;
-            this.bt_SaveCSV.Click += new System.EventHandler(this.bt_SaveCSV_Click);
-            // 
-            // bt_SaveBmp
-            // 
-            this.bt_SaveBmp.Enabled = false;
-            this.bt_SaveBmp.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_SaveBmp.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.bt_SaveBmp.Location = new System.Drawing.Point(121, 26);
-            this.bt_SaveBmp.Name = "bt_SaveBmp";
-            this.bt_SaveBmp.Size = new System.Drawing.Size(90, 40);
-            this.bt_SaveBmp.TabIndex = 0;
-            this.bt_SaveBmp.Text = "保存BMP";
-            this.bt_SaveBmp.UseVisualStyleBackColor = true;
-            this.bt_SaveBmp.Click += new System.EventHandler(this.bt_SaveBmp_Click);
+            this.groupBox1.Controls.Add(this._numericUpDownInterval);
+            this.groupBox1.Controls.Add(this._buttonFinalizeHighSpeedDataCommunication);
+            this.groupBox1.Controls.Add(this._buttonStartMeasure);
+            this.groupBox1.Controls.Add(this._buttonStopHighSpeedDataCommunication);
+            this.groupBox1.Controls.Add(this._buttonStopMeasure);
+            this.groupBox1.Controls.Add(this._buttonInitializeHighSpeedDataCommunicationSimpleArray);
+            this.groupBox1.Controls.Add(this._buttonPreStartHighSpeedDataCommunication);
+            this.groupBox1.Controls.Add(this._buttonStartHighSpeedDataCommunication);
+            this.groupBox1.Controls.Add(this._buttonEthernetOpen);
+            this.groupBox1.Controls.Add(this._buttonInitialize);
+            this.groupBox1.Controls.Add(this._numericUpDownProfileSaveCount);
+            this.groupBox1.Controls.Add(this._labelProfileSaveCount);
+            this.groupBox1.Controls.Add(this._checkBoxUseSimpleArray);
+            this.groupBox1.Controls.Add(this._checkBoxStartTimer);
+            this.groupBox1.Font = new System.Drawing.Font("宋体", 12F);
+            this.groupBox1.Location = new System.Drawing.Point(13, 14);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Size = new System.Drawing.Size(256, 277);
+            this.groupBox1.TabIndex = 1;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "设备管理";
             // 
             // lv_AllFrameData
             // 
@@ -481,145 +577,248 @@
             this.lv_AllFrameData.TabIndex = 3;
             this.lv_AllFrameData.UseCompatibleStateImageBehavior = false;
             // 
-            // tp_3Dcamera_option
+            // _checkBoxUseSimpleArray
             // 
-            this.tp_3Dcamera_option.Controls.Add(this.groupBox1);
-            this.tp_3Dcamera_option.Location = new System.Drawing.Point(4, 22);
-            this.tp_3Dcamera_option.Name = "tp_3Dcamera_option";
-            this.tp_3Dcamera_option.Size = new System.Drawing.Size(501, 299);
-            this.tp_3Dcamera_option.TabIndex = 2;
-            this.tp_3Dcamera_option.Text = "3D相机设置";
-            this.tp_3Dcamera_option.UseVisualStyleBackColor = true;
+            this._checkBoxUseSimpleArray.AutoSize = true;
+            this._checkBoxUseSimpleArray.Checked = true;
+            this._checkBoxUseSimpleArray.CheckState = System.Windows.Forms.CheckState.Checked;
+            this._checkBoxUseSimpleArray.Font = new System.Drawing.Font("宋体", 9F);
+            this._checkBoxUseSimpleArray.Location = new System.Drawing.Point(8, 28);
+            this._checkBoxUseSimpleArray.Name = "_checkBoxUseSimpleArray";
+            this._checkBoxUseSimpleArray.Size = new System.Drawing.Size(120, 16);
+            this._checkBoxUseSimpleArray.TabIndex = 8;
+            this._checkBoxUseSimpleArray.Text = "Use Simple Array";
+            this._checkBoxUseSimpleArray.UseVisualStyleBackColor = true;
+            this._checkBoxUseSimpleArray.CheckedChanged += new System.EventHandler(this._checkBoxUseSimpleArray_CheckedChanged);
             // 
-            // rbt_Measure18
+            // _checkBoxStartTimer
             // 
-            this.rbt_Measure18.AutoSize = true;
-            this.rbt_Measure18.Font = new System.Drawing.Font("宋体", 10F);
-            this.rbt_Measure18.Location = new System.Drawing.Point(108, 38);
-            this.rbt_Measure18.Margin = new System.Windows.Forms.Padding(2);
-            this.rbt_Measure18.Name = "rbt_Measure18";
-            this.rbt_Measure18.Size = new System.Drawing.Size(102, 18);
-            this.rbt_Measure18.TabIndex = 2;
-            this.rbt_Measure18.Text = "FAI-18C(3D)";
-            this.rbt_Measure18.UseVisualStyleBackColor = true;
-            this.rbt_Measure18.CheckedChanged += new System.EventHandler(this.rbt_Measure18_CheckedChanged);
+            this._checkBoxStartTimer.AutoSize = true;
+            this._checkBoxStartTimer.Font = new System.Drawing.Font("宋体", 9F);
+            this._checkBoxStartTimer.Location = new System.Drawing.Point(8, 49);
+            this._checkBoxStartTimer.Name = "_checkBoxStartTimer";
+            this._checkBoxStartTimer.Size = new System.Drawing.Size(114, 16);
+            this._checkBoxStartTimer.TabIndex = 9;
+            this._checkBoxStartTimer.Text = "Start the timer";
+            this._checkBoxStartTimer.UseVisualStyleBackColor = true;
+            this._checkBoxStartTimer.CheckedChanged += new System.EventHandler(this._checkBoxStartTimer_CheckedChanged);
             // 
-            // groupBox1
+            // _textBoxHighSpeedProfileFilePath
             // 
-            this.groupBox1.Controls.Add(this.bt_ClearBufferData);
-            this.groupBox1.Controls.Add(this.bt_StopGrab_3D);
-            this.groupBox1.Controls.Add(this.bt_StartGrab_3D);
-            this.groupBox1.Controls.Add(this.bt_InitCamera3D);
-            this.groupBox1.Controls.Add(this.bt_CloseCamera_3D);
-            this.groupBox1.Controls.Add(this.bt_OpenCamera_3D);
-            this.groupBox1.Font = new System.Drawing.Font("宋体", 12F);
-            this.groupBox1.Location = new System.Drawing.Point(13, 14);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(220, 277);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "设备管理";
+            this._textBoxHighSpeedProfileFilePath.Font = new System.Drawing.Font("宋体", 8F);
+            this._textBoxHighSpeedProfileFilePath.Location = new System.Drawing.Point(109, 25);
+            this._textBoxHighSpeedProfileFilePath.Name = "_textBoxHighSpeedProfileFilePath";
+            this._textBoxHighSpeedProfileFilePath.Size = new System.Drawing.Size(77, 20);
+            this._textBoxHighSpeedProfileFilePath.TabIndex = 4;
+            this._textBoxHighSpeedProfileFilePath.TextChanged += new System.EventHandler(this._textBoxHighSpeedProfileFilePath_TextChanged);
             // 
-            // bt_StopGrab_3D
+            // _buttonHighSpeedProfileFileSave
             // 
-            this.bt_StopGrab_3D.Enabled = false;
-            this.bt_StopGrab_3D.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_StopGrab_3D.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.bt_StopGrab_3D.Location = new System.Drawing.Point(114, 88);
-            this.bt_StopGrab_3D.Name = "bt_StopGrab_3D";
-            this.bt_StopGrab_3D.Size = new System.Drawing.Size(100, 30);
-            this.bt_StopGrab_3D.TabIndex = 3;
-            this.bt_StopGrab_3D.Text = "停止采集";
-            this.bt_StopGrab_3D.UseVisualStyleBackColor = true;
+            this._buttonHighSpeedProfileFileSave.Font = new System.Drawing.Font("宋体", 6F);
+            this._buttonHighSpeedProfileFileSave.Location = new System.Drawing.Point(185, 24);
+            this._buttonHighSpeedProfileFileSave.Name = "_buttonHighSpeedProfileFileSave";
+            this._buttonHighSpeedProfileFileSave.Size = new System.Drawing.Size(25, 22);
+            this._buttonHighSpeedProfileFileSave.TabIndex = 5;
+            this._buttonHighSpeedProfileFileSave.Text = "...";
+            this._buttonHighSpeedProfileFileSave.UseVisualStyleBackColor = true;
             // 
-            // bt_StartGrab_3D
+            // _labelHighSpeedSavePath
             // 
-            this.bt_StartGrab_3D.Enabled = false;
-            this.bt_StartGrab_3D.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_StartGrab_3D.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.bt_StartGrab_3D.Location = new System.Drawing.Point(114, 34);
-            this.bt_StartGrab_3D.Name = "bt_StartGrab_3D";
-            this.bt_StartGrab_3D.Size = new System.Drawing.Size(100, 30);
-            this.bt_StartGrab_3D.TabIndex = 2;
-            this.bt_StartGrab_3D.Text = "开始采集";
-            this.bt_StartGrab_3D.UseVisualStyleBackColor = true;
+            this._labelHighSpeedSavePath.AutoSize = true;
+            this._labelHighSpeedSavePath.Font = new System.Drawing.Font("宋体", 9F);
+            this._labelHighSpeedSavePath.Location = new System.Drawing.Point(4, 27);
+            this._labelHighSpeedSavePath.Name = "_labelHighSpeedSavePath";
+            this._labelHighSpeedSavePath.Size = new System.Drawing.Size(101, 12);
+            this._labelHighSpeedSavePath.TabIndex = 3;
+            this._labelHighSpeedSavePath.Text = "Save destination";
             // 
-            // bt_InitCamera3D
+            // _numericUpDownProfileSaveCount
             // 
-            this.bt_InitCamera3D.Font = new System.Drawing.Font("宋体", 10F);
-            this.bt_InitCamera3D.Location = new System.Drawing.Point(9, 34);
-            this.bt_InitCamera3D.Margin = new System.Windows.Forms.Padding(2);
-            this.bt_InitCamera3D.Name = "bt_InitCamera3D";
-            this.bt_InitCamera3D.Size = new System.Drawing.Size(100, 30);
-            this.bt_InitCamera3D.TabIndex = 2;
-            this.bt_InitCamera3D.Text = "初始化相机";
-            this.bt_InitCamera3D.UseVisualStyleBackColor = true;
+            this._numericUpDownProfileSaveCount.Font = new System.Drawing.Font("宋体", 8F);
+            this._numericUpDownProfileSaveCount.Location = new System.Drawing.Point(181, 70);
+            this._numericUpDownProfileSaveCount.Maximum = new decimal(new int[] {
+            60000,
+            0,
+            0,
+            0});
+            this._numericUpDownProfileSaveCount.Name = "_numericUpDownProfileSaveCount";
+            this._numericUpDownProfileSaveCount.Size = new System.Drawing.Size(64, 20);
+            this._numericUpDownProfileSaveCount.TabIndex = 11;
+            this._numericUpDownProfileSaveCount.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
-            // bt_CloseCamera_3D
+            // _labelProfileSaveCount
             // 
-            this.bt_CloseCamera_3D.Enabled = false;
-            this.bt_CloseCamera_3D.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_CloseCamera_3D.Location = new System.Drawing.Point(9, 143);
-            this.bt_CloseCamera_3D.Margin = new System.Windows.Forms.Padding(2);
-            this.bt_CloseCamera_3D.Name = "bt_CloseCamera_3D";
-            this.bt_CloseCamera_3D.Size = new System.Drawing.Size(100, 30);
-            this.bt_CloseCamera_3D.TabIndex = 1;
-            this.bt_CloseCamera_3D.Text = "关闭相机";
-            this.bt_CloseCamera_3D.UseVisualStyleBackColor = true;
+            this._labelProfileSaveCount.AutoSize = true;
+            this._labelProfileSaveCount.Font = new System.Drawing.Font("宋体", 8F);
+            this._labelProfileSaveCount.Location = new System.Drawing.Point(8, 72);
+            this._labelProfileSaveCount.Name = "_labelProfileSaveCount";
+            this._labelProfileSaveCount.Size = new System.Drawing.Size(161, 11);
+            this._labelProfileSaveCount.TabIndex = 10;
+            this._labelProfileSaveCount.Text = "Number of profiles to save";
             // 
-            // bt_OpenCamera_3D
+            // _buttonInitialize
             // 
-            this.bt_OpenCamera_3D.Enabled = false;
-            this.bt_OpenCamera_3D.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_OpenCamera_3D.Location = new System.Drawing.Point(9, 88);
-            this.bt_OpenCamera_3D.Margin = new System.Windows.Forms.Padding(2);
-            this.bt_OpenCamera_3D.Name = "bt_OpenCamera_3D";
-            this.bt_OpenCamera_3D.Size = new System.Drawing.Size(100, 30);
-            this.bt_OpenCamera_3D.TabIndex = 0;
-            this.bt_OpenCamera_3D.Text = "打开相机";
-            this.bt_OpenCamera_3D.UseVisualStyleBackColor = true;
+            this._buttonInitialize.Font = new System.Drawing.Font("宋体", 9F);
+            this._buttonInitialize.Location = new System.Drawing.Point(11, 96);
+            this._buttonInitialize.Name = "_buttonInitialize";
+            this._buttonInitialize.Size = new System.Drawing.Size(70, 23);
+            this._buttonInitialize.TabIndex = 12;
+            this._buttonInitialize.Text = "Initialize";
+            this._buttonInitialize.UseVisualStyleBackColor = true;
             // 
-            // bt_ClearBufferData
+            // _buttonEthernetOpen
             // 
-            this.bt_ClearBufferData.Enabled = false;
-            this.bt_ClearBufferData.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_ClearBufferData.Location = new System.Drawing.Point(113, 143);
-            this.bt_ClearBufferData.Margin = new System.Windows.Forms.Padding(2);
-            this.bt_ClearBufferData.Name = "bt_ClearBufferData";
-            this.bt_ClearBufferData.Size = new System.Drawing.Size(100, 30);
-            this.bt_ClearBufferData.TabIndex = 7;
-            this.bt_ClearBufferData.Text = "清除内存";
-            this.bt_ClearBufferData.UseVisualStyleBackColor = true;
+            this._buttonEthernetOpen.BackColor = System.Drawing.Color.LightGray;
+            this._buttonEthernetOpen.Font = new System.Drawing.Font("宋体", 9F);
+            this._buttonEthernetOpen.ForeColor = System.Drawing.SystemColors.ControlText;
+            this._buttonEthernetOpen.Location = new System.Drawing.Point(139, 96);
+            this._buttonEthernetOpen.Name = "_buttonEthernetOpen";
+            this._buttonEthernetOpen.Size = new System.Drawing.Size(90, 23);
+            this._buttonEthernetOpen.TabIndex = 13;
+            this._buttonEthernetOpen.Text = "EthernetOpen";
+            this._buttonEthernetOpen.UseVisualStyleBackColor = false;
             // 
-            // rbt_outLineMode
+            // _buttonInitializeHighSpeedDataCommunicationSimpleArray
             // 
-            this.rbt_outLineMode.AutoSize = true;
-            this.rbt_outLineMode.Checked = true;
-            this.rbt_outLineMode.Font = new System.Drawing.Font("宋体", 12F);
-            this.rbt_outLineMode.Location = new System.Drawing.Point(112, 75);
-            this.rbt_outLineMode.Margin = new System.Windows.Forms.Padding(2);
-            this.rbt_outLineMode.Name = "rbt_outLineMode";
-            this.rbt_outLineMode.Size = new System.Drawing.Size(90, 20);
-            this.rbt_outLineMode.TabIndex = 10;
-            this.rbt_outLineMode.TabStop = true;
-            this.rbt_outLineMode.Text = "离线模式";
-            this.rbt_outLineMode.UseVisualStyleBackColor = true;
-            this.rbt_outLineMode.CheckedChanged += new System.EventHandler(this.rbt_outLineMode_CheckedChanged_1);
+            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(218)))), ((int)(((byte)(255)))));
+            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.Font = new System.Drawing.Font("宋体", 9F);
+            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.ForeColor = System.Drawing.SystemColors.ControlText;
+            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.Location = new System.Drawing.Point(10, 126);
+            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.Name = "_buttonInitializeHighSpeedDataCommunicationSimpleArray";
+            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.Size = new System.Drawing.Size(219, 23);
+            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.TabIndex = 14;
+            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.Text = "InitializeHighSpeed(SimpleArray)";
+            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.UseVisualStyleBackColor = false;
             // 
-            // rbt_inLineMode
+            // _buttonPreStartHighSpeedDataCommunication
             // 
-            this.rbt_inLineMode.AutoSize = true;
-            this.rbt_inLineMode.Font = new System.Drawing.Font("宋体", 12F);
-            this.rbt_inLineMode.Location = new System.Drawing.Point(17, 75);
-            this.rbt_inLineMode.Margin = new System.Windows.Forms.Padding(2);
-            this.rbt_inLineMode.Name = "rbt_inLineMode";
-            this.rbt_inLineMode.Size = new System.Drawing.Size(90, 20);
-            this.rbt_inLineMode.TabIndex = 9;
-            this.rbt_inLineMode.Text = "在线模式";
-            this.rbt_inLineMode.UseVisualStyleBackColor = true;
-            this.rbt_inLineMode.CheckedChanged += new System.EventHandler(this.rbt_inLineMode_CheckedChanged_1);
+            this._buttonPreStartHighSpeedDataCommunication.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(218)))), ((int)(((byte)(255)))));
+            this._buttonPreStartHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
+            this._buttonPreStartHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
+            this._buttonPreStartHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 150);
+            this._buttonPreStartHighSpeedDataCommunication.Name = "_buttonPreStartHighSpeedDataCommunication";
+            this._buttonPreStartHighSpeedDataCommunication.Size = new System.Drawing.Size(219, 23);
+            this._buttonPreStartHighSpeedDataCommunication.TabIndex = 15;
+            this._buttonPreStartHighSpeedDataCommunication.Text = "PreStartHighSpeedDataCommunication";
+            this._buttonPreStartHighSpeedDataCommunication.UseVisualStyleBackColor = false;
+            // 
+            // _buttonStartHighSpeedDataCommunication
+            // 
+            this._buttonStartHighSpeedDataCommunication.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(218)))), ((int)(((byte)(255)))));
+            this._buttonStartHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
+            this._buttonStartHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
+            this._buttonStartHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 174);
+            this._buttonStartHighSpeedDataCommunication.Name = "_buttonStartHighSpeedDataCommunication";
+            this._buttonStartHighSpeedDataCommunication.Size = new System.Drawing.Size(219, 23);
+            this._buttonStartHighSpeedDataCommunication.TabIndex = 16;
+            this._buttonStartHighSpeedDataCommunication.Text = "StartHighSpeedDataCommunication";
+            this._buttonStartHighSpeedDataCommunication.UseVisualStyleBackColor = false;
+            // 
+            // _buttonStartMeasure
+            // 
+            this._buttonStartMeasure.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this._buttonStartMeasure.Font = new System.Drawing.Font("宋体", 9F);
+            this._buttonStartMeasure.Location = new System.Drawing.Point(10, 200);
+            this._buttonStartMeasure.Name = "_buttonStartMeasure";
+            this._buttonStartMeasure.Size = new System.Drawing.Size(99, 23);
+            this._buttonStartMeasure.TabIndex = 17;
+            this._buttonStartMeasure.Text = "StartMeasure";
+            this._buttonStartMeasure.UseVisualStyleBackColor = false;
+            // 
+            // _buttonStopMeasure
+            // 
+            this._buttonStopMeasure.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this._buttonStopMeasure.Font = new System.Drawing.Font("宋体", 9F);
+            this._buttonStopMeasure.Location = new System.Drawing.Point(136, 200);
+            this._buttonStopMeasure.Name = "_buttonStopMeasure";
+            this._buttonStopMeasure.Size = new System.Drawing.Size(93, 23);
+            this._buttonStopMeasure.TabIndex = 18;
+            this._buttonStopMeasure.Text = "StopMeasure";
+            this._buttonStopMeasure.UseVisualStyleBackColor = false;
+            // 
+            // _buttonHighSpeedSaveAsBitmapFile
+            // 
+            this._buttonHighSpeedSaveAsBitmapFile.Font = new System.Drawing.Font("宋体", 9F);
+            this._buttonHighSpeedSaveAsBitmapFile.Location = new System.Drawing.Point(44, 51);
+            this._buttonHighSpeedSaveAsBitmapFile.Name = "_buttonHighSpeedSaveAsBitmapFile";
+            this._buttonHighSpeedSaveAsBitmapFile.Size = new System.Drawing.Size(127, 23);
+            this._buttonHighSpeedSaveAsBitmapFile.TabIndex = 9;
+            this._buttonHighSpeedSaveAsBitmapFile.Text = "Save As Image File";
+            this._buttonHighSpeedSaveAsBitmapFile.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this._textBoxHighSpeedProfileFilePath);
+            this.groupBox2.Controls.Add(this._buttonHighSpeedSaveAsBitmapFile);
+            this.groupBox2.Controls.Add(this._buttonHighSpeedProfileFileSave);
+            this.groupBox2.Controls.Add(this._labelHighSpeedSavePath);
+            this.groupBox2.Font = new System.Drawing.Font("宋体", 12F);
+            this.groupBox2.Location = new System.Drawing.Point(274, 14);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(210, 89);
+            this.groupBox2.TabIndex = 10;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "保存图像";
+            // 
+            // _buttonFinalizeHighSpeedDataCommunication
+            // 
+            this._buttonFinalizeHighSpeedDataCommunication.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(218)))), ((int)(((byte)(255)))));
+            this._buttonFinalizeHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
+            this._buttonFinalizeHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
+            this._buttonFinalizeHighSpeedDataCommunication.Location = new System.Drawing.Point(11, 250);
+            this._buttonFinalizeHighSpeedDataCommunication.Name = "_buttonFinalizeHighSpeedDataCommunication";
+            this._buttonFinalizeHighSpeedDataCommunication.Size = new System.Drawing.Size(218, 23);
+            this._buttonFinalizeHighSpeedDataCommunication.TabIndex = 12;
+            this._buttonFinalizeHighSpeedDataCommunication.Text = "FinalizeHighSpeedDataCommunication";
+            this._buttonFinalizeHighSpeedDataCommunication.UseVisualStyleBackColor = false;
+            // 
+            // _buttonStopHighSpeedDataCommunication
+            // 
+            this._buttonStopHighSpeedDataCommunication.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(218)))), ((int)(((byte)(255)))));
+            this._buttonStopHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
+            this._buttonStopHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
+            this._buttonStopHighSpeedDataCommunication.Location = new System.Drawing.Point(11, 226);
+            this._buttonStopHighSpeedDataCommunication.Name = "_buttonStopHighSpeedDataCommunication";
+            this._buttonStopHighSpeedDataCommunication.Size = new System.Drawing.Size(218, 23);
+            this._buttonStopHighSpeedDataCommunication.TabIndex = 11;
+            this._buttonStopHighSpeedDataCommunication.Text = "StopHighSpeedDataCommunication";
+            this._buttonStopHighSpeedDataCommunication.UseVisualStyleBackColor = false;
+            // 
+            // _timerHighSpeedReceive
+            // 
+            this._timerHighSpeedReceive.Interval = 500;
+            // 
+            // _numericUpDownInterval
+            // 
+            this._numericUpDownInterval.Font = new System.Drawing.Font("宋体", 9F);
+            this._numericUpDownInterval.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this._numericUpDownInterval.Location = new System.Drawing.Point(193, 48);
+            this._numericUpDownInterval.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this._numericUpDownInterval.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this._numericUpDownInterval.Name = "_numericUpDownInterval";
+            this._numericUpDownInterval.Size = new System.Drawing.Size(50, 21);
+            this._numericUpDownInterval.TabIndex = 19;
+            this._numericUpDownInterval.Value = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
             // 
             // MyWindow
             // 
@@ -640,19 +839,24 @@
             ((System.ComponentModel.ISupportInitialize)(this.pb_in)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_out)).EndInit();
             this.tp_SetOption.ResumeLayout(false);
-            this.tp_2Dcamera_option.ResumeLayout(false);
-            this.gb_camera_parameter.ResumeLayout(false);
-            this.gb_camera_parameter.PerformLayout();
-            this.gb_camera_init.ResumeLayout(false);
-            this.gb_image_grab.ResumeLayout(false);
             this.tp_process_option.ResumeLayout(false);
             this.gb_Test.ResumeLayout(false);
             this.gb_Test.PerformLayout();
             this.gb_measurement.ResumeLayout(false);
             this.gb_measurement.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            this.tp_2Dcamera_option.ResumeLayout(false);
+            this.gb_camera_parameter.ResumeLayout(false);
+            this.gb_camera_parameter.PerformLayout();
+            this.gb_camera_init.ResumeLayout(false);
+            this.gb_image_grab.ResumeLayout(false);
             this.tp_3Dcamera_option.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._numericUpDownProfileSaveCount)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._numericUpDownInterval)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -694,14 +898,28 @@
         private System.Windows.Forms.TabPage tp_3Dcamera_option;
         private System.Windows.Forms.RadioButton rbt_Measure18;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button bt_ClearBufferData;
-        private System.Windows.Forms.Button bt_StopGrab_3D;
-        private System.Windows.Forms.Button bt_StartGrab_3D;
-        private System.Windows.Forms.Button bt_InitCamera3D;
-        private System.Windows.Forms.Button bt_CloseCamera_3D;
-        private System.Windows.Forms.Button bt_OpenCamera_3D;
         private System.Windows.Forms.RadioButton rbt_outLineMode;
         private System.Windows.Forms.RadioButton rbt_inLineMode;
+        private System.Windows.Forms.TextBox _textBoxHighSpeedProfileFilePath;
+        private System.Windows.Forms.CheckBox _checkBoxUseSimpleArray;
+        private System.Windows.Forms.Button _buttonHighSpeedProfileFileSave;
+        private System.Windows.Forms.CheckBox _checkBoxStartTimer;
+        private System.Windows.Forms.Label _labelHighSpeedSavePath;
+        private System.Windows.Forms.NumericUpDown _numericUpDownProfileSaveCount;
+        private System.Windows.Forms.Label _labelProfileSaveCount;
+        private System.Windows.Forms.Button _buttonStartMeasure;
+        private System.Windows.Forms.Button _buttonStopMeasure;
+        private System.Windows.Forms.Button _buttonInitializeHighSpeedDataCommunicationSimpleArray;
+        private System.Windows.Forms.Button _buttonPreStartHighSpeedDataCommunication;
+        private System.Windows.Forms.Button _buttonStartHighSpeedDataCommunication;
+        private System.Windows.Forms.Button _buttonEthernetOpen;
+        private System.Windows.Forms.Button _buttonInitialize;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button _buttonHighSpeedSaveAsBitmapFile;
+        private System.Windows.Forms.Button _buttonFinalizeHighSpeedDataCommunication;
+        private System.Windows.Forms.Button _buttonStopHighSpeedDataCommunication;
+        private System.Windows.Forms.Timer _timerHighSpeedReceive;
+        private System.Windows.Forms.NumericUpDown _numericUpDownInterval;
     }
 }
 

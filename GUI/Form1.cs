@@ -17,11 +17,92 @@ using System.Drawing.Imaging;
 using LJX8_DllSampleAll.Data;
 using LJX8_DllSampleAll.Forms;
 using LJX8_DllSampleAll.Properties;
+using LJX8_DllSampleAll;
 
 namespace MyWindow
 {
     public partial class MyWindow : Form
     {
+        #region 3D Pagram
+
+        #region Constant
+        private const uint NoErrorValue = 0u;
+        private const int ProfileDataMinCount = 200;
+        private const int DataCountInOneLine = 8;
+        private const int NotAccessValue = 0;
+        private const char NullChar = '\0';
+        #endregion
+
+        #region Enum
+
+        /// <summary>
+        /// Send command definition
+        /// </summary>
+        /// <remark>Defined for separate return code distinction</remark>
+        private enum SendCommand
+        {
+            /// <summary>None</summary>
+            None,
+            /// <summary>Restart</summary>
+            RebootController,
+            /// <summary>Trigger</summary>
+            Trigger,
+            /// <summary>Start measurement</summary>
+            StartMeasure,
+            /// <summary>Stop measurement</summary>
+            StopMeasure,
+            /// <summary>Get profiles</summary>
+            GetProfile,
+            /// <summary>Get batch profiles</summary>
+            GetBatchProfile,
+            /// <summary>Initialize Ethernet high-speed data communication</summary>
+            InitializeHighSpeedDataCommunication,
+            /// <summary>Request preparation before starting high-speed data communication</summary>
+            PreStartHighSpeedDataCommunication,
+            /// <summary>Start high-speed data communication</summary>
+            StartHighSpeedDataCommunication,
+        }
+
+        #endregion
+
+        #region Field
+
+        /// <summary>Ethernet settings structure </summary>
+        private LJX8IF_ETHERNET_CONFIG _ethernetConfig;
+        /// <summary>Current device ID</summary>
+        private int _currentDeviceId;
+        /// <summary>Send command</summary>
+        private SendCommand _sendCommand;
+        /// <summary>Callback function used during high-speed communication</summary>
+        private HighSpeedDataCallBack _callback;
+        /// <summary>Callback function used during high-speed communication (count only)</summary>
+        private HighSpeedDataCallBack _callbackOnlyCount;
+        /// <summary>Callback function used during high-speed communication (simple array)</summary>
+        private HighSpeedDataCallBackForSimpleArray _callbackSimpleArray;
+        /// <summary>Callback function used during high-speed communication (simple array) (count only)</summary>
+        private HighSpeedDataCallBackForSimpleArray _callbackSimpleArrayOnlyCount;
+        /// The following are maintained in arrays to support multiple controllers.
+        /// <summary>Array of profile information structures</summary>
+        private LJX8IF_PROFILE_INFO[] _profileInfo;
+        /// <summary>Array of controller information</summary>
+        private DeviceData[] _deviceData;
+        /// <summary>Array of labels that indicate the controller status</summary>
+        private Label[] _deviceStatusLabels;
+        /// <summary>Array of labels that indicate the number of received profiles </summary>
+        private Label[] _receivedProfileCountLabels;
+        /// <summary>Array of value of receive buffer is full</summary>
+        private static bool[] _isBufferFull = new bool[NativeMethods.DeviceCount];
+        /// <summary>Array of value of stop processing has done by buffer full error</summary>
+        private static bool[] _isStopCommunicationByError = new bool[NativeMethods.DeviceCount];
+
+        #endregion
+
+        #region Delegate
+        private delegate void InvokeDelagate();
+        #endregion
+        #endregion
+
+        #region 2D Pagram
         MyCamera.MV_CC_DEVICE_INFO_LIST m_stDeviceList = new MyCamera.MV_CC_DEVICE_INFO_LIST();
         private MyCamera m_MyCamera = new MyCamera();
         bool m_bGrabbing = false;
@@ -36,13 +117,15 @@ namespace MyWindow
         //用于保存图像的缓存
         UInt32 m_nBufSizeForSaveImage = 0;
         IntPtr m_BufForSaveImage;
+        #endregion
 
+        #region Configure Pagram
         bool IsInLine = false;
         int MeasureProject = -1;
         Thread thread_OutLineTest;
         bool IsthreadLoadImageStop = false;
         double Radius, PositionDegree, RunTime, DistanceX1, DistanceY1;
-
+        #endregion
 
         public MyWindow()
         {
@@ -1037,6 +1120,49 @@ namespace MyWindow
         private float x;//定义当前窗体的宽度
         private float y;//定义当前窗体的高度
 
+        private void _textBoxHighSpeedProfileFilePath_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void _checkBoxUseSimpleArray_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateBatchSimpleArrayEnable();
+        }
+
+        private void UpdateBatchSimpleArrayEnable()
+        {
+            Color colorEnabled = Color.FromArgb(255, 192, 218, 255);
+            Color colorDisabled = Color.LightGray;
+
+
+            bool isUseSimpleArray = _checkBoxUseSimpleArray.Checked;
+            //bool isOnlyProfileCountChecked = _checkBoxOnlyProfileCount.Checked;
+
+            //_buttonInitializeHighSpeedDataCommunication.Enabled = !isUseSimpleArray;
+            //_buttonInitializeHighSpeedDataCommunication.BackColor = !isUseSimpleArray ? colorEnabled : colorDisabled;
+            _buttonInitializeHighSpeedDataCommunicationSimpleArray.Enabled = isUseSimpleArray;
+            _buttonInitializeHighSpeedDataCommunicationSimpleArray.BackColor = isUseSimpleArray ? colorEnabled : colorDisabled;
+
+           // _buttonHighSpeedSave.Enabled = !isUseSimpleArray && !isOnlyProfileCountChecked;
+           // _buttonHighSpeedSaveAsBitmapFile.Enabled = isUseSimpleArray && !isOnlyProfileCountChecked;
+        }
+
+        private void _checkBoxStartTimer_CheckedChanged(object sender, EventArgs e)
+        {
+            bool isStart = _checkBoxStartTimer.Checked;
+            if (isStart)
+            {
+                _timerHighSpeedReceive.Interval = (int)_numericUpDownInterval.Value;
+                _timerHighSpeedReceive.Start();
+            }
+            else
+            {
+                _timerHighSpeedReceive.Stop();
+            }
+            _numericUpDownInterval.Enabled = !isStart;
+            //_checkBoxOnlyProfileCount.Enabled = !isStart;
+        }
 
         private void setTag(Control cons)
         {
