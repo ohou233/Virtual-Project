@@ -14,6 +14,9 @@ using System.IO;
 using System.Xml.Linq;
 using HalconAlgorithm;
 using System.Drawing.Imaging;
+using LJX8_DllSampleAll.Data;
+using LJX8_DllSampleAll.Forms;
+using LJX8_DllSampleAll.Properties;
 
 namespace MyWindow
 {
@@ -35,7 +38,7 @@ namespace MyWindow
         IntPtr m_BufForSaveImage;
 
         bool IsInLine = false;
-        int MeasureProject = 9;
+        int MeasureProject = -1;
         Thread thread_OutLineTest;
         bool IsthreadLoadImageStop = false;
         double Radius, PositionDegree, RunTime, DistanceX1, DistanceY1;
@@ -51,7 +54,6 @@ namespace MyWindow
             Control.CheckForIllegalCrossThreadCalls = false;
             OutLineModeState();
  
-            HAlgorithm.InitListView2D(lv_AllFrameData);
 
             thread_OutLineTest = new Thread(new ThreadStart(thread_OutLineTest_Start));
         }
@@ -361,6 +363,8 @@ namespace MyWindow
                     bt_StopTest.Enabled = false;
                     bt_StartTest.Enabled = true;
                     rbt_Measure9.Enabled = true;
+                    rbt_Measure18.Enabled = true;
+
                     break;
                 }
                 else
@@ -388,6 +392,8 @@ namespace MyWindow
             bt_SaveBmp.Enabled = false;
             bt_StartTest.Enabled = true;
             rbt_Measure9.Enabled = true;
+            rbt_Measure18.Enabled = true;
+
             bt_StopTest.Enabled = false;
         }
 
@@ -427,6 +433,8 @@ namespace MyWindow
             bt_StopGrab.Enabled = true;
             bt_SaveBmp.Enabled = true;
             rbt_Measure9.Enabled = true;
+            rbt_Measure18.Enabled = true;
+
         }
 
         //实时显示线程函数
@@ -724,6 +732,8 @@ namespace MyWindow
             bt_StopTest.Enabled = true;
             bt_StartTest.Enabled = false;
             rbt_Measure9.Enabled = false;
+            rbt_Measure18.Enabled = false;
+
 
             if (false == IsInLine)
             {
@@ -808,6 +818,8 @@ namespace MyWindow
             bt_StopTest.Enabled = true;
             bt_StartTest.Enabled = false;
             rbt_Measure9.Enabled = false;
+            rbt_Measure18.Enabled = false;
+
             bt_ClearData.Enabled = false;
             bt_SaveCSV.Enabled = false;
         }
@@ -931,6 +943,8 @@ namespace MyWindow
             bt_StopTest.Enabled = false;
             bt_StartTest.Enabled = true;
             rbt_Measure9.Enabled = true;
+            rbt_Measure18.Enabled = true;
+
             bt_SaveCSV.Enabled = true;
             bt_ClearData.Enabled = true;
         }
@@ -974,6 +988,38 @@ namespace MyWindow
             sw.Close();
         }
 
+        private void rbt_Measure18_CheckedChanged(object sender, EventArgs e)
+        {
+            if (true == rbt_Measure18.Checked)
+            {
+                MeasureProject = 18;
+                HAlgorithm.ClearListView(lv_AllFrameData);
+                HAlgorithm.InitListView3D(lv_AllFrameData);
+            }
+            else
+            {
+                MeasureProject = -1;
+            }
+        }
+
+        private void rbt_inLineMode_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (rbt_inLineMode.Checked == true)
+            {
+                bt_StartTest.Enabled = false;
+                bt_DiscoverCamera.Enabled = true;
+            }
+        }
+
+        private void rbt_outLineMode_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (rbt_outLineMode.Checked == true)
+            {
+                bt_StartTest.Enabled = true;
+                bt_DiscoverCamera.Enabled = false;
+            }
+        }
+
         // 控件大小随窗体大小等比例缩放
         #region 
         void changeSize()
@@ -990,6 +1036,7 @@ namespace MyWindow
 
         private float x;//定义当前窗体的宽度
         private float y;//定义当前窗体的高度
+
 
         private void setTag(Control cons)
         {
