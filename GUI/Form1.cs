@@ -136,9 +136,27 @@ namespace MyWindow
             
             Control.CheckForIllegalCrossThreadCalls = false;
             OutLineModeState();
- 
+
+            UpdateHighSpeedProfileSaveEnable();
+
+
 
             thread_OutLineTest = new Thread(new ThreadStart(thread_OutLineTest_Start));
+        }
+
+        private void UpdateHighSpeedProfileSaveEnable()
+        {
+            //bool isOnlyProfileCountChecked = _checkBoxOnlyProfileCount.Checked;
+            bool isOnlyProfileCountChecked = false;
+            //bool isUseSimpleArray = _checkBoxUseSimpleArray.Checked;
+            bool isUseSimpleArray = true;
+
+            _textBoxHighSpeedProfileFilePath.Enabled = !isOnlyProfileCountChecked;
+            //_numericUpDownProfileNo.Enabled = !isOnlyProfileCountChecked;
+            _numericUpDownProfileSaveCount.Enabled = !isOnlyProfileCountChecked;
+            //_buttonHighSpeedSave.Enabled = !isOnlyProfileCountChecked && !isUseSimpleArray;
+            _buttonHighSpeedProfileFileSave.Enabled = !isOnlyProfileCountChecked;
+            _buttonHighSpeedSaveAsBitmapFile.Enabled = !isOnlyProfileCountChecked && isUseSimpleArray;
         }
 
         //打开相机
@@ -1136,16 +1154,19 @@ namespace MyWindow
             Color colorDisabled = Color.LightGray;
 
 
-            bool isUseSimpleArray = _checkBoxUseSimpleArray.Checked;
+            //bool isUseSimpleArray = _checkBoxUseSimpleArray.Checked;
+            bool isUseSimpleArray = true;
+
             //bool isOnlyProfileCountChecked = _checkBoxOnlyProfileCount.Checked;
+            bool isOnlyProfileCountChecked = false;
 
             //_buttonInitializeHighSpeedDataCommunication.Enabled = !isUseSimpleArray;
             //_buttonInitializeHighSpeedDataCommunication.BackColor = !isUseSimpleArray ? colorEnabled : colorDisabled;
             _buttonInitializeHighSpeedDataCommunicationSimpleArray.Enabled = isUseSimpleArray;
             _buttonInitializeHighSpeedDataCommunicationSimpleArray.BackColor = isUseSimpleArray ? colorEnabled : colorDisabled;
 
-           // _buttonHighSpeedSave.Enabled = !isUseSimpleArray && !isOnlyProfileCountChecked;
-           // _buttonHighSpeedSaveAsBitmapFile.Enabled = isUseSimpleArray && !isOnlyProfileCountChecked;
+            //_buttonHighSpeedSave.Enabled = !isUseSimpleArray && !isOnlyProfileCountChecked;
+            _buttonHighSpeedSaveAsBitmapFile.Enabled = isUseSimpleArray && !isOnlyProfileCountChecked;
         }
 
         private void _checkBoxStartTimer_CheckedChanged(object sender, EventArgs e)
@@ -1162,6 +1183,448 @@ namespace MyWindow
             }
             _numericUpDownInterval.Enabled = !isStart;
             //_checkBoxOnlyProfileCount.Enabled = !isStart;
+        }
+
+        private void _buttonInitialize_Click(object sender, EventArgs e)
+        {
+            int rc = NativeMethods.LJX8IF_Initialize();
+            AddLogResult(rc, Resources.IDS_INITIALIZE);
+
+            for (int i = 0; i < _deviceData.Length; i++)
+            {
+                _deviceData[i].Status = DeviceStatus.NoConnection;
+                _deviceStatusLabels[i].Text = _deviceData[i].GetStatusString();
+                _receivedProfileCountLabels[i].Text = "0";
+            }
+        }
+
+        private void AddLogResult(int rc, string commandName)
+        {
+            if (rc == (int)Rc.Ok)
+            {
+                AddLog(string.Format(Resources.IDS_LOG_FORMAT, commandName, Resources.IDS_RESULT_OK, rc));
+            }
+            else
+            {
+                AddLog(string.Format(Resources.IDS_LOG_FORMAT, commandName, Resources.IDS_RESULT_NG, rc));
+                AddErrorLog(rc);
+            }
+        }
+
+        private void CommonErrorLog(int rc)
+        {
+            switch (rc)
+            {
+                case (int)Rc.Ok:
+                    AddLog(string.Format(Resources.IDS_RC_FORMAT, Resources.IDS_RC_OK));
+                    break;
+                case (int)Rc.ErrOpenDevice:
+                    AddLog(string.Format(Resources.IDS_RC_FORMAT, Resources.IDS_RC_ERR_OPEN_DEVICE));
+                    break;
+                case (int)Rc.ErrNoDevice:
+                    AddLog(string.Format(Resources.IDS_RC_FORMAT, Resources.IDS_RC_ERR_NO_DEVICE));
+                    break;
+                case (int)Rc.ErrSend:
+                    AddLog(string.Format(Resources.IDS_RC_FORMAT, Resources.IDS_RC_ERR_SEND));
+                    break;
+                case (int)Rc.ErrReceive:
+                    AddLog(string.Format(Resources.IDS_RC_FORMAT, Resources.IDS_RC_ERR_RECEIVE));
+                    break;
+                case (int)Rc.ErrTimeout:
+                    AddLog(string.Format(Resources.IDS_RC_FORMAT, Resources.IDS_RC_ERR_TIMEOUT));
+                    _deviceData[_currentDeviceId].Status = DeviceStatus.NoConnection;
+                    _deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
+                    _receivedProfileCountLabels[_currentDeviceId].Text = "0";
+                    break;
+                case (int)Rc.ErrParameter:
+                    AddLog(string.Format(Resources.IDS_RC_FORMAT, Resources.IDS_RC_ERR_PARAMETER));
+                    break;
+                case (int)Rc.ErrNomemory:
+                    AddLog(string.Format(Resources.IDS_RC_FORMAT, Resources.IDS_RC_ERR_NOMEMORY));
+                    break;
+                case (int)Rc.ErrHispeedNoDevice:
+                    AddLog(string.Format(Resources.IDS_RC_FORMAT, Resources.IDS_RC_ERR_HISPEED_NO_DEVICE));
+                    break;
+                case (int)Rc.ErrHispeedOpenYet:
+                    AddLog(string.Format(Resources.IDS_RC_FORMAT, Resources.IDS_RC_ERR_HISPEED_OPEN_YET));
+                    break;
+                case (int)Rc.ErrBufferShort:
+                    AddLog(string.Format(Resources.IDS_RC_FORMAT, Resources.IDS_RC_ERR_BUFFER_SHORT));
+                    break;
+                default:
+                    AddLog(string.Format(Resources.IDS_NOT_DEFINE_FROMAT, rc));
+                    break;
+            }
+        }
+
+        private bool ControllerErrorLog(int rc)
+        {
+            switch (rc)
+            {
+                case 0x8011:
+                    return true;
+                case 0x8021:
+                    AddLog(string.Format(Resources.IDS_RC_FORMAT, @"Controller model difference"));
+                    return true;
+                case 0x8031:
+                    AddLog(string.Format(Resources.IDS_RC_FORMAT, @"Undefined command"));
+                    return true;
+                case 0x8032:
+                    AddLog(string.Format(Resources.IDS_RC_FORMAT, @"Command length error"));
+                    return true;
+                case 0x8041:
+                    AddLog(string.Format(Resources.IDS_RC_FORMAT, @"Controller status error"));
+                    return true;
+                case 0x8042:
+                    AddLog(string.Format(Resources.IDS_RC_FORMAT, @"Controller parameter error"));
+                    return true;
+            }
+            return false;
+        }
+
+        private void AddErrorLog(int rc)
+        {
+            if (rc < 0x8000)
+            {
+                // Common return code
+                CommonErrorLog(rc);
+            }
+            else
+            {
+                // Controller return code
+                if (ControllerErrorLog(rc))
+                {
+                    return;
+                }
+
+                // Individual return code
+                IndividualErrorLog(rc);
+            }
+        }
+
+        private void IndividualErrorLog(int rc)
+        {
+            switch (_sendCommand)
+            {
+                case SendCommand.RebootController:
+                    {
+                        switch (rc)
+                        {
+                            case 0x80A0:
+                                AddLog(string.Format(Resources.IDS_RC_FORMAT, @"Accessing the save area"));
+                                break;
+                            default:
+                                AddLog(string.Format(Resources.IDS_NOT_DEFINE_FROMAT, rc));
+                                break;
+                        }
+                    }
+                    break;
+                case SendCommand.Trigger:
+                    {
+                        switch (rc)
+                        {
+                            case 0x8080:
+                                AddLog(string.Format(Resources.IDS_RC_FORMAT, @"The trigger mode is not [external trigger]"));
+                                break;
+                            default:
+                                AddLog(string.Format(Resources.IDS_NOT_DEFINE_FROMAT, rc));
+                                break;
+                        }
+                    }
+                    break;
+                case SendCommand.StartMeasure:
+                case SendCommand.StopMeasure:
+                    {
+                        switch (rc)
+                        {
+                            case 0x8080:
+                                AddLog(string.Format(Resources.IDS_RC_FORMAT, @"Batch measurements are off or several controller Sync function is Sync Slave"));
+                                break;
+                            case 0x80A0:
+                                AddLog(string.Format(Resources.IDS_RC_FORMAT, @"Batch measurement start or stop processing could not be performed because laser off by command or the LASER_ON terminal is off"));
+                                break;
+                            default:
+                                AddLog(string.Format(Resources.IDS_NOT_DEFINE_FROMAT, rc));
+                                break;
+                        }
+                    }
+                    break;
+                case SendCommand.GetProfile:
+                    {
+                        switch (rc)
+                        {
+                            case 0x8081:
+                                AddLog(string.Format(Resources.IDS_RC_FORMAT, @"Batch measurements on"));
+                                break;
+                            case 0x80A0:
+                                AddLog(string.Format(Resources.IDS_RC_FORMAT, @"No profile data"));
+                                break;
+                            default:
+                                AddLog(string.Format(Resources.IDS_NOT_DEFINE_FROMAT, rc));
+                                break;
+                        }
+                    }
+                    break;
+                case SendCommand.GetBatchProfile:
+                    {
+                        switch (rc)
+                        {
+                            case 0x8081:
+                                AddLog(string.Format(Resources.IDS_RC_FORMAT, @"Batch measurements off"));
+                                break;
+                            case 0x80A0:
+                                AddLog(string.Format(Resources.IDS_RC_FORMAT, @"No batch data (batch measurements not run even once)"));
+                                break;
+                            default:
+                                AddLog(string.Format(Resources.IDS_NOT_DEFINE_FROMAT, rc));
+                                break;
+                        }
+                    }
+                    break;
+                case SendCommand.InitializeHighSpeedDataCommunication:
+                    {
+                        switch (rc)
+                        {
+                            case 0x80A1:
+                                AddLog(string.Format(Resources.IDS_RC_FORMAT, @"Already performing high-speed communication error (for high-speed communication)"));
+                                break;
+                            default:
+                                AddLog(string.Format(Resources.IDS_NOT_DEFINE_FROMAT, rc));
+                                break;
+                        }
+                    }
+                    break;
+                case SendCommand.PreStartHighSpeedDataCommunication:
+                case SendCommand.StartHighSpeedDataCommunication:
+                    {
+                        switch (rc)
+                        {
+                            case 0x8081:
+                                AddLog(string.Format(Resources.IDS_RC_FORMAT, @"The data specified as the send start position does not exist"));
+                                break;
+                            case 0x80A0:
+                                AddLog(string.Format(Resources.IDS_RC_FORMAT, @"A high-speed data communication connection was not established"));
+                                break;
+                            case 0x80A1:
+                                AddLog(string.Format(Resources.IDS_RC_FORMAT, @"Already performing high-speed communication error (for high-speed communication)"));
+                                break;
+                            case 0x80A2:
+                                AddLog(string.Format(Resources.IDS_RC_FORMAT, @"Command code does not match (for high-speed communication)"));
+                                break;
+                            case 0x80A3:
+                                AddLog(string.Format(Resources.IDS_RC_FORMAT, @"Start code does not match (for high-speed communication)"));
+                                break;
+                            case 0x80A4:
+                                AddLog(string.Format(Resources.IDS_RC_FORMAT, @"The send target data was cleared"));
+                                break;
+                            default:
+                                AddLog(string.Format(Resources.IDS_NOT_DEFINE_FROMAT, rc));
+                                break;
+                        }
+                    }
+                    break;
+                default:
+                    AddLog(string.Format(Resources.IDS_NOT_DEFINE_FROMAT, rc));
+                    break;
+            }
+        }
+
+        private void AddLog(string strLog)
+        {
+            _textBoxLog.AppendText(strLog + Environment.NewLine);
+            _textBoxLog.SelectionStart = _textBoxLog.Text.Length;
+            _textBoxLog.Focus();
+            _textBoxLog.ScrollToCaret();
+        }
+
+        private void _buttonEthernetOpen_Click(object sender, EventArgs e)
+        {
+            using (OpenEthernetForm openEthernetForm = new OpenEthernetForm())
+            {
+                if (DialogResult.OK != openEthernetForm.ShowDialog()) return;
+
+                LJX8IF_ETHERNET_CONFIG ethernetConfig = openEthernetForm.EthernetConfig;
+                // @Point
+                // # Enter the "_currentDeviceId" set here for the communication settings into the arguments of each DLL function.
+                // # If you want to get data from multiple controllers, prepare and set multiple "_currentDeviceId" values,
+                //   enter these values into the arguments of the DLL functions, and then use the functions.
+
+                int rc = NativeMethods.LJX8IF_EthernetOpen(_currentDeviceId, ref ethernetConfig);
+                AddLogResult(rc, Resources.IDS_ETHERNET_OPEN);
+
+                if (rc == (int)Rc.Ok)
+                {
+                    _deviceData[_currentDeviceId].Status = DeviceStatus.Ethernet;
+                    _deviceData[_currentDeviceId].EthernetConfig = ethernetConfig;
+                }
+                else
+                {
+                    _deviceData[_currentDeviceId].Status = DeviceStatus.NoConnection;
+                }
+                _deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
+                _receivedProfileCountLabels[_currentDeviceId].Text = "0";
+            }
+        }
+
+        private void _buttonInitializeHighSpeedDataCommunicationSimpleArray_Click(object sender, EventArgs e)
+        {
+            _sendCommand = SendCommand.InitializeHighSpeedDataCommunication;
+
+            using (HighSpeedInitializeForm highSpeedInitializeForm = new HighSpeedInitializeForm())
+            {
+                highSpeedInitializeForm.Text = Resources.IDS_INITIALIZE_HIGH_SPEED_DATA_ETHERNET_COMMUNICATION_SIMPLE_ARRAY;
+                highSpeedInitializeForm.EthernetConfig = _deviceData[_currentDeviceId].EthernetConfig;
+
+                if (DialogResult.OK != highSpeedInitializeForm.ShowDialog()) return;
+
+                ThreadSafeBuffer.ClearBuffer(_currentDeviceId);  //Clear the retained profile data.
+                _deviceData[_currentDeviceId].ProfileDataHighSpeed.Clear();
+                _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.Clear();
+
+                LJX8IF_ETHERNET_CONFIG ethernetConfig = highSpeedInitializeForm.EthernetConfig;
+                int rc = NativeMethods.LJX8IF_InitializeHighSpeedDataCommunicationSimpleArray(_currentDeviceId, ref ethernetConfig,
+                    highSpeedInitializeForm.HighSpeedPortNo, _callbackSimpleArrayOnlyCount,
+                    highSpeedInitializeForm.ProfileCount, (uint)_currentDeviceId);
+                // @Point
+                // # When the frequency of calls is low, the callback function may not be called once per specified number of profiles.
+                // # The callback function is called when both of the following conditions are met.
+                //   * There is one packet of received data.
+                //   * The specified number of profiles have been received by the time the call frequency has been met.
+
+                AddLogResult(rc, Resources.IDS_INITIALIZE_HIGH_SPEED_DATA_ETHERNET_COMMUNICATION_SIMPLE_ARRAY);
+
+                if (rc == (int)Rc.Ok)
+                {
+                    _deviceData[_currentDeviceId].Status = DeviceStatus.EthernetFast;
+                    _deviceData[_currentDeviceId].EthernetConfig = ethernetConfig;
+                }
+                _deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
+                _receivedProfileCountLabels[_currentDeviceId].Text = "0";
+            }
+        }
+
+        private void _buttonPreStartHighSpeedDataCommunication_Click(object sender, EventArgs e)
+        {
+            _sendCommand = SendCommand.PreStartHighSpeedDataCommunication;
+
+            using (PreStartHighSpeedForm preStartHighSpeedForm = new PreStartHighSpeedForm())
+            {
+                if (DialogResult.OK != preStartHighSpeedForm.ShowDialog()) return;
+
+                LJX8IF_HIGH_SPEED_PRE_START_REQUEST request = preStartHighSpeedForm.Request;
+                // @Point
+                // # SendPosition is used to specify which profile to start sending data from during high-speed communication.
+                // # When "Overwrite" is specified for the operation when memory full and 
+                //   "0: From previous send complete position" is specified for the send start position,
+                //    if the LJ-X continues to accumulate profiles, the LJ-X memory will become full,
+                //    and the profile at the previous send complete position will be overwritten with a new profile.
+                //    In this situation, because the profile at the previous send complete position is not saved, an error will occur.
+
+                LJX8IF_PROFILE_INFO profileInfo = new LJX8IF_PROFILE_INFO();
+
+                int rc = NativeMethods.LJX8IF_PreStartHighSpeedDataCommunication(_currentDeviceId, ref request, ref profileInfo);
+                AddLogResult(rc, Resources.IDS_PRE_START_HIGH_SPEED_DATA_COMMUNICATION);
+                if (rc != (int)Rc.Ok) return;
+
+                // Response data display
+                AddLog(Utility.ConvertProfileInfoToLogString(profileInfo).ToString());
+
+                _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.Clear();
+                _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.DataWidth = profileInfo.nProfileDataCount;
+                _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.IsLuminanceEnable = profileInfo.byLuminanceOutput == 1;
+
+                _profileInfo[_currentDeviceId] = profileInfo;
+            }
+        }
+
+        private void _buttonStartHighSpeedDataCommunication_Click(object sender, EventArgs e)
+        {
+            _sendCommand = SendCommand.StartHighSpeedDataCommunication;
+
+            ThreadSafeBuffer.ClearBuffer(_currentDeviceId);
+            _deviceData[_currentDeviceId].ProfileDataHighSpeed.Clear();
+            _isBufferFull[_currentDeviceId] = false;
+            _isStopCommunicationByError[_currentDeviceId] = false;
+
+            _receivedProfileCountLabels[_currentDeviceId].Text = "0";
+            int rc = NativeMethods.LJX8IF_StartHighSpeedDataCommunication(_currentDeviceId);
+
+            AddLogResult(rc, Resources.IDS_START_HIGH_SPEED_DATA_COMMUNICATION);
+
+        }
+
+        private void _buttonStartMeasure_Click(object sender, EventArgs e)
+        {
+            _sendCommand = SendCommand.StartMeasure;
+
+            int rc = NativeMethods.LJX8IF_StartMeasure(_currentDeviceId);
+            AddLogResult(rc, Resources.IDS_START_MEASURE);
+        }
+
+        private void _buttonStopMeasure_Click(object sender, EventArgs e)
+        {
+            _sendCommand = SendCommand.StopMeasure;
+
+            int rc = NativeMethods.LJX8IF_StopMeasure(_currentDeviceId);
+            AddLogResult(rc, Resources.IDS_STOP_MEASURE);
+        }
+
+        private void _buttonStopHighSpeedDataCommunication_Click(object sender, EventArgs e)
+        {
+            int rc = NativeMethods.LJX8IF_StopHighSpeedDataCommunication(_currentDeviceId);
+            AddLogResult(rc, Resources.IDS_STOP_HIGH_SPEED_DATA_COMMUNICATION);
+        }
+
+        private void _buttonFinalizeHighSpeedDataCommunication_Click(object sender, EventArgs e)
+        {
+            int rc = NativeMethods.LJX8IF_FinalizeHighSpeedDataCommunication(_currentDeviceId);
+            AddLogResult(rc, Resources.IDS_FINALIZE_HIGH_SPEED_DATA_COMMUNICATION);
+
+            switch (_deviceData[_currentDeviceId].Status)
+            {
+                case DeviceStatus.EthernetFast:
+                    LJX8IF_ETHERNET_CONFIG config = _deviceData[_currentDeviceId].EthernetConfig;
+                    _deviceData[_currentDeviceId].Status = DeviceStatus.Ethernet;
+                    _deviceData[_currentDeviceId].EthernetConfig = config;
+                    break;
+            }
+            _deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
+            _receivedProfileCountLabels[_currentDeviceId].Text = "0";
+        }
+
+        private void _buttonHighSpeedProfileFileSave_Click(object sender, EventArgs e)
+        {
+            if (_profileOrBitmapFileSave.ShowDialog(this) == DialogResult.Cancel) return;
+
+            _textBoxHighSpeedProfileFilePath.Text = _profileOrBitmapFileSave.FileName;
+            _textBoxHighSpeedProfileFilePath.SelectionStart = _textBoxHighSpeedProfileFilePath.Text.Length;
+
+        }
+
+        private void _buttonHighSpeedSaveAsBitmapFile_Click(object sender, EventArgs e)
+        {
+            int width = _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.DataWidth;
+            if (width == 0)
+            {
+                AddLog("No simple array data.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(_textBoxHighSpeedProfileFilePath.Text))
+            {
+                AddLog("Failed to save image. (File path is empty.)");
+                return;
+            }
+
+            Cursor.Current = Cursors.WaitCursor;
+
+            //int startIndex = (int)_numericUpDownProfileNo.Value;
+            int startIndex = 0;
+            int dataCount = (int)_numericUpDownProfileSaveCount.Value;
+            bool result = _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.SaveDataAsImages(_textBoxHighSpeedProfileFilePath.Text, startIndex, dataCount);
+
+            AddLog(result ? "Succeed to save image." : "Failed to save image.");
+
         }
 
         private void setTag(Control cons)
