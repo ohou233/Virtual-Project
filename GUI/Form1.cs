@@ -1089,6 +1089,7 @@ namespace MyWindow
             sw.Close();
         }
 
+        //选择测量项18
         private void rbt_Measure18_CheckedChanged(object sender, EventArgs e)
         {
             if (true == rbt_Measure18.Checked)
@@ -1103,6 +1104,7 @@ namespace MyWindow
             }
         }
 
+        //选择在线模式
         private void rbt_inLineMode_CheckedChanged_1(object sender, EventArgs e)
         {
             if (rbt_inLineMode.Checked == true)
@@ -1112,6 +1114,7 @@ namespace MyWindow
             }
         }
 
+        //选择离线模式
         private void rbt_outLineMode_CheckedChanged_1(object sender, EventArgs e)
         {
             if (rbt_outLineMode.Checked == true)
@@ -1119,33 +1122,6 @@ namespace MyWindow
                 bt_StartTest.Enabled = true;
                 bt_DiscoverCamera.Enabled = false;
             }
-        }
-
-        // 控件大小随窗体大小等比例缩放
-        #region 
-        void changeSize()
-        {
-            SetStyle(ControlStyles.UserPaint, true);
-            SetStyle(ControlStyles.AllPaintingInWmPaint, true); // 禁止擦除背景.
-            SetStyle(ControlStyles.OptimizedDoubleBuffer, true); // 双缓冲DoubleBuffer
-
-            this.WindowState = FormWindowState.Maximized;
-            x = this.Width;
-            y = this.Height;
-            setTag(this);
-        }
-
-        private float x;//定义当前窗体的宽度
-        private float y;//定义当前窗体的高度
-
-        private void _textBoxHighSpeedProfileFilePath_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void _checkBoxUseSimpleArray_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateBatchSimpleArrayEnable();
         }
 
         private void UpdateBatchSimpleArrayEnable()
@@ -1162,8 +1138,8 @@ namespace MyWindow
 
             //_buttonInitializeHighSpeedDataCommunication.Enabled = !isUseSimpleArray;
             //_buttonInitializeHighSpeedDataCommunication.BackColor = !isUseSimpleArray ? colorEnabled : colorDisabled;
-            _buttonInitializeHighSpeedDataCommunicationSimpleArray.Enabled = isUseSimpleArray;
-            _buttonInitializeHighSpeedDataCommunicationSimpleArray.BackColor = isUseSimpleArray ? colorEnabled : colorDisabled;
+            //_buttonInitializeHighSpeedDataCommunicationSimpleArray.Enabled = isUseSimpleArray;
+            //_buttonInitializeHighSpeedDataCommunicationSimpleArray.BackColor = isUseSimpleArray ? colorEnabled : colorDisabled;
 
             //_buttonHighSpeedSave.Enabled = !isUseSimpleArray && !isOnlyProfileCountChecked;
             _buttonHighSpeedSaveAsBitmapFile.Enabled = isUseSimpleArray && !isOnlyProfileCountChecked;
@@ -1195,6 +1171,37 @@ namespace MyWindow
                 _deviceData[i].Status = DeviceStatus.NoConnection;
                 _deviceStatusLabels[i].Text = _deviceData[i].GetStatusString();
                 _receivedProfileCountLabels[i].Text = "0";
+            }
+            Open_Ethernet();
+            Initialize_HighSpeedData_Communication_SimpleArray();
+        }
+
+        private void Open_Ethernet()
+        {
+            using (OpenEthernetForm openEthernetForm = new OpenEthernetForm())
+            {
+                if (DialogResult.OK != openEthernetForm.ShowDialog()) return;
+
+                LJX8IF_ETHERNET_CONFIG ethernetConfig = openEthernetForm.EthernetConfig;
+                // @Point
+                // # Enter the "_currentDeviceId" set here for the communication settings into the arguments of each DLL function.
+                // # If you want to get data from multiple controllers, prepare and set multiple "_currentDeviceId" values,
+                //   enter these values into the arguments of the DLL functions, and then use the functions.
+
+                int rc = NativeMethods.LJX8IF_EthernetOpen(_currentDeviceId, ref ethernetConfig);
+                AddLogResult(rc, Resources.IDS_ETHERNET_OPEN);
+
+                if (rc == (int)Rc.Ok)
+                {
+                    _deviceData[_currentDeviceId].Status = DeviceStatus.Ethernet;
+                    _deviceData[_currentDeviceId].EthernetConfig = ethernetConfig;
+                }
+                else
+                {
+                    _deviceData[_currentDeviceId].Status = DeviceStatus.NoConnection;
+                }
+                _deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
+                _receivedProfileCountLabels[_currentDeviceId].Text = "0";
             }
         }
 
@@ -1437,36 +1444,7 @@ namespace MyWindow
             _textBoxLog.ScrollToCaret();
         }
 
-        private void _buttonEthernetOpen_Click(object sender, EventArgs e)
-        {
-            using (OpenEthernetForm openEthernetForm = new OpenEthernetForm())
-            {
-                if (DialogResult.OK != openEthernetForm.ShowDialog()) return;
-
-                LJX8IF_ETHERNET_CONFIG ethernetConfig = openEthernetForm.EthernetConfig;
-                // @Point
-                // # Enter the "_currentDeviceId" set here for the communication settings into the arguments of each DLL function.
-                // # If you want to get data from multiple controllers, prepare and set multiple "_currentDeviceId" values,
-                //   enter these values into the arguments of the DLL functions, and then use the functions.
-
-                int rc = NativeMethods.LJX8IF_EthernetOpen(_currentDeviceId, ref ethernetConfig);
-                AddLogResult(rc, Resources.IDS_ETHERNET_OPEN);
-
-                if (rc == (int)Rc.Ok)
-                {
-                    _deviceData[_currentDeviceId].Status = DeviceStatus.Ethernet;
-                    _deviceData[_currentDeviceId].EthernetConfig = ethernetConfig;
-                }
-                else
-                {
-                    _deviceData[_currentDeviceId].Status = DeviceStatus.NoConnection;
-                }
-                _deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
-                _receivedProfileCountLabels[_currentDeviceId].Text = "0";
-            }
-        }
-
-        private void _buttonInitializeHighSpeedDataCommunicationSimpleArray_Click(object sender, EventArgs e)
+        private void Initialize_HighSpeedData_Communication_SimpleArray()
         {
             _sendCommand = SendCommand.InitializeHighSpeedDataCommunication;
 
@@ -1501,9 +1479,11 @@ namespace MyWindow
                 _deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
                 _receivedProfileCountLabels[_currentDeviceId].Text = "0";
             }
+
+            Pre_Start_HighSpeedDataCommunication();
         }
 
-        private void _buttonPreStartHighSpeedDataCommunication_Click(object sender, EventArgs e)
+        private void Pre_Start_HighSpeedDataCommunication()
         {
             _sendCommand = SendCommand.PreStartHighSpeedDataCommunication;
 
@@ -1626,6 +1606,131 @@ namespace MyWindow
             AddLog(result ? "Succeed to save image." : "Failed to save image.");
 
         }
+
+        private void _buttonSetSetting_Click(object sender, EventArgs e)
+        {
+            using (SettingForm settingForm = new SettingForm(true))
+            {
+                if (DialogResult.OK != settingForm.ShowDialog()) return;
+                using (PinnedObject pin = new PinnedObject(settingForm.Data))
+                {
+                    LJX8IF_TARGET_SETTING targetSetting = settingForm.TargetSetting;
+                    uint error = 0;
+                    int rc = NativeMethods.LJX8IF_SetSetting(_currentDeviceId, settingForm.Depth, targetSetting,
+                        pin.Pointer, (uint)settingForm.Data.Length, ref error);
+                    // @Point
+                    // # There are three setting areas: a) the write settings area, b) the running area, and c) the save area.
+                    //   * Specify a) for the setting level when you want to change multiple settings. However, to reflect settings in the LJ-X operations, you have to call LJX8IF_ReflectSetting.
+                    //	 * Specify b) for the setting level when you want to change one setting but you don't mind if this setting is returned to its value prior to the change when the power is turned off.
+                    //	 * Specify c) for the setting level when you want to change one setting and you want this new value to be retained even when the power is turned off.
+
+                    // @Point
+                    //  As a usage example, we will show how to use SettingForm to configure settings such that sending a setting, with SettingForm using its initial values,
+                    //  will change the sampling period in the running area to "100 Hz."
+                    //  Also see the GetSetting function.
+
+                    AddLogResult(rc, Resources.IDS_SET_SETTING);
+                    if ((rc == (int)Rc.Ok) && (error != NoErrorValue))
+                    {
+                        AddError(error);
+                    }
+                }
+            }
+        }
+
+        private void AddError(uint error)
+        {
+            _textBoxLog.AppendText("  ErrorCode : 0x" + error.ToString("x8") + Environment.NewLine);
+            _textBoxLog.SelectionStart = _textBoxLog.Text.Length;
+            _textBoxLog.Focus();
+            _textBoxLog.ScrollToCaret();
+        }
+
+        //设置批处理点数
+        private void _buttonGetSetting_Click(object sender, EventArgs e)
+        {
+            using (SettingForm settingForm = new SettingForm(false))
+            {
+                if (DialogResult.OK != settingForm.ShowDialog()) return;
+
+                byte[] data = new byte[settingForm.DataLength];
+                using (PinnedObject pin = new PinnedObject(data))
+                {
+                    LJX8IF_TARGET_SETTING targetSetting = settingForm.TargetSetting;
+                    int rc = NativeMethods.LJX8IF_GetSetting(_currentDeviceId, settingForm.Depth, targetSetting,
+                        pin.Pointer, (uint)settingForm.DataLength);
+                    // @Point
+                    //  We have prepared an object for reading the sampling period into the setting's initial value.
+                    //  Also see the SetSetting function.
+
+                    AddLogResult(rc, Resources.IDS_GET_SETTING);
+                    if (rc != (int)Rc.Ok) return;
+
+                    AddLog("\t    0  1  2  3  4  5  6  7");
+                    StringBuilder stringBuilder = new StringBuilder();
+                    // Get data display
+                    for (int i = 0; i < settingForm.DataLength; i++)
+                    {
+                        if ((i % DataCountInOneLine) == 0) stringBuilder.Append(string.Format("  [0x{0:x4}] ", i));
+
+                        stringBuilder.Append(string.Format("{0:x2} ", data[i]));
+                        if (((i % DataCountInOneLine) == DataCountInOneLine - 1) || (i == settingForm.DataLength - 1))
+                        {
+                            AddLog(stringBuilder.ToString());
+                            stringBuilder.Remove(0, stringBuilder.Length);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void bt_Set_BatchprocessPoints_Click(object sender, EventArgs e)
+        {
+            int m_CountProfile = Convert.ToInt32(_numericUpDownProfileSaveCount.Text);
+            String strA = m_CountProfile.ToString("x8");
+            byte[] _data = new byte[4];
+            string[] parameterTexts = new string[4];
+            parameterTexts[0] = strA.Substring(0, 2);
+            parameterTexts[1] = strA.Substring(2, 2);
+            parameterTexts[2] = strA.Substring(4, 2);
+            parameterTexts[3] = strA.Substring(6, 2);
+            if (0 < parameterTexts.Length)
+            {
+                _data = Array.ConvertAll(parameterTexts,
+                    delegate (string text) { return Convert.ToByte(text, 16); });
+            }
+            Array.Resize(ref _data, 4);
+            uint error = 0;
+            LJX8IF_TARGET_SETTING _targetSetting = new LJX8IF_TARGET_SETTING();
+            _targetSetting.byType = Convert.ToByte("10", 16);
+            _targetSetting.byCategory = Convert.ToByte("00", 16);
+            _targetSetting.byItem = Convert.ToByte("0A", 16);
+            _targetSetting.byTarget1 = Convert.ToByte("00", 16);
+            _targetSetting.byTarget2 = Convert.ToByte("00", 16);
+            _targetSetting.byTarget3 = Convert.ToByte("00", 16);
+            _targetSetting.byTarget4 = Convert.ToByte("00", 16);
+            using (PinnedObject pin = new PinnedObject(_data))
+            {
+                int rc = NativeMethods.LJX8IF_SetSetting(0, 2, _targetSetting,
+                    pin.Pointer, 4, ref error);
+            }
+        }
+
+        // 控件大小随窗体大小等比例缩放
+        #region 
+        void changeSize()
+        {
+            SetStyle(ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true); // 禁止擦除背景.
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true); // 双缓冲DoubleBuffer
+
+            this.WindowState = FormWindowState.Maximized;
+            x = this.Width;
+            y = this.Height;
+            setTag(this);
+        }
+        private float x;//定义当前窗体的宽度
+        private float y;//定义当前窗体的高度
 
         private void setTag(Control cons)
         {

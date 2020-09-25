@@ -71,11 +71,7 @@
             this._buttonHighSpeedProfileFileSave = new System.Windows.Forms.Button();
             this._labelHighSpeedSavePath = new System.Windows.Forms.Label();
             this._numericUpDownProfileSaveCount = new System.Windows.Forms.NumericUpDown();
-            this._labelProfileSaveCount = new System.Windows.Forms.Label();
             this._buttonInitialize = new System.Windows.Forms.Button();
-            this._buttonEthernetOpen = new System.Windows.Forms.Button();
-            this._buttonInitializeHighSpeedDataCommunicationSimpleArray = new System.Windows.Forms.Button();
-            this._buttonPreStartHighSpeedDataCommunication = new System.Windows.Forms.Button();
             this._buttonStartHighSpeedDataCommunication = new System.Windows.Forms.Button();
             this._buttonStartMeasure = new System.Windows.Forms.Button();
             this._buttonStopMeasure = new System.Windows.Forms.Button();
@@ -87,6 +83,9 @@
             this._numericUpDownInterval = new System.Windows.Forms.NumericUpDown();
             this._textBoxLog = new System.Windows.Forms.TextBox();
             this._profileOrBitmapFileSave = new System.Windows.Forms.SaveFileDialog();
+            this._buttonSetSetting = new System.Windows.Forms.Button();
+            this._buttonGetSetting = new System.Windows.Forms.Button();
+            this.bt_Set_BatchprocessPoints = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pb_in)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_out)).BeginInit();
             this.tp_SetOption.SuspendLayout();
@@ -545,18 +544,17 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.bt_Set_BatchprocessPoints);
+            this.groupBox1.Controls.Add(this._buttonSetSetting);
+            this.groupBox1.Controls.Add(this._buttonGetSetting);
             this.groupBox1.Controls.Add(this._numericUpDownInterval);
             this.groupBox1.Controls.Add(this._buttonFinalizeHighSpeedDataCommunication);
             this.groupBox1.Controls.Add(this._buttonStartMeasure);
             this.groupBox1.Controls.Add(this._buttonStopHighSpeedDataCommunication);
             this.groupBox1.Controls.Add(this._buttonStopMeasure);
-            this.groupBox1.Controls.Add(this._buttonInitializeHighSpeedDataCommunicationSimpleArray);
-            this.groupBox1.Controls.Add(this._buttonPreStartHighSpeedDataCommunication);
             this.groupBox1.Controls.Add(this._buttonStartHighSpeedDataCommunication);
-            this.groupBox1.Controls.Add(this._buttonEthernetOpen);
             this.groupBox1.Controls.Add(this._buttonInitialize);
             this.groupBox1.Controls.Add(this._numericUpDownProfileSaveCount);
-            this.groupBox1.Controls.Add(this._labelProfileSaveCount);
             this.groupBox1.Controls.Add(this._checkBoxStartTimer);
             this.groupBox1.Font = new System.Drawing.Font("宋体", 12F);
             this.groupBox1.Location = new System.Drawing.Point(13, 6);
@@ -582,7 +580,7 @@
             // 
             this._checkBoxStartTimer.AutoSize = true;
             this._checkBoxStartTimer.Font = new System.Drawing.Font("宋体", 9F);
-            this._checkBoxStartTimer.Location = new System.Drawing.Point(11, 27);
+            this._checkBoxStartTimer.Location = new System.Drawing.Point(13, 27);
             this._checkBoxStartTimer.Name = "_checkBoxStartTimer";
             this._checkBoxStartTimer.Size = new System.Drawing.Size(84, 16);
             this._checkBoxStartTimer.TabIndex = 9;
@@ -597,7 +595,6 @@
             this._textBoxHighSpeedProfileFilePath.Name = "_textBoxHighSpeedProfileFilePath";
             this._textBoxHighSpeedProfileFilePath.Size = new System.Drawing.Size(133, 20);
             this._textBoxHighSpeedProfileFilePath.TabIndex = 4;
-            this._textBoxHighSpeedProfileFilePath.TextChanged += new System.EventHandler(this._textBoxHighSpeedProfileFilePath_TextChanged);
             // 
             // _buttonHighSpeedProfileFileSave
             // 
@@ -623,7 +620,7 @@
             // _numericUpDownProfileSaveCount
             // 
             this._numericUpDownProfileSaveCount.Font = new System.Drawing.Font("宋体", 8F);
-            this._numericUpDownProfileSaveCount.Location = new System.Drawing.Point(182, 51);
+            this._numericUpDownProfileSaveCount.Location = new System.Drawing.Point(181, 56);
             this._numericUpDownProfileSaveCount.Maximum = new decimal(new int[] {
             60000,
             0,
@@ -638,74 +635,25 @@
             0,
             0});
             // 
-            // _labelProfileSaveCount
-            // 
-            this._labelProfileSaveCount.AutoSize = true;
-            this._labelProfileSaveCount.Font = new System.Drawing.Font("宋体", 9F);
-            this._labelProfileSaveCount.Location = new System.Drawing.Point(9, 53);
-            this._labelProfileSaveCount.Name = "_labelProfileSaveCount";
-            this._labelProfileSaveCount.Size = new System.Drawing.Size(149, 12);
-            this._labelProfileSaveCount.TabIndex = 10;
-            this._labelProfileSaveCount.Text = "保存轮廓数（批处理点数）";
-            // 
             // _buttonInitialize
             // 
             this._buttonInitialize.Font = new System.Drawing.Font("宋体", 9F);
-            this._buttonInitialize.Location = new System.Drawing.Point(11, 75);
+            this._buttonInitialize.Location = new System.Drawing.Point(11, 84);
             this._buttonInitialize.Name = "_buttonInitialize";
-            this._buttonInitialize.Size = new System.Drawing.Size(110, 23);
+            this._buttonInitialize.Size = new System.Drawing.Size(235, 25);
             this._buttonInitialize.TabIndex = 12;
             this._buttonInitialize.Text = "初始化";
             this._buttonInitialize.UseVisualStyleBackColor = true;
             this._buttonInitialize.Click += new System.EventHandler(this._buttonInitialize_Click);
-            // 
-            // _buttonEthernetOpen
-            // 
-            this._buttonEthernetOpen.BackColor = System.Drawing.Color.Transparent;
-            this._buttonEthernetOpen.Font = new System.Drawing.Font("宋体", 9F);
-            this._buttonEthernetOpen.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonEthernetOpen.Location = new System.Drawing.Point(136, 75);
-            this._buttonEthernetOpen.Name = "_buttonEthernetOpen";
-            this._buttonEthernetOpen.Size = new System.Drawing.Size(110, 23);
-            this._buttonEthernetOpen.TabIndex = 13;
-            this._buttonEthernetOpen.Text = "开启以太网";
-            this._buttonEthernetOpen.UseVisualStyleBackColor = false;
-            this._buttonEthernetOpen.Click += new System.EventHandler(this._buttonEthernetOpen_Click);
-            // 
-            // _buttonInitializeHighSpeedDataCommunicationSimpleArray
-            // 
-            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.BackColor = System.Drawing.Color.Transparent;
-            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.Font = new System.Drawing.Font("宋体", 9F);
-            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.Location = new System.Drawing.Point(10, 104);
-            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.Name = "_buttonInitializeHighSpeedDataCommunicationSimpleArray";
-            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.Size = new System.Drawing.Size(236, 23);
-            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.TabIndex = 14;
-            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.Text = "初始化高速通信";
-            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.UseVisualStyleBackColor = false;
-            this._buttonInitializeHighSpeedDataCommunicationSimpleArray.Click += new System.EventHandler(this._buttonInitializeHighSpeedDataCommunicationSimpleArray_Click);
-            // 
-            // _buttonPreStartHighSpeedDataCommunication
-            // 
-            this._buttonPreStartHighSpeedDataCommunication.BackColor = System.Drawing.Color.Transparent;
-            this._buttonPreStartHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
-            this._buttonPreStartHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonPreStartHighSpeedDataCommunication.Location = new System.Drawing.Point(11, 133);
-            this._buttonPreStartHighSpeedDataCommunication.Name = "_buttonPreStartHighSpeedDataCommunication";
-            this._buttonPreStartHighSpeedDataCommunication.Size = new System.Drawing.Size(235, 23);
-            this._buttonPreStartHighSpeedDataCommunication.TabIndex = 15;
-            this._buttonPreStartHighSpeedDataCommunication.Text = "预开启高速数据通信";
-            this._buttonPreStartHighSpeedDataCommunication.UseVisualStyleBackColor = false;
-            this._buttonPreStartHighSpeedDataCommunication.Click += new System.EventHandler(this._buttonPreStartHighSpeedDataCommunication_Click);
             // 
             // _buttonStartHighSpeedDataCommunication
             // 
             this._buttonStartHighSpeedDataCommunication.BackColor = System.Drawing.Color.Transparent;
             this._buttonStartHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonStartHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonStartHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 163);
+            this._buttonStartHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 117);
             this._buttonStartHighSpeedDataCommunication.Name = "_buttonStartHighSpeedDataCommunication";
-            this._buttonStartHighSpeedDataCommunication.Size = new System.Drawing.Size(236, 23);
+            this._buttonStartHighSpeedDataCommunication.Size = new System.Drawing.Size(235, 25);
             this._buttonStartHighSpeedDataCommunication.TabIndex = 16;
             this._buttonStartHighSpeedDataCommunication.Text = "开启高速数据通信";
             this._buttonStartHighSpeedDataCommunication.UseVisualStyleBackColor = false;
@@ -715,9 +663,9 @@
             // 
             this._buttonStartMeasure.BackColor = System.Drawing.Color.Transparent;
             this._buttonStartMeasure.Font = new System.Drawing.Font("宋体", 9F);
-            this._buttonStartMeasure.Location = new System.Drawing.Point(10, 193);
+            this._buttonStartMeasure.Location = new System.Drawing.Point(10, 148);
             this._buttonStartMeasure.Name = "_buttonStartMeasure";
-            this._buttonStartMeasure.Size = new System.Drawing.Size(110, 23);
+            this._buttonStartMeasure.Size = new System.Drawing.Size(110, 25);
             this._buttonStartMeasure.TabIndex = 17;
             this._buttonStartMeasure.Text = "开始测量";
             this._buttonStartMeasure.UseVisualStyleBackColor = false;
@@ -727,9 +675,9 @@
             // 
             this._buttonStopMeasure.BackColor = System.Drawing.Color.Transparent;
             this._buttonStopMeasure.Font = new System.Drawing.Font("宋体", 9F);
-            this._buttonStopMeasure.Location = new System.Drawing.Point(136, 193);
+            this._buttonStopMeasure.Location = new System.Drawing.Point(136, 148);
             this._buttonStopMeasure.Name = "_buttonStopMeasure";
-            this._buttonStopMeasure.Size = new System.Drawing.Size(110, 23);
+            this._buttonStopMeasure.Size = new System.Drawing.Size(110, 25);
             this._buttonStopMeasure.TabIndex = 18;
             this._buttonStopMeasure.Text = "停止测量";
             this._buttonStopMeasure.UseVisualStyleBackColor = false;
@@ -765,9 +713,9 @@
             this._buttonFinalizeHighSpeedDataCommunication.BackColor = System.Drawing.Color.Transparent;
             this._buttonFinalizeHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonFinalizeHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonFinalizeHighSpeedDataCommunication.Location = new System.Drawing.Point(11, 248);
+            this._buttonFinalizeHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 211);
             this._buttonFinalizeHighSpeedDataCommunication.Name = "_buttonFinalizeHighSpeedDataCommunication";
-            this._buttonFinalizeHighSpeedDataCommunication.Size = new System.Drawing.Size(235, 23);
+            this._buttonFinalizeHighSpeedDataCommunication.Size = new System.Drawing.Size(235, 25);
             this._buttonFinalizeHighSpeedDataCommunication.TabIndex = 12;
             this._buttonFinalizeHighSpeedDataCommunication.Text = "结束高速数据通信";
             this._buttonFinalizeHighSpeedDataCommunication.UseVisualStyleBackColor = false;
@@ -778,9 +726,9 @@
             this._buttonStopHighSpeedDataCommunication.BackColor = System.Drawing.Color.Transparent;
             this._buttonStopHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonStopHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonStopHighSpeedDataCommunication.Location = new System.Drawing.Point(11, 221);
+            this._buttonStopHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 180);
             this._buttonStopHighSpeedDataCommunication.Name = "_buttonStopHighSpeedDataCommunication";
-            this._buttonStopHighSpeedDataCommunication.Size = new System.Drawing.Size(235, 23);
+            this._buttonStopHighSpeedDataCommunication.Size = new System.Drawing.Size(235, 25);
             this._buttonStopHighSpeedDataCommunication.TabIndex = 11;
             this._buttonStopHighSpeedDataCommunication.Text = "停止高速数据通信";
             this._buttonStopHighSpeedDataCommunication.UseVisualStyleBackColor = false;
@@ -798,7 +746,7 @@
             0,
             0,
             0});
-            this._numericUpDownInterval.Location = new System.Drawing.Point(196, 26);
+            this._numericUpDownInterval.Location = new System.Drawing.Point(195, 26);
             this._numericUpDownInterval.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -834,6 +782,43 @@
             this._profileOrBitmapFileSave.Filter = "Profile (*.csv)|*.csv|Bitmap (*.bmp)|*.bmp|TIFF (*.tif;*.tiff)|*.tif;*.tiff|all f" +
     "iles (*.*)|*.*";
             this._profileOrBitmapFileSave.OverwritePrompt = false;
+            // 
+            // _buttonSetSetting
+            // 
+            this._buttonSetSetting.BackColor = System.Drawing.Color.Transparent;
+            this._buttonSetSetting.Font = new System.Drawing.Font("宋体", 9F);
+            this._buttonSetSetting.ForeColor = System.Drawing.SystemColors.ControlText;
+            this._buttonSetSetting.Location = new System.Drawing.Point(10, 241);
+            this._buttonSetSetting.Name = "_buttonSetSetting";
+            this._buttonSetSetting.Size = new System.Drawing.Size(110, 25);
+            this._buttonSetSetting.TabIndex = 20;
+            this._buttonSetSetting.Text = "设置参数";
+            this._buttonSetSetting.UseVisualStyleBackColor = false;
+            this._buttonSetSetting.Click += new System.EventHandler(this._buttonSetSetting_Click);
+            // 
+            // _buttonGetSetting
+            // 
+            this._buttonGetSetting.BackColor = System.Drawing.Color.Transparent;
+            this._buttonGetSetting.Font = new System.Drawing.Font("宋体", 9F);
+            this._buttonGetSetting.ForeColor = System.Drawing.SystemColors.ControlText;
+            this._buttonGetSetting.Location = new System.Drawing.Point(136, 241);
+            this._buttonGetSetting.Name = "_buttonGetSetting";
+            this._buttonGetSetting.Size = new System.Drawing.Size(110, 25);
+            this._buttonGetSetting.TabIndex = 21;
+            this._buttonGetSetting.Text = "获取参数";
+            this._buttonGetSetting.UseVisualStyleBackColor = false;
+            this._buttonGetSetting.Click += new System.EventHandler(this._buttonGetSetting_Click);
+            // 
+            // bt_Set_BatchprocessPoints
+            // 
+            this.bt_Set_BatchprocessPoints.Font = new System.Drawing.Font("宋体", 9F);
+            this.bt_Set_BatchprocessPoints.Location = new System.Drawing.Point(11, 54);
+            this.bt_Set_BatchprocessPoints.Name = "bt_Set_BatchprocessPoints";
+            this.bt_Set_BatchprocessPoints.Size = new System.Drawing.Size(164, 23);
+            this.bt_Set_BatchprocessPoints.TabIndex = 22;
+            this.bt_Set_BatchprocessPoints.Text = "设置批处理点数";
+            this.bt_Set_BatchprocessPoints.UseVisualStyleBackColor = true;
+            this.bt_Set_BatchprocessPoints.Click += new System.EventHandler(this.bt_Set_BatchprocessPoints_Click);
             // 
             // MyWindow
             // 
@@ -921,13 +906,9 @@
         private System.Windows.Forms.CheckBox _checkBoxStartTimer;
         private System.Windows.Forms.Label _labelHighSpeedSavePath;
         private System.Windows.Forms.NumericUpDown _numericUpDownProfileSaveCount;
-        private System.Windows.Forms.Label _labelProfileSaveCount;
         private System.Windows.Forms.Button _buttonStartMeasure;
         private System.Windows.Forms.Button _buttonStopMeasure;
-        private System.Windows.Forms.Button _buttonInitializeHighSpeedDataCommunicationSimpleArray;
-        private System.Windows.Forms.Button _buttonPreStartHighSpeedDataCommunication;
         private System.Windows.Forms.Button _buttonStartHighSpeedDataCommunication;
-        private System.Windows.Forms.Button _buttonEthernetOpen;
         private System.Windows.Forms.Button _buttonInitialize;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button _buttonHighSpeedSaveAsBitmapFile;
@@ -937,6 +918,9 @@
         private System.Windows.Forms.NumericUpDown _numericUpDownInterval;
         private System.Windows.Forms.TextBox _textBoxLog;
         private System.Windows.Forms.SaveFileDialog _profileOrBitmapFileSave;
+        private System.Windows.Forms.Button _buttonSetSetting;
+        private System.Windows.Forms.Button _buttonGetSetting;
+        private System.Windows.Forms.Button bt_Set_BatchprocessPoints;
     }
 }
 
