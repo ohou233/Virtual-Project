@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="19.11.0.0">
+<procedure name="main">
+<interface/>
+<body>
+<l>Set_Offest_Param (p_A1_x_offest, p_A1_y_offest, p_A2_y_offest, p_A2_x_offest, p_A3_y_offest, p_A3_x_offest, p_A4_y_offest, p_A4_x_offest, p_A5_y_offest, p_A5_x_offest, p_A6_y_offest, p_A6_x_offest, p_A7_y_offest, p_A7_x_offest, p_A8_y_offest, p_A8_x_offest, p_E2_y_offest, p_E2_x_offest, p_E5_y_offest, p_E5_x_offest, p_E10_y_offest, p_E10_x_offest, p_E13_y_offest, p_E13_x_offest, B_offest, C_offest)</l>
+<l>count_seconds (start_time)</l>
+<l>read_image (ImageZ, '//mac/Home/Desktop/VirtualProject/Data/3d-Image/2.1.tif')</l>
+<l>get_image_size (ImageZ, Width, Height)</l>
+<c>*定位两圆心</c>
+<l>gen_TwoCircle_info(ImageZ, Row_Origin, Col_Origin, MaxCircleRadius, RowEnd_X, ColEnd_X, MinCircleRadius, TwoCirclePhi)</l>
+<l>hom_mat2d_identity (HomMat2DIdentity)</l>
+<c>*以大圆圆心为原点建立坐标系</c>
+<l>my_create_coordinate (HomMat2DIdentity, Col_Origin, Row_Origin, ColEnd_X, RowEnd_X, Phi, ColEnd_Y, RowEnd_Y)</l>
+<c>*寻找拟合平面点，并计算Z0向平面的高度</c>
+<l>my_fit_surface (ImageZ, HomMat2DIdentity, p_A1_x_offest, p_A1_y_offest, Phi, Col_Origin, Row_Origin, p_A2_x_offest, p_A2_y_offest, p_A3_x_offest, p_A3_y_offest, p_A4_x_offest, p_A4_y_offest, p_A5_x_offest, p_A5_y_offest, p_A6_x_offest, p_A6_y_offest, p_A7_x_offest, p_A7_y_offest, p_A8_x_offest, p_A8_y_offest, Z_Origin_Median)</l>
+<c>*寻找底部4个点，计算四个点相对于Z0向平面的偏差</c>
+<l>my_gen_4point_offest (ImageZ, HomMat2DIdentity, p_E2_x_offest, p_E2_y_offest, Phi, Col_Origin, Row_Origin, p_E5_x_offest, p_E5_y_offest, p_E10_x_offest, p_E10_y_offest, p_E13_x_offest, p_E13_y_offest, Z_Origin_Median, E2_Z_mm, E5_Z_mm, E10_Z_mm, E13_Z_mm, p_E2_x_fit, p_E2_y_fit, p_E5_x_fit, p_E5_y_fit, p_E10_x_fit, p_E10_y_fit, p_E13_x_fit, p_E13_y_fit)</l>
+<c>*计算轮廓度</c>
+<l>my_gen_result (E2_Z_mm, E5_Z_mm, E10_Z_mm, E13_Z_mm, result)</l>
+<l>count_seconds (stop_time)</l>
+<c></c>
+</body>
+<docu id="main">
+<parameters/>
+</docu>
+</procedure>
+<procedure name="gen_buttom_edge">
+<interface>
+<io>
+<par name="Image" base_type="iconic" dimension="0"/>
+</io>
+<ic>
+<par name="CenterRow" base_type="ctrl" dimension="0"/>
+<par name="CenterCol" base_type="ctrl" dimension="0"/>
+<par name="BaseRectDistRow" base_type="ctrl" dimension="0"/>
+<par name="BaseRectDistCol" base_type="ctrl" dimension="0"/>
+<par name="BasePhi" base_type="ctrl" dimension="0"/>
+<par name="ImageWidth" base_type="ctrl" dimension="0"/>
+<par name="ImageHeight" base_type="ctrl" dimension="0"/>
+<par name="RotatePhi" base_type="ctrl" dimension="0"/>
+<par name="RectBasePhi" base_type="ctrl" dimension="0"/>
+<par name="MinCircleColumn" base_type="ctrl" dimension="0"/>
+<par name="MaxCircleColumn" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="ButtomEdgeRowBegin" base_type="ctrl" dimension="0"/>
+<par name="ButtomEdgeColBegin" base_type="ctrl" dimension="0"/>
+<par name="ButtomEdgeRowEnd" base_type="ctrl" dimension="0"/>
+<par name="ButtomEdgeColEnd" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<l>gen_rectangle2 (Rectangle1, CenterRow+BaseRectDistRow, CenterCol-BaseRectDistCol, RectBasePhi, 10, 5)</l>
+<l>gen_rectangle2 (Rectangle2, CenterRow+BaseRectDistRow, CenterCol+BaseRectDistCol, RectBasePhi, 10, 5)</l>
+<c></c>
+<l>if (MaxCircleColumn &gt; MinCircleColumn)</l>
+<l>    vector_angle_to_rigid (CenterRow, CenterCol, -RectBasePhi, CenterRow, CenterCol, BasePhi+RotatePhi, HomMat2D5)</l>
+<l>    affine_trans_region (Rectangle1, RectButtomMeasureRectionAffineTrans1, HomMat2D5, 'nearest_neighbor')</l>
+<l>    area_center (RectButtomMeasureRectionAffineTrans1, RectButtomMeasureRectArea, RectButtomMeasureRectRow1, RectButtomMeasureRectColumn1)</l>
+<l>    orientation_region (RectButtomMeasureRectionAffineTrans1, RectButtomMeasureRectPhi1)</l>
+<l>    gen_measure_rectangle2 (RectButtomMeasureRectRow1, RectButtomMeasureRectColumn1, RectButtomMeasureRectPhi1, 10, 5, ImageWidth, ImageHeight, 'bicubic', MeasureHandle5)</l>
+<c></c>
+<l>    vector_angle_to_rigid (CenterRow, CenterCol, -RectBasePhi, CenterRow, CenterCol, BasePhi+RotatePhi, HomMat2D6)</l>
+<l>    affine_trans_region (Rectangle2, ButtomMeasureRectRegionAffineTrans2, HomMat2D6, 'nearest_neighbor')</l>
+<l>    area_center (ButtomMeasureRectRegionAffineTrans2, ButtomMeasureRectArea, ButtomMeasureRectRow2, ButtomMeasureRectColumn2)</l>
+<l>    orientation_region (ButtomMeasureRectRegionAffineTrans2, ButtomMeasureRectPhi2)</l>
+<l>    gen_measure_rectangle2 (ButtomMeasureRectRow2, ButtomMeasureRectColumn2, ButtomMeasureRectPhi2, 10, 5, ImageWidth, ImageHeight, 'bicubic', MeasureHandle6)</l>
+<c></c>
+<l>else</l>
+<l>    vector_angle_to_rigid (CenterRow, CenterCol, -RectBasePhi, CenterRow, CenterCol, BasePhi-RotatePhi, HomMat2D5)</l>
+<l>    affine_trans_region (Rectangle1, RectButtomMeasureRectionAffineTrans1, HomMat2D5, 'nearest_neighbor')</l>
+<l>    area_center (RectButtomMeasureRectionAffineTrans1, RectButtomMeasureRectArea, RectButtomMeasureRectRow1, RectButtomMeasureRectColumn1)</l>
+<l>    orientation_region (RectButtomMeasureRectionAffineTrans1, RectButtomMeasureRectPhi1)</l>
+<l>    gen_measure_rectangle2 (RectButtomMeasureRectRow1, RectButtomMeasureRectColumn1, RectButtomMeasureRectPhi1, 10, 5, ImageWidth, ImageHeight, 'bicubic', MeasureHandle5)</l>
+<c></c>
+<l>    vector_angle_to_rigid (CenterRow, CenterCol, -RectBasePhi, CenterRow, CenterCol, BasePhi-RotatePhi, HomMat2D6)</l>
+<l>    affine_trans_region (Rectangle2, ButtomMeasureRectRegionAffineTrans2, HomMat2D6, 'nearest_neighbor')</l>
+<l>    area_center (ButtomMeasureRectRegionAffineTrans2, ButtomMeasureRectArea, ButtomMeasureRectRow2, ButtomMeasureRectColumn2)</l>
+<l>    orientation_region (ButtomMeasureRectRegionAffineTrans2, ButtomMeasureRectPhi2)</l>
+<l>    gen_measure_rectangle2 (ButtomMeasureRectRow2, ButtomMeasureRectColumn2, ButtomMeasureRectPhi2, 10, 5, ImageWidth, ImageHeight, 'bicubic', MeasureHandle6)</l>
+<c></c>
+<l>endif</l>
+<c>* 抓取边缘</c>
+<l>measure_pos (Image, MeasureHandle5, 1, 150, 'all', 'first', ButtomEdgeRowBegin, ButtomEdgeColBegin, ButtomAmplitude, ButtomDistance)</l>
+<l>measure_pos (Image, MeasureHandle6, 1, 150, 'all', 'first', ButtomEdgeRowEnd, ButtomEdgeColEnd, ButtomAmplitude, ButtomDistance)</l>
+<c></c>
+<l>close_measure (MeasureHandle5)</l>
+<l>close_measure (MeasureHandle6)</l>
+<c></c>
+<c>* 拟合边缘</c>
+<l>create_metrology_model (ButtomMetrologyHandle)</l>
+<l>add_metrology_object_line_measure (ButtomMetrologyHandle, ButtomEdgeRowBegin, ButtomEdgeColBegin, ButtomEdgeRowEnd, ButtomEdgeColEnd, 5, 1, 1, 150, [], [], Index)</l>
+<l>apply_metrology_model (Image, ButtomMetrologyHandle)</l>
+<l>get_metrology_object_measures (Contours, ButtomMetrologyHandle, 'all', 'all', ButtomEdgeRows, ButtomEdgeColumns)</l>
+<l>gen_contour_polygon_xld (ButtomEdgeContour, ButtomEdgeRows, ButtomEdgeColumns)</l>
+<l>fit_line_contour_xld (ButtomEdgeContour, 'drop', -1, 0, 5, 4, ButtomEdgeRowBegin, ButtomEdgeColBegin, ButtomEdgeRowEnd, ButtomEdgeColEnd, Nr, Nc, Dist)</l>
+<c></c>
+<c></c>
+<l>return ()</l>
+</body>
+<docu id="gen_buttom_edge">
+<parameters>
+<parameter id="BasePhi"/>
+<parameter id="BaseRectDistCol"/>
+<parameter id="BaseRectDistRow"/>
+<parameter id="ButtomEdgeColBegin"/>
+<parameter id="ButtomEdgeColEnd"/>
+<parameter id="ButtomEdgeRowBegin"/>
+<parameter id="ButtomEdgeRowEnd"/>
+<parameter id="CenterCol"/>
+<parameter id="CenterRow"/>
+<parameter id="Image"/>
+<parameter id="ImageHeight"/>
+<parameter id="ImageWidth"/>
+<parameter id="MaxCircleColumn"/>
+<parameter id="MinCircleColumn"/>
+<parameter id="RectBasePhi"/>
+<parameter id="RotatePhi"/>
+</parameters>
+</docu>
+</procedure>
+<procedure name="gen_TwoCircle_info">
+<interface>
+<io>
+<par name="Image" base_type="iconic" dimension="0"/>
+</io>
+<oc>
+<par name="MaxCircleRow" base_type="ctrl" dimension="0"/>
+<par name="MaxCircleColumn" base_type="ctrl" dimension="0"/>
+<par name="MaxCircleRadius" base_type="ctrl" dimension="0"/>
+<par name="MinCircleRow" base_type="ctrl" dimension="0"/>
+<par name="MinCircleColumn" base_type="ctrl" dimension="0"/>
+<par name="MinCircleRadius" base_type="ctrl" dimension="0"/>
+<par name="TwoCirclePhi" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<l>* fast_threshold (Image, Regions, 128, 255, 20)</l>
+<c></c>
+<l>* threshold (Image, Regions, 152, 181)</l>
+<c></c>
+<l>auto_threshold (Image, Regions, 0.2)</l>
+<l>connection (Regions, ConnectedRegions)</l>
+<c>* 提取两个圆形区域</c>
+<c></c>
+<l>select_shape (ConnectedRegions, MaxCircleSelectedRegions, ['area','circularity'], 'and', [217996,0.7004], [1.24768e+06,0.7301])</l>
+<l>select_shape (ConnectedRegions, MinCircleSelectedRegions, ['area','circularity'], 'and', [217996,0.7579], [1.24768e+06,0.8006])</l>
+<c></c>
+<l>smallest_circle (MaxCircleSelectedRegions, MaxCircleRow, MaxCircleColumn, MaxCircleRadius)</l>
+<l>smallest_circle (MinCircleSelectedRegions, MinCircleRow, MinCircleColumn, MinCircleRadius)</l>
+<c></c>
+<l>gen_circle_contour_xld (MinCircle, MinCircleRow, MinCircleColumn, MinCircleRadius, 0, 6.28318, 'positive', 1)</l>
+<l>gen_circle_contour_xld (MaxCircle, MaxCircleRow, MaxCircleColumn, MaxCircleRadius, 0, 6.28318, 'positive', 1)</l>
+<c></c>
+<c></c>
+<c>* 求两圆心连线方向</c>
+<l>line_orientation (MaxCircleRow, MaxCircleColumn, MinCircleRow, MinCircleColumn, TwoCirclePhi)</l>
+<c></c>
+<c></c>
+<c></c>
+<l>* threshold_sub_pix (Image, Border, 1)</l>
+<l>* select_shape_xld (Border, MinCircleContour, 'area', 'and', 463303, 766055)</l>
+<l>* fit_circle_contour_xld (MinCircleContour, 'algebraic', -1, 0, 0, 3, 2, MinCircleRow, MinCircleColumn, MinCircleRadius, StartPhi, EndPhi, PointOrder)</l>
+<l>* select_shape_xld (Border, MaxCircleContour, 'area', 'and', 738532, 1.03211e+06)</l>
+<l>* fit_circle_contour_xld (MaxCircleContour, 'algebraic', -1, 0, 0, 3, 2, MaxCircleRow, MaxCircleColumn, MaxCircleRadius, StartPhi, EndPhi, PointOrder)</l>
+<l>* line_orientation (MaxCircleRow, MaxCircleColumn, MinCircleRow, MinCircleColumn, TwoCirclePhi)</l>
+<c></c>
+<l>return ()</l>
+</body>
+<docu id="gen_TwoCircle_info">
+<parameters>
+<parameter id="Image"/>
+<parameter id="MaxCircleColumn"/>
+<parameter id="MaxCircleRadius"/>
+<parameter id="MaxCircleRow"/>
+<parameter id="MinCircleColumn"/>
+<parameter id="MinCircleRadius"/>
+<parameter id="MinCircleRow"/>
+<parameter id="TwoCirclePhi"/>
+</parameters>
+</docu>
+</procedure>
+<procedure name="gen_FitPoint">
+<interface>
+<io>
+<par name="Image" base_type="iconic" dimension="0"/>
+</io>
+<oo>
+<par name="Circle1" base_type="iconic" dimension="0"/>
+</oo>
+<ic>
+<par name="Origin_Row_InImg" base_type="ctrl" dimension="0"/>
+<par name="Origin_Column_InImg" base_type="ctrl" dimension="0"/>
+<par name="TwoCirclePhi" base_type="ctrl" dimension="0"/>
+<par name="p_XOffest" base_type="ctrl" dimension="0"/>
+<par name="p_YOffest" base_type="ctrl" dimension="0"/>
+<par name="MaxCircleColumn" base_type="ctrl" dimension="0"/>
+<par name="MinCircleColumn" base_type="ctrl" dimension="0"/>
+<par name="MaxCircleRow" base_type="ctrl" dimension="0"/>
+<par name="Width" base_type="ctrl" dimension="0"/>
+<par name="Height" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="p_x" base_type="ctrl" dimension="0"/>
+<par name="p_y" base_type="ctrl" dimension="0"/>
+<par name="p_x_fit" base_type="ctrl" dimension="0"/>
+<par name="p_y_fit" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<c>* 计算图像坐标系到基准坐标系的变换矩阵</c>
+<l>vector_angle_to_rigid (0, 0, 0, Origin_Row_InImg, Origin_Column_InImg, TwoCirclePhi, HomMat2D_Img2Base)</l>
+<c>* 将图像坐标系下的基准点转换到基准坐标系下</c>
+<l>affine_trans_point_2d (HomMat2D_Img2Base, Origin_Column_InImg, Origin_Row_InImg, Origin_Column_InBase, Origin_Row_InBase)</l>
+<c>* 在基准坐标系下对基准点进行偏移找拟合点</c>
+<l>if (MaxCircleColumn &lt; MinCircleColumn)</l>
+<l>    p_XInBase := Origin_Column_InBase-p_XOffest</l>
+<l>    p_YInBase := Origin_Row_InBase-p_YOffest</l>
+<l>else</l>
+<l>    p_XInBase := Origin_Column_InBase+p_XOffest</l>
+<l>    p_YInBase := Origin_Row_InBase+p_YOffest</l>
+<l>endif</l>
+<c></c>
+<c>* 计算基准坐标系到图像坐标系下的变换矩阵</c>
+<l>hom_mat2d_invert (HomMat2D_Img2Base, HomMat2D_Base2Img)</l>
+<c>* 将基准坐标系下的拟合点转换到图像坐标系下</c>
+<l>affine_trans_point_2d (HomMat2D_Base2Img, p_XInBase, p_YInBase, p_x_fit, p_y_fit)</l>
+<c></c>
+<c>* **********如采用边缘点则取消注释*******************</c>
+<l>* p_x := p_x_fit</l>
+<l>* p_y := p_y_fit</l>
+<c>* **************************************************</c>
+<c></c>
+<c></c>
+<c>* **********如直接采用手册标记点则取消注释*******************</c>
+<l>line_orientation (MaxCircleRow, MaxCircleColumn, p_y_fit, p_x_fit, MeasureRectPhi1)</l>
+<l>gen_measure_rectangle2 (p_y_fit, p_x_fit, MeasureRectPhi1, 30, 2, Width, Height, 'bicubic', MeasureHandle1)</l>
+<l>measure_pos (Image, MeasureHandle1, 1.5, 50, 'all', 'all', p_y, p_x, Amplitude, Distance)</l>
+<l>close_measure (MeasureHandle1)</l>
+<c>* *********************************************************</c>
+<l>gen_circle (Circle1, p_y, p_x, 10)</l>
+<l>return ()</l>
+</body>
+<docu id="gen_FitPoint">
+<parameters>
+<parameter id="Circle1"/>
+<parameter id="Height"/>
+<parameter id="Image"/>
+<parameter id="MaxCircleColumn"/>
+<parameter id="MaxCircleRow"/>
+<parameter id="MinCircleColumn"/>
+<parameter id="Origin_Column_InImg"/>
+<parameter id="Origin_Row_InImg"/>
+<parameter id="TwoCirclePhi"/>
+<parameter id="Width"/>
+<parameter id="p_XOffest"/>
+<parameter id="p_YOffest"/>
+<parameter id="p_x"/>
+<parameter id="p_x_fit"/>
+<parameter id="p_y"/>
+<parameter id="p_y_fit"/>
+</parameters>
+</docu>
+</procedure>
+<procedure name="Set_Offest_Param">
+<interface>
+<oc>
+<par name="p_A1_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A1_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A2_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A2_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A3_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A3_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A4_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A4_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A5_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A5_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A6_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A6_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A7_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A7_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A8_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A8_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_E2_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_E2_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_E5_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_E5_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_E10_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_E10_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_E13_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_E13_x_offest" base_type="ctrl" dimension="0"/>
+<par name="B_offest" base_type="ctrl" dimension="0"/>
+<par name="C_offest" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<l>p_A1_x_offest := 7.12/0.0125875</l>
+<l>p_A1_y_offest := 4.340/0.01</l>
+<c></c>
+<l>p_A2_x_offest := 7.12/0.0125875</l>
+<l>p_A2_y_offest := -4.340/0.01</l>
+<c></c>
+<l>p_A3_x_offest := 4.540 /0.0125875</l>
+<l>p_A3_y_offest := -6.570/0.01</l>
+<c></c>
+<l>p_A4_x_offest := -4.540/0.0125875</l>
+<l>p_A4_y_offest := -6.570/0.01</l>
+<c></c>
+<l>p_A5_x_offest := -6.940 /0.0125875</l>
+<l>p_A5_y_offest := -4.050/0.01</l>
+<c></c>
+<l>p_A6_x_offest := -6.940 /0.0125875</l>
+<l>p_A6_y_offest := 4.050/0.01</l>
+<c></c>
+<l>p_A7_x_offest := -4.540 /0.0125875</l>
+<l>p_A7_y_offest := 6.570/0.01</l>
+<c></c>
+<l>p_A8_x_offest := 4.540 /0.0125875</l>
+<l>p_A8_y_offest := 6.570/0.01</l>
+<c></c>
+<l>p_E2_x_offest := 5.220 /0.0125875</l>
+<l>p_E2_y_offest := 1.520/0.01</l>
+<c></c>
+<l>p_E5_x_offest := 5.220 /0.0125875</l>
+<l>p_E5_y_offest := -1.520/0.01</l>
+<c></c>
+<l>p_E10_x_offest := -5.220 /0.0125875</l>
+<l>p_E10_y_offest := -1.520/0.01</l>
+<c></c>
+<l>p_E13_x_offest := -5.220  /0.0125875</l>
+<l>p_E13_y_offest := 1.520/0.01</l>
+<c></c>
+<l>B_offest := 6.788/0.0125875</l>
+<l>C_offest := 19.605/0.01</l>
+<l>return ()</l>
+</body>
+<docu id="Set_Offest_Param">
+<parameters>
+<parameter id="B_offest"/>
+<parameter id="C_offest"/>
+<parameter id="p_A1_x_offest"/>
+<parameter id="p_A1_y_offest"/>
+<parameter id="p_A2_x_offest"/>
+<parameter id="p_A2_y_offest"/>
+<parameter id="p_A3_x_offest"/>
+<parameter id="p_A3_y_offest"/>
+<parameter id="p_A4_x_offest"/>
+<parameter id="p_A4_y_offest"/>
+<parameter id="p_A5_x_offest"/>
+<parameter id="p_A5_y_offest"/>
+<parameter id="p_A6_x_offest"/>
+<parameter id="p_A6_y_offest"/>
+<parameter id="p_A7_x_offest"/>
+<parameter id="p_A7_y_offest"/>
+<parameter id="p_A8_x_offest"/>
+<parameter id="p_A8_y_offest"/>
+<parameter id="p_E10_x_offest"/>
+<parameter id="p_E10_y_offest"/>
+<parameter id="p_E13_x_offest"/>
+<parameter id="p_E13_y_offest"/>
+<parameter id="p_E2_x_offest"/>
+<parameter id="p_E2_y_offest"/>
+<parameter id="p_E5_x_offest"/>
+<parameter id="p_E5_y_offest"/>
+</parameters>
+</docu>
+</procedure>
+<procedure name="my_fit_surface">
+<interface>
+<io>
+<par name="ImageZ" base_type="iconic" dimension="0"/>
+</io>
+<ic>
+<par name="HomMat2DIdentity" base_type="ctrl" dimension="0"/>
+<par name="p_A1_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A1_y_offest" base_type="ctrl" dimension="0"/>
+<par name="Phi" base_type="ctrl" dimension="0"/>
+<par name="Col_Origin" base_type="ctrl" dimension="0"/>
+<par name="Row_Origin" base_type="ctrl" dimension="0"/>
+<par name="p_A2_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A2_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A3_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A3_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A4_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A4_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A5_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A5_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A6_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A6_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A7_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A7_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A8_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A8_y_offest" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="Z_Origin_median" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<c>*定位8个给定平面拟合点</c>
+<l>my_gen_suffce_fit_point (Row_Origin, Col_Origin, Phi, p_A1_x_offest, p_A1_y_offest, p_A1_x_fit, p_A1_y_fit)</l>
+<l>my_gen_suffce_fit_point (Row_Origin, Col_Origin, Phi, p_A2_x_offest, p_A2_y_offest, p_A2_x_fit, p_A2_y_fit)</l>
+<l>my_gen_suffce_fit_point (Row_Origin, Col_Origin, Phi, p_A3_x_offest, p_A3_y_offest, p_A3_x_fit, p_A3_y_fit)</l>
+<l>my_gen_suffce_fit_point (Row_Origin, Col_Origin, Phi, p_A4_x_offest, p_A4_y_offest, p_A4_x_fit, p_A4_y_fit)</l>
+<l>my_gen_suffce_fit_point (Row_Origin, Col_Origin, Phi, p_A5_x_offest, p_A5_y_offest, p_A5_x_fit, p_A5_y_fit)</l>
+<l>my_gen_suffce_fit_point (Row_Origin, Col_Origin, Phi, p_A6_x_offest, p_A6_y_offest, p_A6_x_fit, p_A6_y_fit)</l>
+<l>my_gen_suffce_fit_point (Row_Origin, Col_Origin, Phi, p_A7_x_offest, p_A7_y_offest, p_A7_x_fit, p_A7_y_fit)</l>
+<l>my_gen_suffce_fit_point (Row_Origin, Col_Origin, Phi, p_A8_x_offest, p_A8_y_offest, p_A8_x_fit, p_A8_y_fit)</l>
+<c></c>
+<c>*获取八个平面拟合点的灰度值，即Z向距离</c>
+<l>get_grayval_interpolated (ImageZ, [p_A1_y_fit,p_A2_y_fit,p_A3_y_fit,p_A4_y_fit,p_A5_y_fit,p_A6_y_fit,p_A7_y_fit, p_A8_y_fit], [p_A1_x_fit,p_A2_x_fit,p_A3_x_fit,p_A4_x_fit,p_A5_x_fit,p_A6_x_fit,p_A7_x_fit, p_A8_x_fit], 'bicubic_clipped', Surface_Zs)</l>
+<c></c>
+<c>*根据八个平面拟合点，获取八个Z向值，去除最大最小值干扰后求取中位值</c>
+<c>*将中位值作为Z向0点</c>
+<l>* tuple_max (Surface_Zs, Z_Origin_Max)</l>
+<l>* tuple_min (Surface_Zs, Z_Origin_Min)</l>
+<l>Z_Origin_NoMaxMin := []</l>
+<l>for Index := 0 to |Surface_Zs|-1 by 1</l>
+<l>*     if(Surface_Zs[Index] != Z_Origin_Max and Surface_Zs[Index] != Z_Origin_Min)</l>
+<l>        Z_Origin_NoMaxMin := [Z_Origin_NoMaxMin, (Surface_Zs[Index]-32768)*1.6/1000]</l>
+<l>*     endif</l>
+<l>endfor</l>
+<l>tuple_mean (Z_Origin_NoMaxMin, Z_Origin_median)</l>
+<l>return ()</l>
+</body>
+<docu id="my_fit_surface">
+<parameters>
+<parameter id="Col_Origin"/>
+<parameter id="HomMat2DIdentity"/>
+<parameter id="ImageZ"/>
+<parameter id="Phi"/>
+<parameter id="Row_Origin"/>
+<parameter id="Z_Origin_median"/>
+<parameter id="p_A1_x_offest"/>
+<parameter id="p_A1_y_offest"/>
+<parameter id="p_A2_x_offest"/>
+<parameter id="p_A2_y_offest"/>
+<parameter id="p_A3_x_offest"/>
+<parameter id="p_A3_y_offest"/>
+<parameter id="p_A4_x_offest"/>
+<parameter id="p_A4_y_offest"/>
+<parameter id="p_A5_x_offest"/>
+<parameter id="p_A5_y_offest"/>
+<parameter id="p_A6_x_offest"/>
+<parameter id="p_A6_y_offest"/>
+<parameter id="p_A7_x_offest"/>
+<parameter id="p_A7_y_offest"/>
+<parameter id="p_A8_x_offest"/>
+<parameter id="p_A8_y_offest"/>
+</parameters>
+</docu>
+</procedure>
+<procedure name="my_gen_4point_offest">
+<interface>
+<io>
+<par name="ImageZ" base_type="iconic" dimension="0"/>
+</io>
+<ic>
+<par name="HomMat2DIdentity" base_type="ctrl" dimension="0"/>
+<par name="p_E2_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_E2_y_offest" base_type="ctrl" dimension="0"/>
+<par name="Phi" base_type="ctrl" dimension="0"/>
+<par name="Col_Origin" base_type="ctrl" dimension="0"/>
+<par name="Row_Origin" base_type="ctrl" dimension="0"/>
+<par name="p_E5_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_E5_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_E10_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_E10_y_offest" base_type="ctrl" dimension="0"/>
+<par name="p_E13_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_E13_y_offest" base_type="ctrl" dimension="0"/>
+<par name="Z_Origin_Mean" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="E2_Z_mm" base_type="ctrl" dimension="0"/>
+<par name="E5_Z_mm" base_type="ctrl" dimension="0"/>
+<par name="E10_Z_mm" base_type="ctrl" dimension="0"/>
+<par name="E13_Z_mm" base_type="ctrl" dimension="0"/>
+<par name="p_E2_x_fit" base_type="ctrl" dimension="0"/>
+<par name="p_E2_y_fit" base_type="ctrl" dimension="0"/>
+<par name="p_E5_x_fit" base_type="ctrl" dimension="0"/>
+<par name="p_E5_y_fit" base_type="ctrl" dimension="0"/>
+<par name="p_E10_x_fit" base_type="ctrl" dimension="0"/>
+<par name="p_E10_y_fit" base_type="ctrl" dimension="0"/>
+<par name="p_E13_x_fit" base_type="ctrl" dimension="0"/>
+<par name="p_E13_y_fit" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<l>my_gen_suffce_fit_point (Row_Origin, Col_Origin, Phi, p_E2_x_offest, p_E2_y_offest, p_E2_x_fit, p_E2_y_fit)</l>
+<l>my_gen_suffce_fit_point (Row_Origin, Col_Origin, Phi, p_E5_x_offest, p_E5_y_offest, p_E5_x_fit, p_E5_y_fit)</l>
+<l>my_gen_suffce_fit_point (Row_Origin, Col_Origin, Phi, p_E10_x_offest, p_E10_y_offest, p_E10_x_fit, p_E10_y_fit)</l>
+<l>my_gen_suffce_fit_point (Row_Origin, Col_Origin, Phi, p_E13_x_offest, p_E13_y_offest, p_E13_x_fit, p_E13_y_fit)</l>
+<c></c>
+<c>*计算四个底部点相对于Z向0平面的Z向偏差</c>
+<l>get_grayval (ImageZ, p_E2_y_fit, p_E2_x_fit, E2_Z_um)</l>
+<l>E2_Z_mm := (E2_Z_um-32768)*1.6/1000-Z_Origin_Mean </l>
+<c></c>
+<l>get_grayval (ImageZ, p_E5_y_fit, p_E5_x_fit, E5_Z_um)</l>
+<l>E5_Z_mm := (E5_Z_um-32768)*1.6/1000-Z_Origin_Mean</l>
+<c></c>
+<l>get_grayval (ImageZ, p_E10_y_fit, p_E10_x_fit, E10_Z_um)</l>
+<l>E10_Z_mm := (E10_Z_um-32768)*1.6/1000-Z_Origin_Mean</l>
+<c></c>
+<l>get_grayval (ImageZ, p_E13_y_fit, p_E13_x_fit, E13_Z_um)</l>
+<l>E13_Z_mm := (E13_Z_um-32768)*1.6/1000-Z_Origin_Mean</l>
+<l>return ()</l>
+</body>
+<docu id="my_gen_4point_offest">
+<parameters>
+<parameter id="Col_Origin"/>
+<parameter id="E10_Z_mm"/>
+<parameter id="E13_Z_mm"/>
+<parameter id="E2_Z_mm"/>
+<parameter id="E5_Z_mm"/>
+<parameter id="HomMat2DIdentity"/>
+<parameter id="ImageZ"/>
+<parameter id="Phi"/>
+<parameter id="Row_Origin"/>
+<parameter id="Z_Origin_Mean"/>
+<parameter id="p_E10_x_fit"/>
+<parameter id="p_E10_x_offest"/>
+<parameter id="p_E10_y_fit"/>
+<parameter id="p_E10_y_offest"/>
+<parameter id="p_E13_x_fit"/>
+<parameter id="p_E13_x_offest"/>
+<parameter id="p_E13_y_fit"/>
+<parameter id="p_E13_y_offest"/>
+<parameter id="p_E2_x_fit"/>
+<parameter id="p_E2_x_offest"/>
+<parameter id="p_E2_y_fit"/>
+<parameter id="p_E2_y_offest"/>
+<parameter id="p_E5_x_fit"/>
+<parameter id="p_E5_x_offest"/>
+<parameter id="p_E5_y_fit"/>
+<parameter id="p_E5_y_offest"/>
+</parameters>
+</docu>
+</procedure>
+<procedure name="my_create_coordinate">
+<interface>
+<ic>
+<par name="HomMat2DIdentity" base_type="ctrl" dimension="0"/>
+<par name="Col_Origin" base_type="ctrl" dimension="0"/>
+<par name="Row_Origin" base_type="ctrl" dimension="0"/>
+<par name="ColEnd_X" base_type="ctrl" dimension="0"/>
+<par name="RowEnd_X" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="Phi" base_type="ctrl" dimension="0"/>
+<par name="ColEnd_Y" base_type="ctrl" dimension="0"/>
+<par name="RowEnd_Y" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<l>hom_mat2d_rotate (HomMat2DIdentity, rad(-90), Col_Origin, Row_Origin, HomMat2DRotate)</l>
+<l>affine_trans_point_2d (HomMat2DRotate, ColEnd_X, RowEnd_X, ColEnd_Y, RowEnd_Y)</l>
+<l>line_orientation (Row_Origin, Col_Origin, RowEnd_X, ColEnd_X, Phi)</l>
+<l>return ()</l>
+</body>
+<docu id="my_create_coordinate">
+<parameters>
+<parameter id="ColEnd_X"/>
+<parameter id="ColEnd_Y"/>
+<parameter id="Col_Origin"/>
+<parameter id="HomMat2DIdentity"/>
+<parameter id="Phi"/>
+<parameter id="RowEnd_X"/>
+<parameter id="RowEnd_Y"/>
+<parameter id="Row_Origin"/>
+</parameters>
+</docu>
+</procedure>
+<procedure name="my_gen_result">
+<interface>
+<ic>
+<par name="E2_Z_mm" base_type="ctrl" dimension="0"/>
+<par name="E5_Z_mm" base_type="ctrl" dimension="0"/>
+<par name="E10_Z_mm" base_type="ctrl" dimension="0"/>
+<par name="E13_Z_mm" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="result" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<l>Max := max([abs(2.612+E2_Z_mm),abs(2.612+E5_Z_mm),abs(2.612+E10_Z_mm),abs(2.612+E13_Z_mm)])</l>
+<l>Min := min([abs(2.612+E2_Z_mm),abs(2.612+E5_Z_mm),abs(2.612+E10_Z_mm),abs(2.612+E13_Z_mm)])</l>
+<l>* result := 2*max([Max,Min])-0.2</l>
+<l>result := 2*max([Max,Min])-0.04</l>
+<c></c>
+<l>return ()</l>
+</body>
+<docu id="my_gen_result">
+<parameters>
+<parameter id="E10_Z_mm"/>
+<parameter id="E13_Z_mm"/>
+<parameter id="E2_Z_mm"/>
+<parameter id="E5_Z_mm"/>
+<parameter id="result"/>
+</parameters>
+</docu>
+</procedure>
+<procedure name="my_gen_suffce_fit_point">
+<interface>
+<ic>
+<par name="Row_Origin" base_type="ctrl" dimension="0"/>
+<par name="Col_Origin" base_type="ctrl" dimension="0"/>
+<par name="Phi" base_type="ctrl" dimension="0"/>
+<par name="p_A1_x_offest" base_type="ctrl" dimension="0"/>
+<par name="p_A1_y_offest" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="p_A_x_fit" base_type="ctrl" dimension="0"/>
+<par name="p_A_y_fit" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<c>* 计算图像坐标系到基准坐标系的变换矩阵</c>
+<l>vector_angle_to_rigid (0, 0, 0, Row_Origin, Col_Origin, Phi, HomMat2D_Img2Base)</l>
+<c>* 将图像坐标系下的基准点转换到基准坐标系下</c>
+<l>affine_trans_point_2d (HomMat2D_Img2Base, Col_Origin, Row_Origin, Col_Origin_InBase, Row_Origin_InBase)</l>
+<c>* 在基准坐标系下对基准点进行偏移找拟合点</c>
+<l>p_A_XInBase := Col_Origin_InBase+p_A1_x_offest</l>
+<l>p_A_YInBase := Row_Origin_InBase-p_A1_y_offest-20</l>
+<c>* 计算基准坐标系到图像坐标系下的变换矩阵</c>
+<l>hom_mat2d_invert (HomMat2D_Img2Base, HomMat2D_Base2Img)</l>
+<c>* 将基准坐标系下的拟合点转换到图像坐标系下</c>
+<l>affine_trans_point_2d (HomMat2D_Base2Img, p_A_XInBase, p_A_YInBase, p_A_x_fit, p_A_y_fit)</l>
+<l>return ()</l>
+</body>
+<docu id="my_gen_suffce_fit_point">
+<parameters>
+<parameter id="Col_Origin"/>
+<parameter id="Phi"/>
+<parameter id="Row_Origin"/>
+<parameter id="p_A1_x_offest"/>
+<parameter id="p_A1_y_offest"/>
+<parameter id="p_A_x_fit"/>
+<parameter id="p_A_y_fit"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>
