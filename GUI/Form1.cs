@@ -125,6 +125,8 @@ namespace MyWindow
         Thread thread_OutLineTest;
         bool IsthreadLoadImageStop = false;
         double Radius, PositionDegree, RunTime, DistanceX1, DistanceY1;
+        double Origin_Z_mm, E2_OffestZ_mm, E5_OffestZ_mm, E10_OffestZ_mm, E13_OffestZ_mm, Profile;
+
         #endregion
 
         public MyWindow()
@@ -442,7 +444,8 @@ namespace MyWindow
                     {
                         OutLineFilePath = dialog.FileName;
                         MeasureIsSucced = HAlgorithm.OutLineMeasure(MeasureProject, lv_AllFrameData, out Radius, out PositionDegree, out RunTime,
-                         out DistanceX1, out DistanceY1, OutLineFilePath);
+                         out DistanceX1, out DistanceY1, OutLineFilePath, 
+                         out Origin_Z_mm, out E2_OffestZ_mm, out E5_OffestZ_mm, out E10_OffestZ_mm, out E13_OffestZ_mm, out Profile);
 
                     }
                     else
@@ -455,7 +458,7 @@ namespace MyWindow
                 else
                 {
                     MeasureIsSucced = HAlgorithm.OutLineMeasure(MeasureProject, lv_AllFrameData, out Radius, out PositionDegree, out RunTime,
-                              out DistanceX1, out DistanceY1, OutLineFilePath);
+                              out DistanceX1, out DistanceY1, OutLineFilePath, out Origin_Z_mm, out E2_OffestZ_mm, out E5_OffestZ_mm, out E10_OffestZ_mm, out E13_OffestZ_mm, out Profile);
                 }
 
                 if (MeasureIsSucced == false)
@@ -860,69 +863,79 @@ namespace MyWindow
         //在线测试
         private void InLineTest()
         {
-            MyCamera.MVCC_INTVALUE stParam = new MyCamera.MVCC_INTVALUE();
-            int Ret = m_MyCamera.MV_CC_GetIntValue_NET("PayloadSize", ref stParam);
-            if (MyCamera.MV_OK != Ret)
+            if(MeasureProject == 9)
             {
-                ShowErrorMsg("Get PayloadSize failed", Ret);
-                return;
-            }
-
-            UInt32 nPayloadSize = stParam.nCurValue;
-            if (nPayloadSize > m_nBufSizeForDriver)
-            {
-                if (m_BufForDriver != IntPtr.Zero)
+                MyCamera.MVCC_INTVALUE stParam = new MyCamera.MVCC_INTVALUE();
+                int Ret = m_MyCamera.MV_CC_GetIntValue_NET("PayloadSize", ref stParam);
+                if (MyCamera.MV_OK != Ret)
                 {
-                    Marshal.Release(m_BufForDriver);
+                    ShowErrorMsg("Get PayloadSize failed", Ret);
+                    return;
                 }
-                m_nBufSizeForDriver = nPayloadSize;
-                m_BufForDriver = Marshal.AllocHGlobal((Int32)m_nBufSizeForDriver);
-            }
 
-            if (m_BufForDriver == IntPtr.Zero)
-            {
-                return;
-            }
-
-            MyCamera.MV_FRAME_OUT_INFO_EX stFrameInfo = new MyCamera.MV_FRAME_OUT_INFO_EX();
-
-            while (true)
-            {
-                lock (BufForDriverLock)
+                UInt32 nPayloadSize = stParam.nCurValue;
+                if (nPayloadSize > m_nBufSizeForDriver)
                 {
-                    Ret = m_MyCamera.MV_CC_GetOneFrameTimeout_NET(m_BufForDriver, nPayloadSize, ref stFrameInfo, 1000);
+                    if (m_BufForDriver != IntPtr.Zero)
+                    {
+                        Marshal.Release(m_BufForDriver);
+                    }
+                    m_nBufSizeForDriver = nPayloadSize;
+                    m_BufForDriver = Marshal.AllocHGlobal((Int32)m_nBufSizeForDriver);
+                }
+
+                if (m_BufForDriver == IntPtr.Zero)
+                {
+                    return;
+                }
+
+                MyCamera.MV_FRAME_OUT_INFO_EX stFrameInfo = new MyCamera.MV_FRAME_OUT_INFO_EX();
+
+                while (true)
+                {
+                    lock (BufForDriverLock)
+                    {
+                        Ret = m_MyCamera.MV_CC_GetOneFrameTimeout_NET(m_BufForDriver, nPayloadSize, ref stFrameInfo, 1000);
+                        if (Ret == MyCamera.MV_OK)
+                        {
+                            m_stFrameInfo = stFrameInfo;
+                        }
+                    }
+
                     if (Ret == MyCamera.MV_OK)
                     {
-                        m_stFrameInfo = stFrameInfo;
+                        if (RemoveCustomPixelFormats(stFrameInfo.enPixelType))
+                        {
+                            continue;
+                        }
+                        HAlgorithm.InLineMeasure(MeasureProject, lv_AllFrameData, m_BufForDriver, stFrameInfo.nWidth,
+                            stFrameInfo.nHeight, out Radius, out PositionDegree, out RunTime, out DistanceX1, out DistanceY1,
+                            out Origin_Z_mm, out E2_OffestZ_mm, out E5_OffestZ_mm, out E10_OffestZ_mm, out E13_OffestZ_mm, out Profile);
+
+                        break;
                     }
                 }
 
-                if (Ret == MyCamera.MV_OK)
+                //保存异常图像
+                if (PositionDegree < 0 || PositionDegree > 0.06 || Radius < 9.40 || Radius > 9.50)
                 {
-                    if (RemoveCustomPixelFormats(stFrameInfo.enPixelType))
-                    {
-                        continue;
-                    }
-                    HAlgorithm.InLineMeasure(MeasureProject, lv_AllFrameData, m_BufForDriver, stFrameInfo.nWidth,
-                        stFrameInfo.nHeight, out Radius, out PositionDegree, out RunTime, out DistanceX1, out DistanceY1);
-                    break;
+                    SaveErrorBMP();
                 }
+                //设置控件状态
+                bt_StopGrab.Enabled = false;
+                bt_StopTest.Enabled = true;
+                bt_StartTest.Enabled = false;
+                rbt_Measure9.Enabled = false;
+                rbt_Measure18.Enabled = false;
+
+                bt_ClearData.Enabled = false;
+                bt_SaveCSV.Enabled = false;
             }
 
-            //保存异常图像
-            if(PositionDegree <0 || PositionDegree >0.06 || Radius <9.40 || Radius > 9.50)
+            else if(MeasureProject == 18)
             {
-                SaveErrorBMP();
-            }
-            //设置控件状态
-            bt_StopGrab.Enabled = false;
-            bt_StopTest.Enabled = true;
-            bt_StartTest.Enabled = false;
-            rbt_Measure9.Enabled = false;
-            rbt_Measure18.Enabled = false;
 
-            bt_ClearData.Enabled = false;
-            bt_SaveCSV.Enabled = false;
+            }
         }
 
         private void SaveErrorBMP()
@@ -1207,6 +1220,7 @@ namespace MyWindow
 
         private void AddLogResult(int rc, string commandName)
         {
+           
             if (rc == (int)Rc.Ok)
             {
                 AddLog(string.Format(Resources.IDS_LOG_FORMAT, commandName, Resources.IDS_RESULT_OK, rc));
@@ -1716,6 +1730,45 @@ namespace MyWindow
             }
         }
 
+        private void _timerHighSpeedReceive_Tick(object sender, EventArgs e)
+        {
+            for (int i = 0; i < NativeMethods.DeviceCount; i++)
+            {
+                uint notify;
+                int batchNo;
+                // if (true)
+                // {
+                // @Point
+                // # Simple array data performed to conversion and storing on .
+                _receivedProfileCountLabels[i].Text = _deviceData[i].SimpleArrayDataHighSpeed.Count.ToString();
+                notify = _deviceData[i].SimpleArrayDataHighSpeed.Notify;
+                batchNo = _deviceData[i].SimpleArrayDataHighSpeed.BatchNo;
+                //}
+                //else if (_checkBoxOnlyProfileCount.Checked)
+                //{
+                //    _receivedProfileCountLabels[i].Text = ThreadSafeBuffer.GetCount(i, out notify, out batchNo).ToString();
+                //}
+                //else
+                //{
+                //    List<int[]> data = ThreadSafeBuffer.Get(i, out notify, out batchNo);
+                //    if (data.Count == 0 && notify == 0) continue;
+
+                //    foreach (int[] profile in data)
+                //    {
+                //        if (_deviceData[i].ProfileDataHighSpeed.Count < Define.BufferFullCount)
+                //        {
+                //            _deviceData[i].ProfileDataHighSpeed.Add(new ProfileData(profile, _profileInfo[i]));
+                //        }
+                //    }
+                //    _receivedProfileCountLabels[i].Text = (Convert.ToInt32(_receivedProfileCountLabels[i].Text) + data.Count).ToString();
+                //}
+
+                if (notify == 0) continue;
+
+                AddLog(string.Format("  notify[{0}] = {1,0:x8}\tbatch[{0}] = {2}", i, notify, batchNo));
+            }
+        }
+
         // 控件大小随窗体大小等比例缩放
         #region 
         void changeSize()
@@ -1731,7 +1784,7 @@ namespace MyWindow
         }
         private float x;//定义当前窗体的宽度
         private float y;//定义当前窗体的高度
-
+        
         private void setTag(Control cons)
         {
             foreach (Control con in cons.Controls)

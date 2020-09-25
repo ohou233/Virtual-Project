@@ -651,7 +651,7 @@
             this._buttonStartHighSpeedDataCommunication.BackColor = System.Drawing.Color.Transparent;
             this._buttonStartHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonStartHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonStartHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 117);
+            this._buttonStartHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 116);
             this._buttonStartHighSpeedDataCommunication.Name = "_buttonStartHighSpeedDataCommunication";
             this._buttonStartHighSpeedDataCommunication.Size = new System.Drawing.Size(235, 25);
             this._buttonStartHighSpeedDataCommunication.TabIndex = 16;
@@ -686,11 +686,11 @@
             // _buttonHighSpeedSaveAsBitmapFile
             // 
             this._buttonHighSpeedSaveAsBitmapFile.Font = new System.Drawing.Font("宋体", 9F);
-            this._buttonHighSpeedSaveAsBitmapFile.Location = new System.Drawing.Point(49, 53);
+            this._buttonHighSpeedSaveAsBitmapFile.Location = new System.Drawing.Point(60, 56);
             this._buttonHighSpeedSaveAsBitmapFile.Name = "_buttonHighSpeedSaveAsBitmapFile";
             this._buttonHighSpeedSaveAsBitmapFile.Size = new System.Drawing.Size(127, 23);
             this._buttonHighSpeedSaveAsBitmapFile.TabIndex = 9;
-            this._buttonHighSpeedSaveAsBitmapFile.Text = "图像文件保存";
+            this._buttonHighSpeedSaveAsBitmapFile.Text = "保存图像文件";
             this._buttonHighSpeedSaveAsBitmapFile.UseVisualStyleBackColor = true;
             this._buttonHighSpeedSaveAsBitmapFile.Click += new System.EventHandler(this._buttonHighSpeedSaveAsBitmapFile_Click);
             // 
@@ -713,7 +713,7 @@
             this._buttonFinalizeHighSpeedDataCommunication.BackColor = System.Drawing.Color.Transparent;
             this._buttonFinalizeHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonFinalizeHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonFinalizeHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 211);
+            this._buttonFinalizeHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 212);
             this._buttonFinalizeHighSpeedDataCommunication.Name = "_buttonFinalizeHighSpeedDataCommunication";
             this._buttonFinalizeHighSpeedDataCommunication.Size = new System.Drawing.Size(235, 25);
             this._buttonFinalizeHighSpeedDataCommunication.TabIndex = 12;
@@ -737,6 +737,7 @@
             // _timerHighSpeedReceive
             // 
             this._timerHighSpeedReceive.Interval = 500;
+            this._timerHighSpeedReceive.Tick += new System.EventHandler(this._timerHighSpeedReceive_Tick);
             // 
             // _numericUpDownInterval
             // 
@@ -788,7 +789,7 @@
             this._buttonSetSetting.BackColor = System.Drawing.Color.Transparent;
             this._buttonSetSetting.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonSetSetting.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonSetSetting.Location = new System.Drawing.Point(10, 241);
+            this._buttonSetSetting.Location = new System.Drawing.Point(10, 243);
             this._buttonSetSetting.Name = "_buttonSetSetting";
             this._buttonSetSetting.Size = new System.Drawing.Size(110, 25);
             this._buttonSetSetting.TabIndex = 20;
@@ -801,7 +802,7 @@
             this._buttonGetSetting.BackColor = System.Drawing.Color.Transparent;
             this._buttonGetSetting.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonGetSetting.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonGetSetting.Location = new System.Drawing.Point(136, 241);
+            this._buttonGetSetting.Location = new System.Drawing.Point(136, 243);
             this._buttonGetSetting.Name = "_buttonGetSetting";
             this._buttonGetSetting.Size = new System.Drawing.Size(110, 25);
             this._buttonGetSetting.TabIndex = 21;
