@@ -86,6 +86,8 @@
             this._buttonSetSetting = new System.Windows.Forms.Button();
             this._buttonGetSetting = new System.Windows.Forms.Button();
             this.bt_Set_BatchprocessPoints = new System.Windows.Forms.Button();
+            this._timerHighSpeed = new System.Windows.Forms.Timer(this.components);
+            this._timerBufferError = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pb_in)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_out)).BeginInit();
             this.tp_SetOption.SuspendLayout();
@@ -821,6 +823,17 @@
             this.bt_Set_BatchprocessPoints.UseVisualStyleBackColor = true;
             this.bt_Set_BatchprocessPoints.Click += new System.EventHandler(this.bt_Set_BatchprocessPoints_Click);
             // 
+            // _timerHighSpeed
+            // 
+            this._timerHighSpeed.Interval = 200;
+            this._timerHighSpeed.Tick += new System.EventHandler(this._timerHighSpeed_Tick);
+            // 
+            // _timerBufferError
+            // 
+            this._timerBufferError.Enabled = true;
+            this._timerBufferError.Interval = 500;
+            this._timerBufferError.Tick += new System.EventHandler(this._timerBufferError_Tick);
+            // 
             // MyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -922,6 +935,8 @@
         private System.Windows.Forms.Button _buttonSetSetting;
         private System.Windows.Forms.Button _buttonGetSetting;
         private System.Windows.Forms.Button bt_Set_BatchprocessPoints;
+        private System.Windows.Forms.Timer _timerHighSpeed;
+        private System.Windows.Forms.Timer _timerBufferError;
     }
 }
 

@@ -15,7 +15,7 @@ using System.Xml.Linq;
 using HalconAlgorithm;
 using System.Drawing.Imaging;
 using LJX8_DllSampleAll.Data;
-using LJX8_DllSampleAll.Forms;
+using MyWindow.Forms;
 using LJX8_DllSampleAll.Properties;
 using LJX8_DllSampleAll;
 
@@ -138,12 +138,69 @@ namespace MyWindow
             
             Control.CheckForIllegalCrossThreadCalls = false;
             OutLineModeState();
-
-            UpdateHighSpeedProfileSaveEnable();
-
-
-
             thread_OutLineTest = new Thread(new ThreadStart(thread_OutLineTest_Start));
+
+            #region 3D初始化
+            // Field initialization
+            _sendCommand = SendCommand.None;
+            _deviceData = new DeviceData[NativeMethods.DeviceCount];
+            _callback = ReceiveHighSpeedData;
+            _callbackSimpleArray = ReceiveHighSpeedSimpleArray;
+            for (int i = 0; i < NativeMethods.DeviceCount; i++)
+            {
+                _deviceData[i] = new DeviceData();
+                //_deviceStatusLabels[i].Text = _deviceData[i].GetStatusString();
+               // _receivedProfileCountLabels[i].Text = "0";
+            }
+            _profileInfo = new LJX8IF_PROFILE_INFO[NativeMethods.DeviceCount];
+
+            UpdateBatchSimpleArrayEnable();
+            UpdateHighSpeedProfileSaveEnable();
+            #endregion
+
+        }
+
+        private void ReceiveHighSpeedSimpleArray(IntPtr headBuffer, IntPtr profileBuffer, IntPtr luminanceBuffer, uint isLuminanceEnable, uint profileSize, uint count, uint notify, uint user)
+        {
+            // @Point
+            // Take care to only implement storing profile data in a thread save buffer in the callback function.
+            // As the thread used to call the callback function is the same as the thread used to receive data,
+            // the processing time of the callback function affects the speed at which data is received,
+            // and may stop communication from being performed properly in some environments.
+
+            _isBufferFull[(int)user] = _deviceData[(int)user].SimpleArrayDataHighSpeed.AddReceivedData(profileBuffer, luminanceBuffer, count);
+            _deviceData[(int)user].SimpleArrayDataHighSpeed.Notify = notify;
+        }
+
+        private static void ReceiveHighSpeedData(IntPtr buffer, uint size, uint count, uint notify, uint user)
+        {
+            // @Point
+            // Take care to only implement storing profile data in a thread save buffer in the callback function.
+            // As the thread used to call the callback function is the same as the thread used to receive data,
+            // the processing time of the callback function affects the speed at which data is received,
+            // and may stop communication from being performed properly in some environments.
+
+            uint profileSize = (uint)(size / Marshal.SizeOf(typeof(int)));
+            List<int[]> receiveBuffer = new List<int[]>();
+            int[] bufferArray = new int[(int)(profileSize * count)];
+            Marshal.Copy(buffer, bufferArray, 0, (int)(profileSize * count));
+
+            // Profile data retention
+            for (int i = 0; i < (int)count; i++)
+            {
+                int[] oneProfile = new int[(int)profileSize];
+                Array.Copy(bufferArray, i * profileSize, oneProfile, 0, profileSize);
+                receiveBuffer.Add(oneProfile);
+            }
+
+            if (ThreadSafeBuffer.GetBufferDataCount((int)user) + receiveBuffer.Count < Define.BufferFullCount)
+            {
+                ThreadSafeBuffer.Add((int)user, receiveBuffer, notify);
+            }
+            else
+            {
+                _isBufferFull[(int)user] = true;
+            }
         }
 
         private void UpdateHighSpeedProfileSaveEnable()
@@ -1561,6 +1618,8 @@ namespace MyWindow
 
             int rc = NativeMethods.LJX8IF_StopMeasure(_currentDeviceId);
             AddLogResult(rc, Resources.IDS_STOP_MEASURE);
+
+            Disp_ProfileByte2ptr();
         }
 
         private void _buttonStopHighSpeedDataCommunication_Click(object sender, EventArgs e)
@@ -1584,6 +1643,8 @@ namespace MyWindow
             }
             _deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
             _receivedProfileCountLabels[_currentDeviceId].Text = "0";
+
+            ClearMemory();
         }
 
         private void _buttonHighSpeedProfileFileSave_Click(object sender, EventArgs e)
@@ -1616,7 +1677,7 @@ namespace MyWindow
             int startIndex = 0;
             int dataCount = (int)_numericUpDownProfileSaveCount.Value;
             bool result = _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.SaveDataAsImages(_textBoxHighSpeedProfileFilePath.Text, startIndex, dataCount);
-
+            
             AddLog(result ? "Succeed to save image." : "Failed to save image.");
 
         }
@@ -1660,6 +1721,22 @@ namespace MyWindow
             _textBoxLog.ScrollToCaret();
         }
 
+        private void Disp_ProfileByte2ptr()
+        {
+            byte[] _profileImage = _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.GetImageByte(0, (int)_deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.Count);
+            int m_3DWidth = _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.DataWidth;
+            int m_3DHeight = _profileImage.Count() / 2 / m_3DWidth;
+            IntPtr ptr = Marshal.AllocHGlobal(_profileImage.Length);
+            Marshal.Copy(_profileImage, 0, ptr, _profileImage.Length);
+
+            HAlgorithm.DispBuffer(ptr, (ushort)m_3DWidth, (ushort)m_3DHeight);
+        }
+
+        private void ClearMemory()
+        {
+            int rc = NativeMethods.LJX8IF_ClearMemory(0);
+        }
+
         //设置批处理点数
         private void _buttonGetSetting_Click(object sender, EventArgs e)
         {
@@ -1696,6 +1773,47 @@ namespace MyWindow
                     }
                 }
             }
+        }
+
+        private void _timerHighSpeed_Tick(object sender, EventArgs e)
+        {
+            uint notify;
+            int batchNo;
+            List<int[]> data = ThreadSafeBuffer.Get(Define.DeviceId, out notify, out batchNo);
+
+            int count = data.Count;
+            //_labelReceiveProfileCount.Text = (Convert.ToUInt32(_labelReceiveProfileCount.Text) + count).ToString();
+
+            if ((uint)(notify & 0xFFFF) != 0)
+            {
+                // If the lower 16 bits of the notification are not 0, high-speed communication was interrupted, so stop the timer.
+                _timerHighSpeed.Stop();
+                MessageBox.Show(this, string.Format("Finalize communication :Notify = 0x{0:x8}", notify));
+            }
+
+            if ((uint)(notify & 0x10000) != 0)
+            {
+                // A descriptor is included here if processing when batch measurement is finished is required.
+            }
+        }
+
+        private void _timerBufferError_Tick(object sender, EventArgs e)
+        {
+            for (int i = 0; i < NativeMethods.DeviceCount; i++)
+            {
+                if ((_isBufferFull[i]) && (!_isStopCommunicationByError[i]))
+                {
+                    _isStopCommunicationByError[i] = true;
+                    NativeMethods.LJX8IF_StopHighSpeedDataCommunication(i);
+                    NativeMethods.LJX8IF_FinalizeHighSpeedDataCommunication(i);
+                    Invoke(new InvokeDelagate(ShowBufferFullMessage));
+                }
+            }
+        }
+
+        private void ShowBufferFullMessage()
+        {
+            MessageBox.Show(this, "Receive buffer is full.");
         }
 
         private void bt_Set_BatchprocessPoints_Click(object sender, EventArgs e)
@@ -1736,34 +1854,34 @@ namespace MyWindow
             {
                 uint notify;
                 int batchNo;
-                // if (true)
-                // {
-                // @Point
-                // # Simple array data performed to conversion and storing on .
-                _receivedProfileCountLabels[i].Text = _deviceData[i].SimpleArrayDataHighSpeed.Count.ToString();
+              //   if (true)
+              //   {
+                    //@Point
+                 ////# Simple array data performed to conversion and storing on .
+                //_receivedProfileCountLabels[i].Text = _deviceData[i].SimpleArrayDataHighSpeed.Count.ToString();
                 notify = _deviceData[i].SimpleArrayDataHighSpeed.Notify;
                 batchNo = _deviceData[i].SimpleArrayDataHighSpeed.BatchNo;
-                //}
-                //else if (_checkBoxOnlyProfileCount.Checked)
-                //{
-                //    _receivedProfileCountLabels[i].Text = ThreadSafeBuffer.GetCount(i, out notify, out batchNo).ToString();
-                //}
-                //else
-                //{
-                //    List<int[]> data = ThreadSafeBuffer.Get(i, out notify, out batchNo);
-                //    if (data.Count == 0 && notify == 0) continue;
+                  //}
+            //    else if (_checkBoxOnlyProfileCount.Checked)
+            //{
+            //    _receivedProfileCountLabels[i].Text = ThreadSafeBuffer.GetCount(i, out notify, out batchNo).ToString();
+            //}
+            //else
+            //{
+            //    List<int[]> data = ThreadSafeBuffer.Get(i, out notify, out batchNo);
+            //    if (data.Count == 0 && notify == 0) continue;
 
-                //    foreach (int[] profile in data)
-                //    {
-                //        if (_deviceData[i].ProfileDataHighSpeed.Count < Define.BufferFullCount)
-                //        {
-                //            _deviceData[i].ProfileDataHighSpeed.Add(new ProfileData(profile, _profileInfo[i]));
-                //        }
-                //    }
-                //    _receivedProfileCountLabels[i].Text = (Convert.ToInt32(_receivedProfileCountLabels[i].Text) + data.Count).ToString();
-                //}
+            //    foreach (int[] profile in data)
+            //    {
+            //        if (_deviceData[i].ProfileDataHighSpeed.Count < Define.BufferFullCount)
+            //        {
+            //            _deviceData[i].ProfileDataHighSpeed.Add(new ProfileData(profile, _profileInfo[i]));
+            //        }
+            //    }
+            //    _receivedProfileCountLabels[i].Text = (Convert.ToInt32(_receivedProfileCountLabels[i].Text) + data.Count).ToString();
+            //}
 
-                if (notify == 0) continue;
+            if (notify == 0) continue;
 
                 AddLog(string.Format("  notify[{0}] = {1,0:x8}\tbatch[{0}] = {2}", i, notify, batchNo));
             }

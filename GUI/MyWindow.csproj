@@ -112,50 +112,30 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ClearErrorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ClearErrorForm.Designer.cs" />
-    <Compile Include="Forms\ControlLaserForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ControlLaserForm.Designer.cs" />
-    <Compile Include="Forms\DepthProgramSelectForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\DepthProgramSelectForm.Designer.cs" />
-    <Compile Include="Forms\GetBatchProfileForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\GetBatchProfileForm.Designer.cs" />
-    <Compile Include="Forms\GetErrorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\GetErrorForm.Designer.cs" />
     <Compile Include="Forms\HighSpeedInitializeForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\HighSpeedInitializeForm.Designer.cs" />
+    <Compile Include="Forms\HighSpeedInitializeForm.Designer.cs">
+      <DependentUpon>HighSpeedInitializeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\OpenEthernetForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\OpenEthernetForm.Designer.cs" />
+    <Compile Include="Forms\OpenEthernetForm.Designer.cs">
+      <DependentUpon>OpenEthernetForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\PreStartHighSpeedForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\PreStartHighSpeedForm.Designer.cs" />
-    <Compile Include="Forms\ProfileForm.cs">
-      <SubType>Form</SubType>
+    <Compile Include="Forms\PreStartHighSpeedForm.Designer.cs">
+      <DependentUpon>PreStartHighSpeedForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ProfileForm.Designer.cs" />
-    <Compile Include="Forms\ProgressForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ProgressForm.Designer.cs" />
     <Compile Include="Forms\SettingForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SettingForm.Designer.cs" />
+    <Compile Include="Forms\SettingForm.Designer.cs">
+      <DependentUpon>SettingForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="NativeMethods.cs" />
     <Compile Include="PinnedObject.cs" />
     <Compile Include="ProfileData.cs" />
@@ -168,6 +148,18 @@
     <Compile Include="Utility.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HighSpeedInitializeForm.resx">
+      <DependentUpon>HighSpeedInitializeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OpenEthernetForm.resx">
+      <DependentUpon>OpenEthernetForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PreStartHighSpeedForm.resx">
+      <DependentUpon>PreStartHighSpeedForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingForm.resx">
+      <DependentUpon>SettingForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

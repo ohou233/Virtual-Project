@@ -52,5 +52,9 @@ C:\Users\iamxb\Desktop\Virtual Project\Code\GUI\obj\x64\Debug\MyWindow.pdb
 \\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.csproj.GenerateResource.Cache
 \\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.exe
 \\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.pdb
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.Forms.SettingForm.resources
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.Forms.OpenEthernetForm.resources
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.Forms.HighSpeedInitializeForm.resources
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.Forms.PreStartHighSpeedForm.resources
 \\Mac\Home\Desktop\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.csprojResolveAssemblyReference.cache
 \\Mac\Home\Desktop\VirtualProject\Code\GUI\bin\x64\Debug\halcondotnet.dll
