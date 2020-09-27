@@ -16,7 +16,7 @@ using HalconAlgorithm;
 using System.Drawing.Imaging;
 using LJX8_DllSampleAll.Data;
 using MyWindow.Forms;
-using LJX8_DllSampleAll.Properties;
+using MyWindow.Properties;
 using LJX8_DllSampleAll;
 
 namespace MyWindow
