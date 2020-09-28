@@ -129,7 +129,7 @@
             this._labelIpAddress.TabIndex = 11;
             this._labelIpAddress.Text = "IP address";
             // 
-            // Open_Ethernet
+            // OpenEthernetForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -144,7 +144,8 @@
             this.Controls.Add(this._textBoxIpSecondSegment);
             this.Controls.Add(this._textBoxIpFirstSegment);
             this.Controls.Add(this._labelIpAddress);
-            this.Name = "Open_Ethernet";
+            this.Name = "OpenEthernetForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Open_Ethernet";
             this.ResumeLayout(false);
             this.PerformLayout();

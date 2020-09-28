@@ -411,6 +411,7 @@
             this.Controls.Add(this._textBoxType);
             this.Controls.Add(this._labelHexType);
             this.Name = "SettingForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SettingForm";
             this.ResumeLayout(false);
             this.PerformLayout();

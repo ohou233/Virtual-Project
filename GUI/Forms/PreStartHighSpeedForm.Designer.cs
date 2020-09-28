@@ -83,6 +83,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "PreStartHighSpeedForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PreStartHighSpeedForm";
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -68,15 +68,15 @@ namespace MyWindow
         #region Field
 
         /// <summary>Ethernet settings structure </summary>
-        private LJX8IF_ETHERNET_CONFIG _ethernetConfig;
+        //private LJX8IF_ETHERNET_CONFIG _ethernetConfig;
         /// <summary>Current device ID</summary>
-        private int _currentDeviceId;
+        private int _currentDeviceId = 0;
         /// <summary>Send command</summary>
         private SendCommand _sendCommand;
         /// <summary>Callback function used during high-speed communication</summary>
         private HighSpeedDataCallBack _callback;
         /// <summary>Callback function used during high-speed communication (count only)</summary>
-        private HighSpeedDataCallBack _callbackOnlyCount;
+        //private HighSpeedDataCallBack _callbackOnlyCount;
         /// <summary>Callback function used during high-speed communication (simple array)</summary>
         private HighSpeedDataCallBackForSimpleArray _callbackSimpleArray;
         /// <summary>Callback function used during high-speed communication (simple array) (count only)</summary>
@@ -87,9 +87,9 @@ namespace MyWindow
         /// <summary>Array of controller information</summary>
         private DeviceData[] _deviceData;
         /// <summary>Array of labels that indicate the controller status</summary>
-        private Label[] _deviceStatusLabels;
+        //private Label[] _deviceStatusLabels;
         /// <summary>Array of labels that indicate the number of received profiles </summary>
-        private Label[] _receivedProfileCountLabels;
+        //private Label[] _receivedProfileCountLabels;
         /// <summary>Array of value of receive buffer is full</summary>
         private static bool[] _isBufferFull = new bool[NativeMethods.DeviceCount];
         /// <summary>Array of value of stop processing has done by buffer full error</summary>
@@ -146,6 +146,8 @@ namespace MyWindow
             _deviceData = new DeviceData[NativeMethods.DeviceCount];
             _callback = ReceiveHighSpeedData;
             _callbackSimpleArray = ReceiveHighSpeedSimpleArray;
+            _callbackSimpleArrayOnlyCount = CountSimpleArrayReceive;
+
             for (int i = 0; i < NativeMethods.DeviceCount; i++)
             {
                 _deviceData[i] = new DeviceData();
@@ -158,6 +160,17 @@ namespace MyWindow
             UpdateHighSpeedProfileSaveEnable();
             #endregion
 
+        }
+
+        private void CountSimpleArrayReceive(IntPtr headBuffer, IntPtr profileBuffer, IntPtr luminanceBuffer, uint isLuminanceEnable, uint profileSize, uint count, uint notify, uint user)
+        {
+            // @Point
+            // Take care to only implement storing profile data in a thread save buffer in the callback function.
+            // As the thread used to call the callback function is the same as the thread used to receive data,
+            // the processing time of the callback function affects the speed at which data is received,
+            // and may stop communication from being performed properly in some environments.
+            _deviceData[(int)user].SimpleArrayDataHighSpeed.Count += count;
+            _deviceData[(int)user].SimpleArrayDataHighSpeed.Notify = notify;
         }
 
         private void ReceiveHighSpeedSimpleArray(IntPtr headBuffer, IntPtr profileBuffer, IntPtr luminanceBuffer, uint isLuminanceEnable, uint profileSize, uint count, uint notify, uint user)
@@ -1239,18 +1252,26 @@ namespace MyWindow
             for (int i = 0; i < _deviceData.Length; i++)
             {
                 _deviceData[i].Status = DeviceStatus.NoConnection;
-                _deviceStatusLabels[i].Text = _deviceData[i].GetStatusString();
-                _receivedProfileCountLabels[i].Text = "0";
+                //_deviceStatusLabels[i].Text = _deviceData[i].GetStatusString();
+               // _receivedProfileCountLabels[i].Text = "0";
             }
-            Open_Ethernet();
-            Initialize_HighSpeedData_Communication_SimpleArray();
+            bool openEthernetSucceed = Open_Ethernet();
+            if(openEthernetSucceed)
+            {
+                Initialize_HighSpeedData_Communication_SimpleArray();
+                _buttonSetSetting.Enabled = true;
+                _buttonGetSetting.Enabled = true;
+            }
         }
 
-        private void Open_Ethernet()
+        private bool Open_Ethernet()
         {
             using (OpenEthernetForm openEthernetForm = new OpenEthernetForm())
             {
-                if (DialogResult.OK != openEthernetForm.ShowDialog()) return;
+                if (DialogResult.OK != openEthernetForm.ShowDialog())
+                {
+                    return false;
+                }
 
                 LJX8IF_ETHERNET_CONFIG ethernetConfig = openEthernetForm.EthernetConfig;
                 // @Point
@@ -1265,13 +1286,15 @@ namespace MyWindow
                 {
                     _deviceData[_currentDeviceId].Status = DeviceStatus.Ethernet;
                     _deviceData[_currentDeviceId].EthernetConfig = ethernetConfig;
+                    return true;
                 }
                 else
                 {
                     _deviceData[_currentDeviceId].Status = DeviceStatus.NoConnection;
+                    return false;
                 }
-                _deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
-                _receivedProfileCountLabels[_currentDeviceId].Text = "0";
+                //_deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
+                //_receivedProfileCountLabels[_currentDeviceId].Text = "0";
             }
         }
 
@@ -1311,8 +1334,8 @@ namespace MyWindow
                 case (int)Rc.ErrTimeout:
                     AddLog(string.Format(Resources.IDS_RC_FORMAT, Resources.IDS_RC_ERR_TIMEOUT));
                     _deviceData[_currentDeviceId].Status = DeviceStatus.NoConnection;
-                    _deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
-                    _receivedProfileCountLabels[_currentDeviceId].Text = "0";
+                    //_deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
+                    //_receivedProfileCountLabels[_currentDeviceId].Text = "0";
                     break;
                 case (int)Rc.ErrParameter:
                     AddLog(string.Format(Resources.IDS_RC_FORMAT, Resources.IDS_RC_ERR_PARAMETER));
@@ -1547,8 +1570,8 @@ namespace MyWindow
                     _deviceData[_currentDeviceId].Status = DeviceStatus.EthernetFast;
                     _deviceData[_currentDeviceId].EthernetConfig = ethernetConfig;
                 }
-                _deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
-                _receivedProfileCountLabels[_currentDeviceId].Text = "0";
+                //_deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
+                //_receivedProfileCountLabels[_currentDeviceId].Text = "0";
             }
 
             Pre_Start_HighSpeedDataCommunication();
@@ -1597,15 +1620,25 @@ namespace MyWindow
             _isBufferFull[_currentDeviceId] = false;
             _isStopCommunicationByError[_currentDeviceId] = false;
 
-            _receivedProfileCountLabels[_currentDeviceId].Text = "0";
+           // _receivedProfileCountLabels[_currentDeviceId].Text = "0";
             int rc = NativeMethods.LJX8IF_StartHighSpeedDataCommunication(_currentDeviceId);
 
             AddLogResult(rc, Resources.IDS_START_HIGH_SPEED_DATA_COMMUNICATION);
 
+            if(_deviceData[_currentDeviceId].Status == DeviceStatus.Ethernet)
+            {
+                _buttonStopHighSpeedDataCommunication.Enabled = true;
+            }
         }
 
         private void _buttonStartMeasure_Click(object sender, EventArgs e)
         {
+           if( _deviceData[_currentDeviceId].Status == DeviceStatus.Ethernet)
+            {
+                _buttonStartMeasure.Enabled = false;
+                _buttonStopMeasure.Enabled = true;
+            }
+
             _sendCommand = SendCommand.StartMeasure;
 
             int rc = NativeMethods.LJX8IF_StartMeasure(_currentDeviceId);
@@ -1614,6 +1647,12 @@ namespace MyWindow
 
         private void _buttonStopMeasure_Click(object sender, EventArgs e)
         {
+            if (_deviceData[_currentDeviceId].Status == DeviceStatus.Ethernet)
+            {
+                _buttonStartMeasure.Enabled = true;
+                _buttonStopMeasure.Enabled = false;
+            }
+
             _sendCommand = SendCommand.StopMeasure;
 
             int rc = NativeMethods.LJX8IF_StopMeasure(_currentDeviceId);
@@ -1626,6 +1665,13 @@ namespace MyWindow
         {
             int rc = NativeMethods.LJX8IF_StopHighSpeedDataCommunication(_currentDeviceId);
             AddLogResult(rc, Resources.IDS_STOP_HIGH_SPEED_DATA_COMMUNICATION);
+
+            if (_deviceData[_currentDeviceId].Status == DeviceStatus.Ethernet)
+            {
+                _buttonStopHighSpeedDataCommunication.Enabled = false;
+                _buttonFinalizeHighSpeedDataCommunication.Enabled = true;
+            }
+
         }
 
         private void _buttonFinalizeHighSpeedDataCommunication_Click(object sender, EventArgs e)
@@ -1641,10 +1687,17 @@ namespace MyWindow
                     _deviceData[_currentDeviceId].EthernetConfig = config;
                     break;
             }
-            _deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
-            _receivedProfileCountLabels[_currentDeviceId].Text = "0";
+            //_deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
+            //_receivedProfileCountLabels[_currentDeviceId].Text = "0";
 
             ClearMemory();
+
+            if (_deviceData[_currentDeviceId].Status == DeviceStatus.Ethernet)
+            {
+                _buttonFinalizeHighSpeedDataCommunication.Enabled = false;
+                _buttonSetSetting.Enabled = false;
+                _buttonGetSetting.Enabled = false;
+            }              
         }
 
         private void _buttonHighSpeedProfileFileSave_Click(object sender, EventArgs e)

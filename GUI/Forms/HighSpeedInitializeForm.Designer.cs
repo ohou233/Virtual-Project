@@ -187,6 +187,7 @@
             this.Controls.Add(this._textBoxIpFirstSegment);
             this.Controls.Add(this._labelIpAddress);
             this.Name = "HighSpeedInitializeForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "HighSpeedInitializeForm";
             this.ResumeLayout(false);
             this.PerformLayout();

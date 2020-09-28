@@ -46,7 +46,7 @@
     
     mimetype: application/x-microsoft.net.object.binary.base64
     value   : The object must be serialized with 
-            : System.Serialization.Formatters.Binary.BinaryFormatter
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
     
     mimetype: application/x-microsoft.net.object.soap.base64
@@ -60,6 +60,7 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -68,9 +69,10 @@
               <xsd:sequence>
                 <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="name" use="required" type="xsd:string" />
               <xsd:attribute name="type" type="xsd:string" />
               <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
@@ -85,9 +87,10 @@
                 <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
                 <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
               <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
               <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
@@ -109,9 +112,228 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="IDS_CHANGE_ACTIVE_PROGRAM" xml:space="preserve">
+    <value>ChangeActiveProgram</value>
+  </data>
+  <data name="IDS_CHECK_MEMORY_ACCESS" xml:space="preserve">
+    <value>CheckMemoryAccess</value>
+  </data>
+  <data name="IDS_CLEAR_ERROR" xml:space="preserve">
+    <value>ClearError</value>
+  </data>
+  <data name="IDS_CLEAR_MEMORY" xml:space="preserve">
+    <value>ClearMemory</value>
+  </data>
+  <data name="IDS_COMMAND_RESULT_FORMAT" xml:space="preserve">
+    <value>  {0} : {1}</value>
+  </data>
+  <data name="IDS_COMM_CLOSE" xml:space="preserve">
+    <value>CommunicationClose</value>
+  </data>
+  <data name="IDS_CONTROL_LASER" xml:space="preserve">
+    <value>ControlLaser</value>
+  </data>
+  <data name="IDS_ETHERNET_OPEN" xml:space="preserve">
+    <value>EthernetOpen</value>
+  </data>
+  <data name="IDS_FINALIZE" xml:space="preserve">
+    <value>Finalize</value>
+  </data>
+  <data name="IDS_FINALIZE_HIGH_SPEED_DATA_COMMUNICATION" xml:space="preserve">
+    <value>FinalizeHighSpeedDataCommunication</value>
+  </data>
+  <data name="IDS_GET_ACTIVE_PROGRAM" xml:space="preserve">
+    <value>GetActiveProgram</value>
+  </data>
+  <data name="IDS_GET_BATCH_PROFILE" xml:space="preserve">
+    <value>GetBatchProfile</value>
+  </data>
+  <data name="IDS_GET_BATCH_SIMPLE_ARRAY" xml:space="preserve">
+    <value>GetBatchSimpleArray</value>
+  </data>
+  <data name="IDS_GET_ERROR" xml:space="preserve">
+    <value>GetError</value>
+  </data>
+  <data name="IDS_GET_HEAD_TEMPERATURE" xml:space="preserve">
+    <value>GetHeadTemperature</value>
+  </data>
+  <data name="IDS_GET_PROFILE" xml:space="preserve">
+    <value>GetProfile</value>
+  </data>
+  <data name="IDS_GET_SERIAL_NUMBER" xml:space="preserve">
+    <value>GetSerialNumber</value>
+  </data>
+  <data name="IDS_GET_SETTING" xml:space="preserve">
+    <value>GetSetting</value>
+  </data>
+  <data name="IDS_GET_SETTING_FILE" xml:space="preserve">
+    <value>Save to the configuration file</value>
+  </data>
+  <data name="IDS_GET_TRIGGER_AND_PULSE_COUNT" xml:space="preserve">
+    <value>GetTriggerAndPulseCount</value>
+  </data>
+  <data name="IDS_GET_VERSION" xml:space="preserve">
+    <value>GetVersion</value>
+  </data>
+  <data name="IDS_INITIALIZE" xml:space="preserve">
+    <value>Initialize</value>
+  </data>
+  <data name="IDS_INITIALIZE_HIGH_SPEED_DATA_ETHERNET_COMMUNICATION" xml:space="preserve">
+    <value>InitializeHighSpeedDataCommunication</value>
+  </data>
+  <data name="IDS_INITIALIZE_HIGH_SPEED_DATA_ETHERNET_COMMUNICATION_SIMPLE_ARRAY" xml:space="preserve">
+    <value>InitializeHighSpeedDataCommunicationSimpleArray</value>
+  </data>
+  <data name="IDS_INITIALIZE_SETTING" xml:space="preserve">
+    <value>InitializeSetting</value>
+  </data>
+  <data name="IDS_LOG_FORMAT" xml:space="preserve">
+    <value>[{0}] : {1}(0x{2:x4})</value>
+  </data>
+  <data name="IDS_MEASURE_RANGE_FULL" xml:space="preserve">
+    <value>FULL</value>
+  </data>
+  <data name="IDS_MEASURE_RANGE_HALF" xml:space="preserve">
+    <value>1/2</value>
+  </data>
+  <data name="IDS_MEASURE_RANGE_MIDDLE" xml:space="preserve">
+    <value>MIDDLE</value>
+  </data>
+  <data name="IDS_MEASURE_RANGE_QUARTER" xml:space="preserve">
+    <value>1/4</value>
+  </data>
+  <data name="IDS_MEASURE_RANGE_SMALL" xml:space="preserve">
+    <value>SMALL</value>
+  </data>
+  <data name="IDS_MEASURE_RANGE_THREE_FOURTHS" xml:space="preserve">
+    <value>3/4</value>
+  </data>
+  <data name="IDS_NOT_DEFINE_FROMAT" xml:space="preserve">
+    <value>#Undefined RC (0x{0,0:X4})</value>
+  </data>
+  <data name="IDS_OFF" xml:space="preserve">
+    <value>OFF</value>
+  </data>
+  <data name="IDS_ON" xml:space="preserve">
+    <value>ON</value>
+  </data>
+  <data name="IDS_PRE_START_HIGH_SPEED_DATA_COMMUNICATION" xml:space="preserve">
+    <value>PreStartHighSpeedDataCommunication</value>
+  </data>
+  <data name="IDS_RC_ERR_BUFFER_SHORT" xml:space="preserve">
+    <value>Insufficient buffer size</value>
+  </data>
+  <data name="IDS_RC_ERR_HISPEED_NO_DEVICE" xml:space="preserve">
+    <value>Not initialized</value>
+  </data>
+  <data name="IDS_RC_ERR_HISPEED_OPEN_YET" xml:space="preserve">
+    <value>Already initialized</value>
+  </data>
+  <data name="IDS_RC_ERR_NOMEMORY" xml:space="preserve">
+    <value>No free space</value>
+  </data>
+  <data name="IDS_RC_ERR_NOTIMPL" xml:space="preserve">
+    <value>Unimplemented Error</value>
+  </data>
+  <data name="IDS_RC_ERR_NO_DEVICE" xml:space="preserve">
+    <value>Device not open</value>
+  </data>
+  <data name="IDS_RC_ERR_OPEN_DEVICE" xml:space="preserve">
+    <value>Failed to open the device</value>
+  </data>
+  <data name="IDS_RC_ERR_PARAMETER" xml:space="preserve">
+    <value>Parameter error</value>
+  </data>
+  <data name="IDS_RC_ERR_RECEIVE" xml:space="preserve">
+    <value>Response reception error</value>
+  </data>
+  <data name="IDS_RC_ERR_SEND" xml:space="preserve">
+    <value>Command send error</value>
+  </data>
+  <data name="IDS_RC_ERR_TIMEOUT" xml:space="preserve">
+    <value>Time out</value>
+  </data>
+  <data name="IDS_RC_ERR_UNKNOWN" xml:space="preserve">
+    <value>Undefined error</value>
+  </data>
+  <data name="IDS_RC_FORMAT" xml:space="preserve">
+    <value>    -&gt; {0}</value>
+  </data>
+  <data name="IDS_RC_OK" xml:space="preserve">
+    <value>Normal termination</value>
+  </data>
+  <data name="IDS_REBOOT_CONTROLLER" xml:space="preserve">
+    <value>RebootController</value>
+  </data>
+  <data name="IDS_REFLECT_SETTING" xml:space="preserve">
+    <value>ReflectSetting</value>
+  </data>
+  <data name="IDS_RESULT_NG" xml:space="preserve">
+    <value>NG</value>
+  </data>
+  <data name="IDS_RESULT_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="IDS_RETURN_TO_FACTORY_SETTING" xml:space="preserve">
+    <value>ReturnToFactorySetting</value>
+  </data>
+  <data name="IDS_REWRITE_TEMPORARY_SETTING" xml:space="preserve">
+    <value>RewriteTemporarySetting</value>
+  </data>
+  <data name="IDS_SAMPLING_PERIOD_100Hz" xml:space="preserve">
+    <value>100Hz</value>
+  </data>
+  <data name="IDS_SAMPLING_PERIOD_10Hz" xml:space="preserve">
+    <value>10Hz</value>
+  </data>
+  <data name="IDS_SAMPLING_PERIOD_16kHz" xml:space="preserve">
+    <value>16kHz</value>
+  </data>
+  <data name="IDS_SAMPLING_PERIOD_1kHz" xml:space="preserve">
+    <value>1kHz</value>
+  </data>
+  <data name="IDS_SAMPLING_PERIOD_4kHz" xml:space="preserve">
+    <value>4kHz</value>
+  </data>
+  <data name="IDS_SET_SETTING" xml:space="preserve">
+    <value>SetSetting</value>
+  </data>
+  <data name="IDS_SET_SETTING_FILE" xml:space="preserve">
+    <value>Read from the configuration file</value>
+  </data>
+  <data name="IDS_START_HIGH_SPEED_DATA_COMMUNICATION" xml:space="preserve">
+    <value>StartHighSpeedDataCommunication</value>
+  </data>
+  <data name="IDS_START_MEASURE" xml:space="preserve">
+    <value>StartMeasure</value>
+  </data>
+  <data name="IDS_STOP_HIGH_SPEED_DATA_COMMUNICATION" xml:space="preserve">
+    <value>StopHighSpeedDataCommunication</value>
+  </data>
+  <data name="IDS_STOP_MEASURE" xml:space="preserve">
+    <value>StopMeasure</value>
+  </data>
+  <data name="IDS_THINNING_X_2" xml:space="preserve">
+    <value>1/2</value>
+  </data>
+  <data name="IDS_THINNING_X_4" xml:space="preserve">
+    <value>1/4</value>
+  </data>
+  <data name="IDS_THINNING_X_OFF" xml:space="preserve">
+    <value>OFF</value>
+  </data>
+  <data name="IDS_TRG_ERROR_RESET" xml:space="preserve">
+    <value>TRG_ERROR_RESET</value>
+  </data>
+  <data name="IDS_TRIGGER" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="IDS_UPDATE_SETTING" xml:space="preserve">
+    <value>ReflectSetting</value>
+  </data>
 </root>
