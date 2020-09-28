@@ -46,52 +46,58 @@
             // 
             // _textBoxProfileCnt
             // 
-            this._textBoxProfileCnt.Location = new System.Drawing.Point(141, 153);
+            this._textBoxProfileCnt.Location = new System.Drawing.Point(282, 306);
+            this._textBoxProfileCnt.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this._textBoxProfileCnt.Name = "_textBoxProfileCnt";
-            this._textBoxProfileCnt.Size = new System.Drawing.Size(64, 21);
+            this._textBoxProfileCnt.Size = new System.Drawing.Size(124, 35);
             this._textBoxProfileCnt.TabIndex = 25;
-            this._textBoxProfileCnt.Text = "1";
+            this._textBoxProfileCnt.Text = "2500";
             // 
             // _labelProfileCnt
             // 
             this._labelProfileCnt.AutoSize = true;
-            this._labelProfileCnt.Location = new System.Drawing.Point(35, 157);
+            this._labelProfileCnt.Location = new System.Drawing.Point(70, 314);
+            this._labelProfileCnt.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this._labelProfileCnt.Name = "_labelProfileCnt";
-            this._labelProfileCnt.Size = new System.Drawing.Size(113, 12);
+            this._labelProfileCnt.Size = new System.Drawing.Size(226, 24);
             this._labelProfileCnt.TabIndex = 24;
             this._labelProfileCnt.Text = "Number of profiles";
             // 
             // _textBoxHighSpeedPortNo
             // 
-            this._textBoxHighSpeedPortNo.Location = new System.Drawing.Point(141, 121);
+            this._textBoxHighSpeedPortNo.Location = new System.Drawing.Point(282, 242);
+            this._textBoxHighSpeedPortNo.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this._textBoxHighSpeedPortNo.Name = "_textBoxHighSpeedPortNo";
-            this._textBoxHighSpeedPortNo.Size = new System.Drawing.Size(157, 21);
+            this._textBoxHighSpeedPortNo.Size = new System.Drawing.Size(310, 35);
             this._textBoxHighSpeedPortNo.TabIndex = 23;
             this._textBoxHighSpeedPortNo.Text = "24692";
             // 
             // _labelHighSpeedPortNo
             // 
             this._labelHighSpeedPortNo.AutoSize = true;
-            this._labelHighSpeedPortNo.Location = new System.Drawing.Point(35, 125);
+            this._labelHighSpeedPortNo.Location = new System.Drawing.Point(70, 250);
+            this._labelHighSpeedPortNo.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this._labelHighSpeedPortNo.Name = "_labelHighSpeedPortNo";
-            this._labelHighSpeedPortNo.Size = new System.Drawing.Size(107, 12);
+            this._labelHighSpeedPortNo.Size = new System.Drawing.Size(214, 24);
             this._labelHighSpeedPortNo.TabIndex = 22;
             this._labelHighSpeedPortNo.Text = "Port (high speed)";
             // 
             // _labelDescription
             // 
             this._labelDescription.AutoSize = true;
-            this._labelDescription.Location = new System.Drawing.Point(35, 31);
+            this._labelDescription.Location = new System.Drawing.Point(70, 62);
+            this._labelDescription.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this._labelDescription.Name = "_labelDescription";
-            this._labelDescription.Size = new System.Drawing.Size(263, 12);
+            this._labelDescription.Size = new System.Drawing.Size(526, 24);
             this._labelDescription.TabIndex = 14;
             this._labelDescription.Text = "[有效范围] IP地址是字节值，端口是ushort值。";
             // 
             // _textBoxPort
             // 
-            this._textBoxPort.Location = new System.Drawing.Point(104, 89);
+            this._textBoxPort.Location = new System.Drawing.Point(208, 178);
+            this._textBoxPort.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this._textBoxPort.Name = "_textBoxPort";
-            this._textBoxPort.Size = new System.Drawing.Size(194, 21);
+            this._textBoxPort.Size = new System.Drawing.Size(384, 35);
             this._textBoxPort.TabIndex = 21;
             this._textBoxPort.Text = "24691";
             // 
@@ -99,9 +105,10 @@
             // 
             this._buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this._buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this._buttonCancel.Location = new System.Drawing.Point(421, 150);
+            this._buttonCancel.Location = new System.Drawing.Point(842, 300);
+            this._buttonCancel.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this._buttonCancel.Name = "_buttonCancel";
-            this._buttonCancel.Size = new System.Drawing.Size(75, 25);
+            this._buttonCancel.Size = new System.Drawing.Size(150, 50);
             this._buttonCancel.TabIndex = 27;
             this._buttonCancel.Text = "Cancel";
             this._buttonCancel.UseVisualStyleBackColor = true;
@@ -110,9 +117,10 @@
             // 
             this._buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this._buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this._buttonOk.Location = new System.Drawing.Point(313, 150);
+            this._buttonOk.Location = new System.Drawing.Point(626, 300);
+            this._buttonOk.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this._buttonOk.Name = "_buttonOk";
-            this._buttonOk.Size = new System.Drawing.Size(75, 25);
+            this._buttonOk.Size = new System.Drawing.Size(150, 50);
             this._buttonOk.TabIndex = 26;
             this._buttonOk.Text = "OK";
             this._buttonOk.UseVisualStyleBackColor = true;
@@ -120,58 +128,64 @@
             // _labelPort
             // 
             this._labelPort.AutoSize = true;
-            this._labelPort.Location = new System.Drawing.Point(35, 93);
+            this._labelPort.Location = new System.Drawing.Point(70, 186);
+            this._labelPort.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this._labelPort.Name = "_labelPort";
-            this._labelPort.Size = new System.Drawing.Size(29, 12);
+            this._labelPort.Size = new System.Drawing.Size(58, 24);
             this._labelPort.TabIndex = 20;
             this._labelPort.Text = "Port";
             // 
             // _textBoxIpFourthSegment
             // 
-            this._textBoxIpFourthSegment.Location = new System.Drawing.Point(254, 57);
+            this._textBoxIpFourthSegment.Location = new System.Drawing.Point(508, 114);
+            this._textBoxIpFourthSegment.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this._textBoxIpFourthSegment.Name = "_textBoxIpFourthSegment";
-            this._textBoxIpFourthSegment.Size = new System.Drawing.Size(44, 21);
+            this._textBoxIpFourthSegment.Size = new System.Drawing.Size(84, 35);
             this._textBoxIpFourthSegment.TabIndex = 19;
             this._textBoxIpFourthSegment.Text = "1";
             // 
             // _textBoxIpThirdSegment
             // 
-            this._textBoxIpThirdSegment.Location = new System.Drawing.Point(204, 57);
+            this._textBoxIpThirdSegment.Location = new System.Drawing.Point(408, 114);
+            this._textBoxIpThirdSegment.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this._textBoxIpThirdSegment.Name = "_textBoxIpThirdSegment";
-            this._textBoxIpThirdSegment.Size = new System.Drawing.Size(44, 21);
+            this._textBoxIpThirdSegment.Size = new System.Drawing.Size(84, 35);
             this._textBoxIpThirdSegment.TabIndex = 18;
             this._textBoxIpThirdSegment.Text = "0";
             // 
             // _textBoxIpSecondSegment
             // 
-            this._textBoxIpSecondSegment.Location = new System.Drawing.Point(154, 57);
+            this._textBoxIpSecondSegment.Location = new System.Drawing.Point(308, 114);
+            this._textBoxIpSecondSegment.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this._textBoxIpSecondSegment.Name = "_textBoxIpSecondSegment";
-            this._textBoxIpSecondSegment.Size = new System.Drawing.Size(44, 21);
+            this._textBoxIpSecondSegment.Size = new System.Drawing.Size(84, 35);
             this._textBoxIpSecondSegment.TabIndex = 17;
             this._textBoxIpSecondSegment.Text = "168";
             // 
             // _textBoxIpFirstSegment
             // 
-            this._textBoxIpFirstSegment.Location = new System.Drawing.Point(104, 57);
+            this._textBoxIpFirstSegment.Location = new System.Drawing.Point(208, 114);
+            this._textBoxIpFirstSegment.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this._textBoxIpFirstSegment.Name = "_textBoxIpFirstSegment";
-            this._textBoxIpFirstSegment.Size = new System.Drawing.Size(44, 21);
+            this._textBoxIpFirstSegment.Size = new System.Drawing.Size(84, 35);
             this._textBoxIpFirstSegment.TabIndex = 16;
             this._textBoxIpFirstSegment.Text = "192";
             // 
             // _labelIpAddress
             // 
             this._labelIpAddress.AutoSize = true;
-            this._labelIpAddress.Location = new System.Drawing.Point(35, 61);
+            this._labelIpAddress.Location = new System.Drawing.Point(70, 122);
+            this._labelIpAddress.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this._labelIpAddress.Name = "_labelIpAddress";
-            this._labelIpAddress.Size = new System.Drawing.Size(65, 12);
+            this._labelIpAddress.Size = new System.Drawing.Size(130, 24);
             this._labelIpAddress.TabIndex = 15;
             this._labelIpAddress.Text = "IP address";
             // 
             // HighSpeedInitializeForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(547, 238);
+            this.ClientSize = new System.Drawing.Size(1094, 476);
             this.Controls.Add(this._textBoxProfileCnt);
             this.Controls.Add(this._labelProfileCnt);
             this.Controls.Add(this._textBoxHighSpeedPortNo);
@@ -186,6 +200,7 @@
             this.Controls.Add(this._textBoxIpSecondSegment);
             this.Controls.Add(this._textBoxIpFirstSegment);
             this.Controls.Add(this._labelIpAddress);
+            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "HighSpeedInitializeForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "HighSpeedInitializeForm";

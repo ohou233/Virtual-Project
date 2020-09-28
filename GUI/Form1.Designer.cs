@@ -71,9 +71,6 @@
             this._buttonHighSpeedProfileFileSave = new System.Windows.Forms.Button();
             this._labelHighSpeedSavePath = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.bt_Set_BatchprocessPoints = new System.Windows.Forms.Button();
-            this._buttonSetSetting = new System.Windows.Forms.Button();
-            this._buttonGetSetting = new System.Windows.Forms.Button();
             this._numericUpDownInterval = new System.Windows.Forms.NumericUpDown();
             this._buttonFinalizeHighSpeedDataCommunication = new System.Windows.Forms.Button();
             this._buttonStartMeasure = new System.Windows.Forms.Button();
@@ -88,6 +85,7 @@
             this._profileOrBitmapFileSave = new System.Windows.Forms.SaveFileDialog();
             this._timerHighSpeed = new System.Windows.Forms.Timer(this.components);
             this._timerBufferError = new System.Windows.Forms.Timer(this.components);
+            this._labelProfileSaveCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pb_in)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_out)).BeginInit();
             this.tp_SetOption.SuspendLayout();
@@ -611,9 +609,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.bt_Set_BatchprocessPoints);
-            this.groupBox1.Controls.Add(this._buttonSetSetting);
-            this.groupBox1.Controls.Add(this._buttonGetSetting);
+            this.groupBox1.Controls.Add(this._labelProfileSaveCount);
             this.groupBox1.Controls.Add(this._numericUpDownInterval);
             this.groupBox1.Controls.Add(this._buttonFinalizeHighSpeedDataCommunication);
             this.groupBox1.Controls.Add(this._buttonStartMeasure);
@@ -632,45 +628,6 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "设备管理";
-            // 
-            // bt_Set_BatchprocessPoints
-            // 
-            this.bt_Set_BatchprocessPoints.Font = new System.Drawing.Font("宋体", 9F);
-            this.bt_Set_BatchprocessPoints.Location = new System.Drawing.Point(11, 54);
-            this.bt_Set_BatchprocessPoints.Name = "bt_Set_BatchprocessPoints";
-            this.bt_Set_BatchprocessPoints.Size = new System.Drawing.Size(164, 23);
-            this.bt_Set_BatchprocessPoints.TabIndex = 22;
-            this.bt_Set_BatchprocessPoints.Text = "设置批处理点数";
-            this.bt_Set_BatchprocessPoints.UseVisualStyleBackColor = true;
-            this.bt_Set_BatchprocessPoints.Click += new System.EventHandler(this.bt_Set_BatchprocessPoints_Click);
-            // 
-            // _buttonSetSetting
-            // 
-            this._buttonSetSetting.BackColor = System.Drawing.Color.Transparent;
-            this._buttonSetSetting.Enabled = false;
-            this._buttonSetSetting.Font = new System.Drawing.Font("宋体", 9F);
-            this._buttonSetSetting.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonSetSetting.Location = new System.Drawing.Point(10, 115);
-            this._buttonSetSetting.Name = "_buttonSetSetting";
-            this._buttonSetSetting.Size = new System.Drawing.Size(110, 25);
-            this._buttonSetSetting.TabIndex = 20;
-            this._buttonSetSetting.Text = "设置参数";
-            this._buttonSetSetting.UseVisualStyleBackColor = false;
-            this._buttonSetSetting.Click += new System.EventHandler(this._buttonSetSetting_Click);
-            // 
-            // _buttonGetSetting
-            // 
-            this._buttonGetSetting.BackColor = System.Drawing.Color.Transparent;
-            this._buttonGetSetting.Enabled = false;
-            this._buttonGetSetting.Font = new System.Drawing.Font("宋体", 9F);
-            this._buttonGetSetting.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonGetSetting.Location = new System.Drawing.Point(136, 115);
-            this._buttonGetSetting.Name = "_buttonGetSetting";
-            this._buttonGetSetting.Size = new System.Drawing.Size(110, 25);
-            this._buttonGetSetting.TabIndex = 21;
-            this._buttonGetSetting.Text = "获取参数";
-            this._buttonGetSetting.UseVisualStyleBackColor = false;
-            this._buttonGetSetting.Click += new System.EventHandler(this._buttonGetSetting_Click);
             // 
             // _numericUpDownInterval
             // 
@@ -706,7 +663,7 @@
             this._buttonFinalizeHighSpeedDataCommunication.Enabled = false;
             this._buttonFinalizeHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonFinalizeHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonFinalizeHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 243);
+            this._buttonFinalizeHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 211);
             this._buttonFinalizeHighSpeedDataCommunication.Name = "_buttonFinalizeHighSpeedDataCommunication";
             this._buttonFinalizeHighSpeedDataCommunication.Size = new System.Drawing.Size(235, 25);
             this._buttonFinalizeHighSpeedDataCommunication.TabIndex = 12;
@@ -718,7 +675,7 @@
             // 
             this._buttonStartMeasure.BackColor = System.Drawing.Color.Transparent;
             this._buttonStartMeasure.Font = new System.Drawing.Font("宋体", 9F);
-            this._buttonStartMeasure.Location = new System.Drawing.Point(10, 179);
+            this._buttonStartMeasure.Location = new System.Drawing.Point(10, 147);
             this._buttonStartMeasure.Name = "_buttonStartMeasure";
             this._buttonStartMeasure.Size = new System.Drawing.Size(110, 25);
             this._buttonStartMeasure.TabIndex = 17;
@@ -732,7 +689,7 @@
             this._buttonStopHighSpeedDataCommunication.Enabled = false;
             this._buttonStopHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonStopHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonStopHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 211);
+            this._buttonStopHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 179);
             this._buttonStopHighSpeedDataCommunication.Name = "_buttonStopHighSpeedDataCommunication";
             this._buttonStopHighSpeedDataCommunication.Size = new System.Drawing.Size(235, 25);
             this._buttonStopHighSpeedDataCommunication.TabIndex = 11;
@@ -745,7 +702,7 @@
             this._buttonStopMeasure.BackColor = System.Drawing.Color.Transparent;
             this._buttonStopMeasure.Enabled = false;
             this._buttonStopMeasure.Font = new System.Drawing.Font("宋体", 9F);
-            this._buttonStopMeasure.Location = new System.Drawing.Point(136, 179);
+            this._buttonStopMeasure.Location = new System.Drawing.Point(136, 147);
             this._buttonStopMeasure.Name = "_buttonStopMeasure";
             this._buttonStopMeasure.Size = new System.Drawing.Size(110, 25);
             this._buttonStopMeasure.TabIndex = 18;
@@ -758,7 +715,7 @@
             this._buttonStartHighSpeedDataCommunication.BackColor = System.Drawing.Color.Transparent;
             this._buttonStartHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonStartHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonStartHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 147);
+            this._buttonStartHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 115);
             this._buttonStartHighSpeedDataCommunication.Name = "_buttonStartHighSpeedDataCommunication";
             this._buttonStartHighSpeedDataCommunication.Size = new System.Drawing.Size(235, 25);
             this._buttonStartHighSpeedDataCommunication.TabIndex = 16;
@@ -838,6 +795,16 @@
             this._timerBufferError.Enabled = true;
             this._timerBufferError.Interval = 500;
             this._timerBufferError.Tick += new System.EventHandler(this._timerBufferError_Tick);
+            // 
+            // _labelProfileSaveCount
+            // 
+            this._labelProfileSaveCount.AutoSize = true;
+            this._labelProfileSaveCount.Font = new System.Drawing.Font("宋体", 9F);
+            this._labelProfileSaveCount.Location = new System.Drawing.Point(12, 59);
+            this._labelProfileSaveCount.Name = "_labelProfileSaveCount";
+            this._labelProfileSaveCount.Size = new System.Drawing.Size(131, 12);
+            this._labelProfileSaveCount.TabIndex = 22;
+            this._labelProfileSaveCount.Text = "要保存的配置文件数量:";
             // 
             // MyWindow
             // 
@@ -937,11 +904,9 @@
         private System.Windows.Forms.NumericUpDown _numericUpDownInterval;
         private System.Windows.Forms.TextBox _textBoxLog;
         private System.Windows.Forms.SaveFileDialog _profileOrBitmapFileSave;
-        private System.Windows.Forms.Button _buttonSetSetting;
-        private System.Windows.Forms.Button _buttonGetSetting;
-        private System.Windows.Forms.Button bt_Set_BatchprocessPoints;
         private System.Windows.Forms.Timer _timerHighSpeed;
         private System.Windows.Forms.Timer _timerBufferError;
+        private System.Windows.Forms.Label _labelProfileSaveCount;
     }
 }
 

@@ -126,7 +126,6 @@ namespace MyWindow
         bool IsthreadLoadImageStop = false;
         double Radius, PositionDegree, RunTime, DistanceX1, DistanceY1;
         double Origin_Z_mm, E2_OffestZ_mm, E5_OffestZ_mm, E10_OffestZ_mm, E13_OffestZ_mm, Profile;
-
         #endregion
 
         public MyWindow()
@@ -1259,8 +1258,6 @@ namespace MyWindow
             if(openEthernetSucceed)
             {
                 Initialize_HighSpeedData_Communication_SimpleArray();
-                _buttonSetSetting.Enabled = true;
-                _buttonGetSetting.Enabled = true;
             }
         }
 
@@ -1633,7 +1630,7 @@ namespace MyWindow
 
         private void _buttonStartMeasure_Click(object sender, EventArgs e)
         {
-           if( _deviceData[_currentDeviceId].Status == DeviceStatus.Ethernet)
+           if( _deviceData[_currentDeviceId].Status == DeviceStatus.Ethernet || _deviceData[_currentDeviceId].Status == DeviceStatus.EthernetFast)
             {
                 _buttonStartMeasure.Enabled = false;
                 _buttonStopMeasure.Enabled = true;
@@ -1651,6 +1648,7 @@ namespace MyWindow
             {
                 _buttonStartMeasure.Enabled = true;
                 _buttonStopMeasure.Enabled = false;
+                _buttonStopHighSpeedDataCommunication.Enabled = true;
             }
 
             _sendCommand = SendCommand.StopMeasure;
@@ -1695,8 +1693,6 @@ namespace MyWindow
             if (_deviceData[_currentDeviceId].Status == DeviceStatus.Ethernet)
             {
                 _buttonFinalizeHighSpeedDataCommunication.Enabled = false;
-                _buttonSetSetting.Enabled = false;
-                _buttonGetSetting.Enabled = false;
             }              
         }
 
@@ -1869,37 +1865,37 @@ namespace MyWindow
             MessageBox.Show(this, "Receive buffer is full.");
         }
 
-        private void bt_Set_BatchprocessPoints_Click(object sender, EventArgs e)
-        {
-            int m_CountProfile = Convert.ToInt32(_numericUpDownProfileSaveCount.Text);
-            String strA = m_CountProfile.ToString("x8");
-            byte[] _data = new byte[4];
-            string[] parameterTexts = new string[4];
-            parameterTexts[0] = strA.Substring(0, 2);
-            parameterTexts[1] = strA.Substring(2, 2);
-            parameterTexts[2] = strA.Substring(4, 2);
-            parameterTexts[3] = strA.Substring(6, 2);
-            if (0 < parameterTexts.Length)
-            {
-                _data = Array.ConvertAll(parameterTexts,
-                    delegate (string text) { return Convert.ToByte(text, 16); });
-            }
-            Array.Resize(ref _data, 4);
-            uint error = 0;
-            LJX8IF_TARGET_SETTING _targetSetting = new LJX8IF_TARGET_SETTING();
-            _targetSetting.byType = Convert.ToByte("10", 16);
-            _targetSetting.byCategory = Convert.ToByte("00", 16);
-            _targetSetting.byItem = Convert.ToByte("0A", 16);
-            _targetSetting.byTarget1 = Convert.ToByte("00", 16);
-            _targetSetting.byTarget2 = Convert.ToByte("00", 16);
-            _targetSetting.byTarget3 = Convert.ToByte("00", 16);
-            _targetSetting.byTarget4 = Convert.ToByte("00", 16);
-            using (PinnedObject pin = new PinnedObject(_data))
-            {
-                int rc = NativeMethods.LJX8IF_SetSetting(0, 2, _targetSetting,
-                    pin.Pointer, 4, ref error);
-            }
-        }
+        //private void bt_Set_BatchprocessPoints_Click(object sender, EventArgs e)
+        //{
+        //    int m_CountProfile = Convert.ToInt32(_numericUpDownProfileSaveCount.Text);
+        //    String strA = m_CountProfile.ToString("x8");
+        //    byte[] _data = new byte[4];
+        //    string[] parameterTexts = new string[4];
+        //    parameterTexts[0] = strA.Substring(0, 2);
+        //    parameterTexts[1] = strA.Substring(2, 2);
+        //    parameterTexts[2] = strA.Substring(4, 2);
+        //    parameterTexts[3] = strA.Substring(6, 2);
+        //    if (0 < parameterTexts.Length)
+        //    {
+        //        _data = Array.ConvertAll(parameterTexts,
+        //            delegate (string text) { return Convert.ToByte(text, 16); });
+        //    }
+        //    Array.Resize(ref _data, 4);
+        //    uint error = 0;
+        //    LJX8IF_TARGET_SETTING _targetSetting = new LJX8IF_TARGET_SETTING();
+        //    _targetSetting.byType = Convert.ToByte("10", 16);
+        //    _targetSetting.byCategory = Convert.ToByte("00", 16);
+        //    _targetSetting.byItem = Convert.ToByte("0A", 16);
+        //    _targetSetting.byTarget1 = Convert.ToByte("00", 16);
+        //    _targetSetting.byTarget2 = Convert.ToByte("00", 16);
+        //    _targetSetting.byTarget3 = Convert.ToByte("00", 16);
+        //    _targetSetting.byTarget4 = Convert.ToByte("00", 16);
+        //    using (PinnedObject pin = new PinnedObject(_data))
+        //    {
+        //        int rc = NativeMethods.LJX8IF_SetSetting(0, 2, _targetSetting,
+        //            pin.Pointer, 4, ref error);
+        //    }
+        //}
 
         private void _timerHighSpeedReceive_Tick(object sender, EventArgs e)
         {
