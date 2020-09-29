@@ -606,7 +606,7 @@ namespace MyWindow
             bt_StopGrab.Enabled = true;
             bt_SaveBmp.Enabled = true;
             rbt_Measure9.Enabled = true;
-            rbt_Measure18.Enabled = true;
+            //rbt_Measure18.Enabled = true;
 
         }
 
@@ -657,7 +657,7 @@ namespace MyWindow
                         continue;
                     }
 
-                    HAlgorithm.DispBuffer(m_BufForDriver, stFrameInfo.nWidth, stFrameInfo.nHeight);
+                    HAlgorithm.DispBuffer(MeasureProject, m_BufForDriver, stFrameInfo.nWidth, stFrameInfo.nHeight);
                 }
        
             }
@@ -697,8 +697,40 @@ namespace MyWindow
         //选择测试项
         #region
 
+        //选择测量项18
+        private void rbt_Measure18_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbt_inLineMode.Checked == true)
+            {
+                _buttonInitialize.Enabled = true;
+                _buttonStartHighSpeedDataCommunication.Enabled = true;
+                _buttonStartMeasure.Enabled = true;
+
+                bt_DiscoverCamera.Enabled = false;
+            }
+
+            if (true == rbt_Measure18.Checked)
+            {
+                MeasureProject = 18;
+                HAlgorithm.ClearListView(lv_AllFrameData);
+                HAlgorithm.InitListView3D(lv_AllFrameData);
+            }
+            else
+            {
+                MeasureProject = -1;
+            }
+        }
+
         private void rbt_Measure9_CheckedChanged(object sender, EventArgs e)
         {
+            if(rbt_inLineMode.Checked ==true)
+            {
+                bt_DiscoverCamera.Enabled = true;
+                _buttonInitialize.Enabled = false;
+                _buttonStartHighSpeedDataCommunication.Enabled = false;
+                _buttonStartMeasure.Enabled = false;
+            }
+
             if (true == rbt_Measure9.Checked)
             {
                 MeasureProject = 9;
@@ -907,7 +939,6 @@ namespace MyWindow
             rbt_Measure9.Enabled = false;
             rbt_Measure18.Enabled = false;
 
-
             if (false == IsInLine)
             {
                 //进行离线测试
@@ -1003,7 +1034,22 @@ namespace MyWindow
 
             else if(MeasureProject == 18)
             {
+                int m_3DWidth, m_3DHeight;
+                IntPtr profilePtr = ProfileByte2ptr(out m_3DWidth, out m_3DHeight);
 
+                HAlgorithm.InLineMeasure(MeasureProject, lv_AllFrameData, profilePtr, (ushort)m_3DWidth, (ushort)m_3DHeight,
+                    out Radius, out PositionDegree, out RunTime, out DistanceX1, out DistanceY1, out Origin_Z_mm,
+                    out E2_OffestZ_mm, out E5_OffestZ_mm, out E10_OffestZ_mm, out E13_OffestZ_mm, out Profile);
+
+
+                //设置控件状态
+                bt_StopTest.Enabled = true;
+                bt_StartTest.Enabled = false;
+                rbt_Measure9.Enabled = false;
+                rbt_Measure18.Enabled = false;
+
+                bt_ClearData.Enabled = false;
+                bt_SaveCSV.Enabled = false;
             }
         }
 
@@ -1128,8 +1174,11 @@ namespace MyWindow
             rbt_Measure9.Enabled = true;
             rbt_Measure18.Enabled = true;
 
+          
             bt_SaveCSV.Enabled = true;
             bt_ClearData.Enabled = true;
+
+
         }
 
         //ListView中数据保存为CSV
@@ -1171,29 +1220,21 @@ namespace MyWindow
             sw.Close();
         }
 
-        //选择测量项18
-        private void rbt_Measure18_CheckedChanged(object sender, EventArgs e)
-        {
-            if (true == rbt_Measure18.Checked)
-            {
-                MeasureProject = 18;
-                HAlgorithm.ClearListView(lv_AllFrameData);
-                HAlgorithm.InitListView3D(lv_AllFrameData);
-            }
-            else
-            {
-                MeasureProject = -1;
-            }
-        }
-
         //选择在线模式
         private void rbt_inLineMode_CheckedChanged_1(object sender, EventArgs e)
         {
-            if (rbt_inLineMode.Checked == true)
+            if (rbt_inLineMode.Checked == true && MeasureProject == 9)
             {
                 bt_StartTest.Enabled = false;
                 bt_DiscoverCamera.Enabled = true;
             }
+            else if(rbt_inLineMode.Checked == true && MeasureProject == 18)
+            {
+                _buttonInitialize.Enabled = true;
+                _buttonStartHighSpeedDataCommunication.Enabled = true;
+                _buttonStartMeasure.Enabled = true;
+            }
+            
         }
 
         //选择离线模式
@@ -1552,7 +1593,7 @@ namespace MyWindow
 
                 LJX8IF_ETHERNET_CONFIG ethernetConfig = highSpeedInitializeForm.EthernetConfig;
                 int rc = NativeMethods.LJX8IF_InitializeHighSpeedDataCommunicationSimpleArray(_currentDeviceId, ref ethernetConfig,
-                    highSpeedInitializeForm.HighSpeedPortNo, _callbackSimpleArrayOnlyCount,
+                    highSpeedInitializeForm.HighSpeedPortNo, _callbackSimpleArray,
                     highSpeedInitializeForm.ProfileCount, (uint)_currentDeviceId);
                 // @Point
                 // # When the frequency of calls is low, the callback function may not be called once per specified number of profiles.
@@ -1592,8 +1633,10 @@ namespace MyWindow
                 //    In this situation, because the profile at the previous send complete position is not saved, an error will occur.
 
                 LJX8IF_PROFILE_INFO profileInfo = new LJX8IF_PROFILE_INFO();
-
+ 
                 int rc = NativeMethods.LJX8IF_PreStartHighSpeedDataCommunication(_currentDeviceId, ref request, ref profileInfo);
+                //profileInfo.nProfileDataCount = 2500;
+
                 AddLogResult(rc, Resources.IDS_PRE_START_HIGH_SPEED_DATA_COMMUNICATION);
                 if (rc != (int)Rc.Ok) return;
 
@@ -1634,6 +1677,7 @@ namespace MyWindow
             {
                 _buttonStartMeasure.Enabled = false;
                 _buttonStopMeasure.Enabled = true;
+                _buttonHighSpeedSaveAsBitmapFile.Enabled = true;
             }
 
             _sendCommand = SendCommand.StartMeasure;
@@ -1649,6 +1693,7 @@ namespace MyWindow
                 _buttonStartMeasure.Enabled = true;
                 _buttonStopMeasure.Enabled = false;
                 _buttonStopHighSpeedDataCommunication.Enabled = true;
+                _buttonHighSpeedSaveAsBitmapFile.Enabled = false;
             }
 
             _sendCommand = SendCommand.StopMeasure;
@@ -1668,6 +1713,7 @@ namespace MyWindow
             {
                 _buttonStopHighSpeedDataCommunication.Enabled = false;
                 _buttonFinalizeHighSpeedDataCommunication.Enabled = true;
+                _buttonStartMeasure.Enabled = true;
             }
 
         }
@@ -1731,37 +1777,6 @@ namespace MyWindow
 
         }
 
-        private void _buttonSetSetting_Click(object sender, EventArgs e)
-        {
-            using (SettingForm settingForm = new SettingForm(true))
-            {
-                if (DialogResult.OK != settingForm.ShowDialog()) return;
-                using (PinnedObject pin = new PinnedObject(settingForm.Data))
-                {
-                    LJX8IF_TARGET_SETTING targetSetting = settingForm.TargetSetting;
-                    uint error = 0;
-                    int rc = NativeMethods.LJX8IF_SetSetting(_currentDeviceId, settingForm.Depth, targetSetting,
-                        pin.Pointer, (uint)settingForm.Data.Length, ref error);
-                    // @Point
-                    // # There are three setting areas: a) the write settings area, b) the running area, and c) the save area.
-                    //   * Specify a) for the setting level when you want to change multiple settings. However, to reflect settings in the LJ-X operations, you have to call LJX8IF_ReflectSetting.
-                    //	 * Specify b) for the setting level when you want to change one setting but you don't mind if this setting is returned to its value prior to the change when the power is turned off.
-                    //	 * Specify c) for the setting level when you want to change one setting and you want this new value to be retained even when the power is turned off.
-
-                    // @Point
-                    //  As a usage example, we will show how to use SettingForm to configure settings such that sending a setting, with SettingForm using its initial values,
-                    //  will change the sampling period in the running area to "100 Hz."
-                    //  Also see the GetSetting function.
-
-                    AddLogResult(rc, Resources.IDS_SET_SETTING);
-                    if ((rc == (int)Rc.Ok) && (error != NoErrorValue))
-                    {
-                        AddError(error);
-                    }
-                }
-            }
-        }
-
         private void AddError(uint error)
         {
             _textBoxLog.AppendText("  ErrorCode : 0x" + error.ToString("x8") + Environment.NewLine);
@@ -1770,58 +1785,34 @@ namespace MyWindow
             _textBoxLog.ScrollToCaret();
         }
 
-        private void Disp_ProfileByte2ptr()
+        private IntPtr ProfileByte2ptr(out int m_3DWidth, out int m_3DHeight)
         {
             byte[] _profileImage = _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.GetImageByte(0, (int)_deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.Count);
-            int m_3DWidth = _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.DataWidth;
-            int m_3DHeight = _profileImage.Count() / 2 / m_3DWidth;
+            m_3DWidth = _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.DataWidth;
+            m_3DHeight = _profileImage.Count() / 2 / m_3DWidth;
             IntPtr ptr = Marshal.AllocHGlobal(_profileImage.Length);
             Marshal.Copy(_profileImage, 0, ptr, _profileImage.Length);
 
-            HAlgorithm.DispBuffer(ptr, (ushort)m_3DWidth, (ushort)m_3DHeight);
+            return ptr;
+        }
+
+        private void Disp_ProfileByte2ptr()
+        {
+            //byte[] _profileImage = _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.GetImageByte(0, (int)_deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.Count);
+            //int m_3DWidth = _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.DataWidth;
+            //int m_3DHeight = _profileImage.Count() / 2 / m_3DWidth;
+            //IntPtr ptr = Marshal.AllocHGlobal(_profileImage.Length);
+            //Marshal.Copy(_profileImage, 0, ptr, _profileImage.Length);
+
+            int m_3DWidth, m_3DHeight;
+            IntPtr ptr = ProfileByte2ptr(out m_3DWidth, out m_3DHeight);
+
+            HAlgorithm.DispBuffer( MeasureProject, ptr, (ushort)m_3DWidth, (ushort)m_3DHeight);
         }
 
         private void ClearMemory()
         {
             int rc = NativeMethods.LJX8IF_ClearMemory(0);
-        }
-
-        //设置批处理点数
-        private void _buttonGetSetting_Click(object sender, EventArgs e)
-        {
-            using (SettingForm settingForm = new SettingForm(false))
-            {
-                if (DialogResult.OK != settingForm.ShowDialog()) return;
-
-                byte[] data = new byte[settingForm.DataLength];
-                using (PinnedObject pin = new PinnedObject(data))
-                {
-                    LJX8IF_TARGET_SETTING targetSetting = settingForm.TargetSetting;
-                    int rc = NativeMethods.LJX8IF_GetSetting(_currentDeviceId, settingForm.Depth, targetSetting,
-                        pin.Pointer, (uint)settingForm.DataLength);
-                    // @Point
-                    //  We have prepared an object for reading the sampling period into the setting's initial value.
-                    //  Also see the SetSetting function.
-
-                    AddLogResult(rc, Resources.IDS_GET_SETTING);
-                    if (rc != (int)Rc.Ok) return;
-
-                    AddLog("\t    0  1  2  3  4  5  6  7");
-                    StringBuilder stringBuilder = new StringBuilder();
-                    // Get data display
-                    for (int i = 0; i < settingForm.DataLength; i++)
-                    {
-                        if ((i % DataCountInOneLine) == 0) stringBuilder.Append(string.Format("  [0x{0:x4}] ", i));
-
-                        stringBuilder.Append(string.Format("{0:x2} ", data[i]));
-                        if (((i % DataCountInOneLine) == DataCountInOneLine - 1) || (i == settingForm.DataLength - 1))
-                        {
-                            AddLog(stringBuilder.ToString());
-                            stringBuilder.Remove(0, stringBuilder.Length);
-                        }
-                    }
-                }
-            }
         }
 
         private void _timerHighSpeed_Tick(object sender, EventArgs e)
@@ -1864,38 +1855,6 @@ namespace MyWindow
         {
             MessageBox.Show(this, "Receive buffer is full.");
         }
-
-        //private void bt_Set_BatchprocessPoints_Click(object sender, EventArgs e)
-        //{
-        //    int m_CountProfile = Convert.ToInt32(_numericUpDownProfileSaveCount.Text);
-        //    String strA = m_CountProfile.ToString("x8");
-        //    byte[] _data = new byte[4];
-        //    string[] parameterTexts = new string[4];
-        //    parameterTexts[0] = strA.Substring(0, 2);
-        //    parameterTexts[1] = strA.Substring(2, 2);
-        //    parameterTexts[2] = strA.Substring(4, 2);
-        //    parameterTexts[3] = strA.Substring(6, 2);
-        //    if (0 < parameterTexts.Length)
-        //    {
-        //        _data = Array.ConvertAll(parameterTexts,
-        //            delegate (string text) { return Convert.ToByte(text, 16); });
-        //    }
-        //    Array.Resize(ref _data, 4);
-        //    uint error = 0;
-        //    LJX8IF_TARGET_SETTING _targetSetting = new LJX8IF_TARGET_SETTING();
-        //    _targetSetting.byType = Convert.ToByte("10", 16);
-        //    _targetSetting.byCategory = Convert.ToByte("00", 16);
-        //    _targetSetting.byItem = Convert.ToByte("0A", 16);
-        //    _targetSetting.byTarget1 = Convert.ToByte("00", 16);
-        //    _targetSetting.byTarget2 = Convert.ToByte("00", 16);
-        //    _targetSetting.byTarget3 = Convert.ToByte("00", 16);
-        //    _targetSetting.byTarget4 = Convert.ToByte("00", 16);
-        //    using (PinnedObject pin = new PinnedObject(_data))
-        //    {
-        //        int rc = NativeMethods.LJX8IF_SetSetting(0, 2, _targetSetting,
-        //            pin.Pointer, 4, ref error);
-        //    }
-        //}
 
         private void _timerHighSpeedReceive_Tick(object sender, EventArgs e)
         {

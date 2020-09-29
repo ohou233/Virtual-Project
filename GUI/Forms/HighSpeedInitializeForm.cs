@@ -99,7 +99,7 @@ namespace MyWindow.Forms
             // Field initialization
             _ethernetConfig = new LJX8IF_ETHERNET_CONFIG();
             _highSpeedPortNo = 0;
-            _profileCount = 0;
+            _profileCount = 2500;
         }
     }
 }

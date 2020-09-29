@@ -13,10 +13,17 @@ namespace HalconAlgorithm
        private static HWindow inWindow, outWindow;
         
         //接收相机传入buffer并显示在输入窗口
-        public static void DispBuffer(IntPtr buffer, ushort Bufferwidth, ushort Bufferheight)
+        public static void DispBuffer(int MeasureProject, IntPtr buffer, ushort Bufferwidth, ushort Bufferheight)
         {
             HObject HojFromBuffer;
-            HOperatorSet.GenImage1Extern(out HojFromBuffer, "byte", Bufferwidth, Bufferheight, buffer, IntPtr.Zero);
+            if(MeasureProject == 9)
+            {
+                HOperatorSet.GenImage1Extern(out HojFromBuffer, "byte", Bufferwidth, Bufferheight, buffer, IntPtr.Zero);
+            }
+            else
+            {
+                HOperatorSet.GenImage1Extern(out HojFromBuffer, "uint2", Bufferwidth, Bufferheight, buffer, IntPtr.Zero);
+            }
             HTuple width, height;
             HOperatorSet.GetImageSize(HojFromBuffer, out width, out height);
             inWindow.SetPart((HTuple)0, (HTuple)0, height, width);

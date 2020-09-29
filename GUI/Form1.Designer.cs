@@ -71,6 +71,7 @@
             this._buttonHighSpeedProfileFileSave = new System.Windows.Forms.Button();
             this._labelHighSpeedSavePath = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this._labelProfileSaveCount = new System.Windows.Forms.Label();
             this._numericUpDownInterval = new System.Windows.Forms.NumericUpDown();
             this._buttonFinalizeHighSpeedDataCommunication = new System.Windows.Forms.Button();
             this._buttonStartMeasure = new System.Windows.Forms.Button();
@@ -85,7 +86,6 @@
             this._profileOrBitmapFileSave = new System.Windows.Forms.SaveFileDialog();
             this._timerHighSpeed = new System.Windows.Forms.Timer(this.components);
             this._timerBufferError = new System.Windows.Forms.Timer(this.components);
-            this._labelProfileSaveCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pb_in)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_out)).BeginInit();
             this.tp_SetOption.SuspendLayout();
@@ -470,6 +470,7 @@
             this.bt_StopGrab.TabIndex = 3;
             this.bt_StopGrab.Text = "停止采集";
             this.bt_StopGrab.UseVisualStyleBackColor = true;
+            this.bt_StopGrab.Click += new System.EventHandler(this.bt_StopGrab_Click);
             // 
             // bt_StartGrab
             // 
@@ -482,6 +483,7 @@
             this.bt_StartGrab.TabIndex = 2;
             this.bt_StartGrab.Text = "开始采集";
             this.bt_StartGrab.UseVisualStyleBackColor = true;
+            this.bt_StartGrab.Click += new System.EventHandler(this.bt_StartGrab_Click);
             // 
             // cb_DeviceList
             // 
@@ -577,6 +579,7 @@
             // 
             // _buttonHighSpeedSaveAsBitmapFile
             // 
+            this._buttonHighSpeedSaveAsBitmapFile.Enabled = false;
             this._buttonHighSpeedSaveAsBitmapFile.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonHighSpeedSaveAsBitmapFile.Location = new System.Drawing.Point(60, 56);
             this._buttonHighSpeedSaveAsBitmapFile.Name = "_buttonHighSpeedSaveAsBitmapFile";
@@ -629,6 +632,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "设备管理";
             // 
+            // _labelProfileSaveCount
+            // 
+            this._labelProfileSaveCount.AutoSize = true;
+            this._labelProfileSaveCount.Font = new System.Drawing.Font("宋体", 9F);
+            this._labelProfileSaveCount.Location = new System.Drawing.Point(12, 59);
+            this._labelProfileSaveCount.Name = "_labelProfileSaveCount";
+            this._labelProfileSaveCount.Size = new System.Drawing.Size(131, 12);
+            this._labelProfileSaveCount.TabIndex = 22;
+            this._labelProfileSaveCount.Text = "要保存的配置文件数量:";
+            // 
             // _numericUpDownInterval
             // 
             this._numericUpDownInterval.Font = new System.Drawing.Font("宋体", 9F);
@@ -674,6 +687,7 @@
             // _buttonStartMeasure
             // 
             this._buttonStartMeasure.BackColor = System.Drawing.Color.Transparent;
+            this._buttonStartMeasure.Enabled = false;
             this._buttonStartMeasure.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonStartMeasure.Location = new System.Drawing.Point(10, 147);
             this._buttonStartMeasure.Name = "_buttonStartMeasure";
@@ -713,6 +727,7 @@
             // _buttonStartHighSpeedDataCommunication
             // 
             this._buttonStartHighSpeedDataCommunication.BackColor = System.Drawing.Color.Transparent;
+            this._buttonStartHighSpeedDataCommunication.Enabled = false;
             this._buttonStartHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonStartHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
             this._buttonStartHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 115);
@@ -725,6 +740,7 @@
             // 
             // _buttonInitialize
             // 
+            this._buttonInitialize.Enabled = false;
             this._buttonInitialize.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonInitialize.Location = new System.Drawing.Point(11, 84);
             this._buttonInitialize.Name = "_buttonInitialize";
@@ -795,16 +811,6 @@
             this._timerBufferError.Enabled = true;
             this._timerBufferError.Interval = 500;
             this._timerBufferError.Tick += new System.EventHandler(this._timerBufferError_Tick);
-            // 
-            // _labelProfileSaveCount
-            // 
-            this._labelProfileSaveCount.AutoSize = true;
-            this._labelProfileSaveCount.Font = new System.Drawing.Font("宋体", 9F);
-            this._labelProfileSaveCount.Location = new System.Drawing.Point(12, 59);
-            this._labelProfileSaveCount.Name = "_labelProfileSaveCount";
-            this._labelProfileSaveCount.Size = new System.Drawing.Size(131, 12);
-            this._labelProfileSaveCount.TabIndex = 22;
-            this._labelProfileSaveCount.Text = "要保存的配置文件数量:";
             // 
             // MyWindow
             // 
