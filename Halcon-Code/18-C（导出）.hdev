@@ -5,7 +5,7 @@
 <body>
 <l>Set_Offest_Param (p_A1_x_offest, p_A1_y_offest, p_A2_y_offest, p_A2_x_offest, p_A3_y_offest, p_A3_x_offest, p_A4_y_offest, p_A4_x_offest, p_A5_y_offest, p_A5_x_offest, p_A6_y_offest, p_A6_x_offest, p_A7_y_offest, p_A7_x_offest, p_A8_y_offest, p_A8_x_offest, p_E2_y_offest, p_E2_x_offest, p_E5_y_offest, p_E5_x_offest, p_E10_y_offest, p_E10_x_offest, p_E13_y_offest, p_E13_x_offest, B_offest, C_offest)</l>
 <l>count_seconds (start_time)</l>
-<l>read_image (ImageZ, '//mac/Home/Desktop/VirtualProject/Data/3d-Image/2.1.tif')</l>
+<l>read_image (ImageZ, '//mac/Home/Desktop/VirtualProject/Data/3d-Image/1.1.tif')</l>
 <l>get_image_size (ImageZ, Width, Height)</l>
 <c>*定位两圆心</c>
 <l>gen_TwoCircle_info(ImageZ, Row_Origin, Col_Origin, MaxCircleRadius, RowEnd_X, ColEnd_X, MinCircleRadius, TwoCirclePhi)</l>
@@ -136,16 +136,14 @@
 </oc>
 </interface>
 <body>
-<l>* fast_threshold (Image, Regions, 128, 255, 20)</l>
-<c></c>
-<l>* threshold (Image, Regions, 152, 181)</l>
-<c></c>
-<l>auto_threshold (Image, Regions, 0.2)</l>
+<l>threshold (Image, Regions, 28879, 36401)</l>
 <l>connection (Regions, ConnectedRegions)</l>
-<c>* 提取两个圆形区域</c>
 <c></c>
-<l>select_shape (ConnectedRegions, MaxCircleSelectedRegions, ['area','circularity'], 'and', [217996,0.7004], [1.24768e+06,0.7301])</l>
-<l>select_shape (ConnectedRegions, MinCircleSelectedRegions, ['area','circularity'], 'and', [217996,0.7579], [1.24768e+06,0.8006])</l>
+<c></c>
+<c>* 提取两个圆形区域</c>
+<l>select_shape (ConnectedRegions, MaxCircleSelectedRegions, 'area', 'and', 509174, 683486)</l>
+<l>select_shape (ConnectedRegions, MinCircleSelectedRegions, 'area', 'and', 298165, 518349)</l>
+<c></c>
 <c></c>
 <l>smallest_circle (MaxCircleSelectedRegions, MaxCircleRow, MaxCircleColumn, MaxCircleRadius)</l>
 <l>smallest_circle (MinCircleSelectedRegions, MinCircleRow, MinCircleColumn, MinCircleRadius)</l>

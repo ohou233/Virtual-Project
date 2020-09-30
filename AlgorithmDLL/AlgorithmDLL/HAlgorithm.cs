@@ -423,7 +423,14 @@ namespace HalconAlgorithm
             E13_OffestZ_mm = -1;
             Profile = -1;
             HObject image;
-            HOperatorSet.GenImage1Extern(out image, "byte", BufferWidth, BufferHeight, buffer, IntPtr.Zero);
+            if(MeasureProject == 9)
+            {
+                 HOperatorSet.GenImage1Extern(out image, "byte", BufferWidth, BufferHeight, buffer, IntPtr.Zero);
+            }
+            else
+            {
+                HOperatorSet.GenImage1Extern(out image, "uint2", BufferWidth, BufferHeight, buffer, IntPtr.Zero);
+            }
             bool MeasureISucced = false;
 
             switch (MeasureProject)
@@ -1040,19 +1047,18 @@ namespace HalconAlgorithm
             //threshold (Image, Regions, 152, 181)
 
             ho_Regions.Dispose();
-            HOperatorSet.AutoThreshold(ho_Image, out ho_Regions, 0.2);
+            HOperatorSet.Threshold(ho_Image, out ho_Regions, 28879, 36401);
+
             ho_ConnectedRegions.Dispose();
             HOperatorSet.Connection(ho_Regions, out ho_ConnectedRegions);
             //提取两个圆形区域
 
             ho_MaxCircleSelectedRegions.Dispose();
             HOperatorSet.SelectShape(ho_ConnectedRegions, out ho_MaxCircleSelectedRegions,
-                (new HTuple("area")).TupleConcat("circularity"), "and", (new HTuple(217996)).TupleConcat(
-                0.7004), (new HTuple(1.24768e+06)).TupleConcat(0.7301));
+                (new HTuple("area")), "and", (new HTuple(509174)), (new HTuple(683486)));
             ho_MinCircleSelectedRegions.Dispose();
             HOperatorSet.SelectShape(ho_ConnectedRegions, out ho_MinCircleSelectedRegions,
-                (new HTuple("area")).TupleConcat("circularity"), "and", (new HTuple(217996)).TupleConcat(
-                0.7579), (new HTuple(1.24768e+06)).TupleConcat(0.8006));
+                   (new HTuple("area")), "and", (new HTuple(298165)), (new HTuple(518349)));
 
             hv_MaxCircleRow.Dispose(); hv_MaxCircleColumn.Dispose(); hv_MaxCircleRadius.Dispose();
             HOperatorSet.SmallestCircle(ho_MaxCircleSelectedRegions, out hv_MaxCircleRow,
@@ -1999,7 +2005,7 @@ namespace HalconAlgorithm
                 //图像显示
                 DispImage(ho_Image);
                 
-                if (Profile < 0 || Profile > 0.04)
+                if (Profile < 0 || Profile > 0.055)
                 {
                     outWindow.SetColor("red");
                     outWindow.SetLineWidth(2);
@@ -2224,9 +2230,6 @@ namespace HalconAlgorithm
         {
             lv.Clear();
         }
-
-
-
 
 
     }

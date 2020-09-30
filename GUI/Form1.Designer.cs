@@ -86,6 +86,10 @@
             this._profileOrBitmapFileSave = new System.Windows.Forms.SaveFileDialog();
             this._timerHighSpeed = new System.Windows.Forms.Timer(this.components);
             this._timerBufferError = new System.Windows.Forms.Timer(this.components);
+            this.label1 = new System.Windows.Forms.Label();
+            this.m_NumOfProfile = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.numericUpDownIntervalPoints = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pb_in)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_out)).BeginInit();
             this.tp_SetOption.SuspendLayout();
@@ -102,6 +106,8 @@
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._numericUpDownInterval)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._numericUpDownProfileSaveCount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_NumOfProfile)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownIntervalPoints)).BeginInit();
             this.SuspendLayout();
             // 
             // pb_in
@@ -612,6 +618,10 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.numericUpDownIntervalPoints);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.m_NumOfProfile);
             this.groupBox1.Controls.Add(this._labelProfileSaveCount);
             this.groupBox1.Controls.Add(this._numericUpDownInterval);
             this.groupBox1.Controls.Add(this._buttonFinalizeHighSpeedDataCommunication);
@@ -636,7 +646,7 @@
             // 
             this._labelProfileSaveCount.AutoSize = true;
             this._labelProfileSaveCount.Font = new System.Drawing.Font("宋体", 9F);
-            this._labelProfileSaveCount.Location = new System.Drawing.Point(12, 59);
+            this._labelProfileSaveCount.Location = new System.Drawing.Point(12, 52);
             this._labelProfileSaveCount.Name = "_labelProfileSaveCount";
             this._labelProfileSaveCount.Size = new System.Drawing.Size(131, 12);
             this._labelProfileSaveCount.TabIndex = 22;
@@ -650,7 +660,7 @@
             0,
             0,
             0});
-            this._numericUpDownInterval.Location = new System.Drawing.Point(195, 26);
+            this._numericUpDownInterval.Location = new System.Drawing.Point(195, 24);
             this._numericUpDownInterval.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -676,7 +686,7 @@
             this._buttonFinalizeHighSpeedDataCommunication.Enabled = false;
             this._buttonFinalizeHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonFinalizeHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonFinalizeHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 211);
+            this._buttonFinalizeHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 245);
             this._buttonFinalizeHighSpeedDataCommunication.Name = "_buttonFinalizeHighSpeedDataCommunication";
             this._buttonFinalizeHighSpeedDataCommunication.Size = new System.Drawing.Size(235, 25);
             this._buttonFinalizeHighSpeedDataCommunication.TabIndex = 12;
@@ -689,7 +699,7 @@
             this._buttonStartMeasure.BackColor = System.Drawing.Color.Transparent;
             this._buttonStartMeasure.Enabled = false;
             this._buttonStartMeasure.Font = new System.Drawing.Font("宋体", 9F);
-            this._buttonStartMeasure.Location = new System.Drawing.Point(10, 147);
+            this._buttonStartMeasure.Location = new System.Drawing.Point(10, 184);
             this._buttonStartMeasure.Name = "_buttonStartMeasure";
             this._buttonStartMeasure.Size = new System.Drawing.Size(110, 25);
             this._buttonStartMeasure.TabIndex = 17;
@@ -703,7 +713,7 @@
             this._buttonStopHighSpeedDataCommunication.Enabled = false;
             this._buttonStopHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonStopHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonStopHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 179);
+            this._buttonStopHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 215);
             this._buttonStopHighSpeedDataCommunication.Name = "_buttonStopHighSpeedDataCommunication";
             this._buttonStopHighSpeedDataCommunication.Size = new System.Drawing.Size(235, 25);
             this._buttonStopHighSpeedDataCommunication.TabIndex = 11;
@@ -716,7 +726,7 @@
             this._buttonStopMeasure.BackColor = System.Drawing.Color.Transparent;
             this._buttonStopMeasure.Enabled = false;
             this._buttonStopMeasure.Font = new System.Drawing.Font("宋体", 9F);
-            this._buttonStopMeasure.Location = new System.Drawing.Point(136, 147);
+            this._buttonStopMeasure.Location = new System.Drawing.Point(135, 184);
             this._buttonStopMeasure.Name = "_buttonStopMeasure";
             this._buttonStopMeasure.Size = new System.Drawing.Size(110, 25);
             this._buttonStopMeasure.TabIndex = 18;
@@ -730,7 +740,7 @@
             this._buttonStartHighSpeedDataCommunication.Enabled = false;
             this._buttonStartHighSpeedDataCommunication.Font = new System.Drawing.Font("宋体", 9F);
             this._buttonStartHighSpeedDataCommunication.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._buttonStartHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 115);
+            this._buttonStartHighSpeedDataCommunication.Location = new System.Drawing.Point(10, 152);
             this._buttonStartHighSpeedDataCommunication.Name = "_buttonStartHighSpeedDataCommunication";
             this._buttonStartHighSpeedDataCommunication.Size = new System.Drawing.Size(235, 25);
             this._buttonStartHighSpeedDataCommunication.TabIndex = 16;
@@ -742,7 +752,7 @@
             // 
             this._buttonInitialize.Enabled = false;
             this._buttonInitialize.Font = new System.Drawing.Font("宋体", 9F);
-            this._buttonInitialize.Location = new System.Drawing.Point(11, 84);
+            this._buttonInitialize.Location = new System.Drawing.Point(11, 121);
             this._buttonInitialize.Name = "_buttonInitialize";
             this._buttonInitialize.Size = new System.Drawing.Size(235, 25);
             this._buttonInitialize.TabIndex = 12;
@@ -753,7 +763,7 @@
             // _numericUpDownProfileSaveCount
             // 
             this._numericUpDownProfileSaveCount.Font = new System.Drawing.Font("宋体", 8F);
-            this._numericUpDownProfileSaveCount.Location = new System.Drawing.Point(181, 56);
+            this._numericUpDownProfileSaveCount.Location = new System.Drawing.Point(181, 49);
             this._numericUpDownProfileSaveCount.Maximum = new decimal(new int[] {
             60000,
             0,
@@ -772,7 +782,7 @@
             // 
             this._checkBoxStartTimer.AutoSize = true;
             this._checkBoxStartTimer.Font = new System.Drawing.Font("宋体", 9F);
-            this._checkBoxStartTimer.Location = new System.Drawing.Point(13, 27);
+            this._checkBoxStartTimer.Location = new System.Drawing.Point(13, 25);
             this._checkBoxStartTimer.Name = "_checkBoxStartTimer";
             this._checkBoxStartTimer.Size = new System.Drawing.Size(84, 16);
             this._checkBoxStartTimer.TabIndex = 9;
@@ -812,6 +822,62 @@
             this._timerBufferError.Interval = 500;
             this._timerBufferError.Tick += new System.EventHandler(this._timerBufferError_Tick);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("宋体", 9F);
+            this.label1.Location = new System.Drawing.Point(12, 76);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(89, 12);
+            this.label1.TabIndex = 24;
+            this.label1.Text = "设置批处理点数";
+            // 
+            // m_NumOfProfile
+            // 
+            this.m_NumOfProfile.Font = new System.Drawing.Font("宋体", 8F);
+            this.m_NumOfProfile.Location = new System.Drawing.Point(181, 73);
+            this.m_NumOfProfile.Maximum = new decimal(new int[] {
+            60000,
+            0,
+            0,
+            0});
+            this.m_NumOfProfile.Name = "m_NumOfProfile";
+            this.m_NumOfProfile.Size = new System.Drawing.Size(64, 20);
+            this.m_NumOfProfile.TabIndex = 23;
+            this.m_NumOfProfile.Value = new decimal(new int[] {
+            2500,
+            0,
+            0,
+            0});
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("宋体", 9F);
+            this.label2.Location = new System.Drawing.Point(12, 100);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(77, 12);
+            this.label2.TabIndex = 26;
+            this.label2.Text = "设置细化点数";
+            // 
+            // numericUpDownIntervalPoints
+            // 
+            this.numericUpDownIntervalPoints.Font = new System.Drawing.Font("宋体", 8F);
+            this.numericUpDownIntervalPoints.Location = new System.Drawing.Point(181, 97);
+            this.numericUpDownIntervalPoints.Maximum = new decimal(new int[] {
+            60000,
+            0,
+            0,
+            0});
+            this.numericUpDownIntervalPoints.Name = "numericUpDownIntervalPoints";
+            this.numericUpDownIntervalPoints.Size = new System.Drawing.Size(64, 20);
+            this.numericUpDownIntervalPoints.TabIndex = 25;
+            this.numericUpDownIntervalPoints.Value = new decimal(new int[] {
+            2500,
+            0,
+            0,
+            0});
+            // 
             // MyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -850,6 +916,8 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this._numericUpDownInterval)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._numericUpDownProfileSaveCount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_NumOfProfile)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownIntervalPoints)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -913,6 +981,10 @@
         private System.Windows.Forms.Timer _timerHighSpeed;
         private System.Windows.Forms.Timer _timerBufferError;
         private System.Windows.Forms.Label _labelProfileSaveCount;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown m_NumOfProfile;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.NumericUpDown numericUpDownIntervalPoints;
     }
 }
 

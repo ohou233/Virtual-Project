@@ -291,7 +291,7 @@
             _targetSetting.byTarget4 = 0;
             using (PinnedObject pin = new PinnedObject(_data))
             {
-                int rc = NativeMethods.LJX8IF_SetSetting(0, 2, targetSetting,
+                int rc = NativeMethods.LJX8IF_SetSetting(0, 2, _targetSetting,
                     pin.Pointer, 2, ref error);
             }
         }

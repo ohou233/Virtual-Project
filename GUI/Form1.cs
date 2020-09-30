@@ -138,7 +138,7 @@ namespace MyWindow
             Control.CheckForIllegalCrossThreadCalls = false;
             OutLineModeState();
             thread_OutLineTest = new Thread(new ThreadStart(thread_OutLineTest_Start));
-
+            
             #region 3D初始化
             // Field initialization
             _sendCommand = SendCommand.None;
@@ -227,7 +227,7 @@ namespace MyWindow
             _numericUpDownProfileSaveCount.Enabled = !isOnlyProfileCountChecked;
             //_buttonHighSpeedSave.Enabled = !isOnlyProfileCountChecked && !isUseSimpleArray;
             _buttonHighSpeedProfileFileSave.Enabled = !isOnlyProfileCountChecked;
-            _buttonHighSpeedSaveAsBitmapFile.Enabled = !isOnlyProfileCountChecked && isUseSimpleArray;
+            //_buttonHighSpeedSaveAsBitmapFile.Enabled = !isOnlyProfileCountChecked && isUseSimpleArray;
         }
 
         //打开相机
@@ -1223,6 +1223,10 @@ namespace MyWindow
         //选择在线模式
         private void rbt_inLineMode_CheckedChanged_1(object sender, EventArgs e)
         {
+            if(rbt_inLineMode.Checked==true)
+            {
+                IsInLine = true;
+            }
             if (rbt_inLineMode.Checked == true && MeasureProject == 9)
             {
                 bt_StartTest.Enabled = false;
@@ -1234,7 +1238,6 @@ namespace MyWindow
                 _buttonStartHighSpeedDataCommunication.Enabled = true;
                 _buttonStartMeasure.Enabled = true;
             }
-            
         }
 
         //选择离线模式
@@ -1244,6 +1247,10 @@ namespace MyWindow
             {
                 bt_StartTest.Enabled = true;
                 bt_DiscoverCamera.Enabled = false;
+                _buttonInitialize.Enabled = false;
+                _buttonStartHighSpeedDataCommunication.Enabled = false;
+                _buttonStartMeasure.Enabled = false;
+
             }
         }
 
@@ -1265,7 +1272,8 @@ namespace MyWindow
             //_buttonInitializeHighSpeedDataCommunicationSimpleArray.BackColor = isUseSimpleArray ? colorEnabled : colorDisabled;
 
             //_buttonHighSpeedSave.Enabled = !isUseSimpleArray && !isOnlyProfileCountChecked;
-            _buttonHighSpeedSaveAsBitmapFile.Enabled = isUseSimpleArray && !isOnlyProfileCountChecked;
+            //_buttonHighSpeedSaveAsBitmapFile.Enabled = false;
+            
         }
 
         private void _checkBoxStartTimer_CheckedChanged(object sender, EventArgs e)
@@ -1295,10 +1303,78 @@ namespace MyWindow
                 //_deviceStatusLabels[i].Text = _deviceData[i].GetStatusString();
                // _receivedProfileCountLabels[i].Text = "0";
             }
+
+            //SetNumProfile();
+            //SetIntervalPoints();
+
             bool openEthernetSucceed = Open_Ethernet();
             if(openEthernetSucceed)
             {
                 Initialize_HighSpeedData_Communication_SimpleArray();
+            }
+        }
+
+        //设置细化点数
+        private void SetIntervalPoints()
+        {
+            int m_CountProfile = Convert.ToInt32(numericUpDownIntervalPoints.Text);
+            String strA = m_CountProfile.ToString("x8");
+            byte[] _data = new byte[2];
+            string[] parameterTexts = new string[2];
+            parameterTexts[0] = strA.Substring(4, 2);
+            parameterTexts[1] = strA.Substring(6, 2);
+            if (0 < parameterTexts.Length)
+            {
+                _data = Array.ConvertAll(parameterTexts,
+                    delegate (string text) { return Convert.ToByte(text, 16); });
+            }
+            Array.Resize(ref _data, 2);
+            uint error = 0;
+            LJX8IF_TARGET_SETTING _targetSetting = new LJX8IF_TARGET_SETTING();
+            _targetSetting.byType = 16;
+            _targetSetting.byCategory = 0;
+            _targetSetting.byItem = 9;
+            _targetSetting.byTarget1 = 0;
+            _targetSetting.byTarget2 = 0;
+            _targetSetting.byTarget3 = 0;
+            _targetSetting.byTarget4 = 0;
+            using (PinnedObject pin = new PinnedObject(_data))
+            {
+                int rc = NativeMethods.LJX8IF_SetSetting(0, 2, _targetSetting,
+                    pin.Pointer, 2, ref error);
+            }
+        }
+
+        //设置批处理点数
+        private void SetNumProfile()
+        {
+            int m_CountProfile = Convert.ToInt32(m_NumOfProfile.Text);
+            String strA = m_CountProfile.ToString("x8");
+            byte[] _data = new byte[4];
+            string[] parameterTexts = new string[4];
+            parameterTexts[0] = strA.Substring(0, 2);
+            parameterTexts[1] = strA.Substring(2, 2);
+            parameterTexts[2] = strA.Substring(4, 2);
+            parameterTexts[3] = strA.Substring(6, 2);
+            if (0 < parameterTexts.Length)
+            {
+                _data = Array.ConvertAll(parameterTexts,
+                    delegate (string text) { return Convert.ToByte(text, 16); });
+            }
+            Array.Resize(ref _data, 4);
+            uint error = 0;
+            LJX8IF_TARGET_SETTING _targetSetting = new LJX8IF_TARGET_SETTING();
+            _targetSetting.byType = 16;
+            _targetSetting.byCategory = 0;
+            _targetSetting.byItem = 10;
+            _targetSetting.byTarget1 = 0;
+            _targetSetting.byTarget2 = 0;
+            _targetSetting.byTarget3 = 0;
+            _targetSetting.byTarget4 = 0;
+            using (PinnedObject pin = new PinnedObject(_data))
+            {
+                int rc = NativeMethods.LJX8IF_SetSetting(0, 2, _targetSetting,
+                    pin.Pointer, 4, ref error);
             }
         }
 
@@ -1595,6 +1671,7 @@ namespace MyWindow
                 int rc = NativeMethods.LJX8IF_InitializeHighSpeedDataCommunicationSimpleArray(_currentDeviceId, ref ethernetConfig,
                     highSpeedInitializeForm.HighSpeedPortNo, _callbackSimpleArray,
                     highSpeedInitializeForm.ProfileCount, (uint)_currentDeviceId);
+
                 // @Point
                 // # When the frequency of calls is low, the callback function may not be called once per specified number of profiles.
                 // # The callback function is called when both of the following conditions are met.
@@ -1611,6 +1688,9 @@ namespace MyWindow
                 //_deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
                 //_receivedProfileCountLabels[_currentDeviceId].Text = "0";
             }
+
+            SetNumProfile();
+            SetIntervalPoints();
 
             Pre_Start_HighSpeedDataCommunication();
         }
@@ -1665,7 +1745,7 @@ namespace MyWindow
 
             AddLogResult(rc, Resources.IDS_START_HIGH_SPEED_DATA_COMMUNICATION);
 
-            if(_deviceData[_currentDeviceId].Status == DeviceStatus.Ethernet)
+            if(_deviceData[_currentDeviceId].Status == DeviceStatus.EthernetFast)
             {
                 _buttonStopHighSpeedDataCommunication.Enabled = true;
             }
@@ -1673,7 +1753,7 @@ namespace MyWindow
 
         private void _buttonStartMeasure_Click(object sender, EventArgs e)
         {
-           if( _deviceData[_currentDeviceId].Status == DeviceStatus.Ethernet || _deviceData[_currentDeviceId].Status == DeviceStatus.EthernetFast)
+           if( _deviceData[_currentDeviceId].Status == DeviceStatus.EthernetFast)
             {
                 _buttonStartMeasure.Enabled = false;
                 _buttonStopMeasure.Enabled = true;
@@ -1688,7 +1768,7 @@ namespace MyWindow
 
         private void _buttonStopMeasure_Click(object sender, EventArgs e)
         {
-            if (_deviceData[_currentDeviceId].Status == DeviceStatus.Ethernet)
+            if (_deviceData[_currentDeviceId].Status == DeviceStatus.EthernetFast)
             {
                 _buttonStartMeasure.Enabled = true;
                 _buttonStopMeasure.Enabled = false;
@@ -1702,6 +1782,8 @@ namespace MyWindow
             AddLogResult(rc, Resources.IDS_STOP_MEASURE);
 
             Disp_ProfileByte2ptr();
+
+            
         }
 
         private void _buttonStopHighSpeedDataCommunication_Click(object sender, EventArgs e)
@@ -1709,13 +1791,12 @@ namespace MyWindow
             int rc = NativeMethods.LJX8IF_StopHighSpeedDataCommunication(_currentDeviceId);
             AddLogResult(rc, Resources.IDS_STOP_HIGH_SPEED_DATA_COMMUNICATION);
 
-            if (_deviceData[_currentDeviceId].Status == DeviceStatus.Ethernet)
+            if (_deviceData[_currentDeviceId].Status == DeviceStatus.EthernetFast)
             {
                 _buttonStopHighSpeedDataCommunication.Enabled = false;
                 _buttonFinalizeHighSpeedDataCommunication.Enabled = true;
                 _buttonStartMeasure.Enabled = true;
             }
-
         }
 
         private void _buttonFinalizeHighSpeedDataCommunication_Click(object sender, EventArgs e)
@@ -1734,11 +1815,12 @@ namespace MyWindow
             //_deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
             //_receivedProfileCountLabels[_currentDeviceId].Text = "0";
 
-            ClearMemory();
+            //ClearMemory();
 
             if (_deviceData[_currentDeviceId].Status == DeviceStatus.Ethernet)
             {
                 _buttonFinalizeHighSpeedDataCommunication.Enabled = false;
+                _buttonInitialize.Enabled = true;
             }              
         }
 
@@ -1748,7 +1830,6 @@ namespace MyWindow
 
             _textBoxHighSpeedProfileFilePath.Text = _profileOrBitmapFileSave.FileName;
             _textBoxHighSpeedProfileFilePath.SelectionStart = _textBoxHighSpeedProfileFilePath.Text.Length;
-
         }
 
         private void _buttonHighSpeedSaveAsBitmapFile_Click(object sender, EventArgs e)
