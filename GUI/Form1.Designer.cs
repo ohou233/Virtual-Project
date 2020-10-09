@@ -166,11 +166,11 @@
             this.gb_Test.Controls.Add(this.bt_StartTest);
             this.gb_Test.Controls.Add(this.bt_StopTest);
             this.gb_Test.Font = new System.Drawing.Font("宋体", 12F);
-            this.gb_Test.Location = new System.Drawing.Point(17, 103);
+            this.gb_Test.Location = new System.Drawing.Point(19, 129);
             this.gb_Test.Margin = new System.Windows.Forms.Padding(2);
             this.gb_Test.Name = "gb_Test";
             this.gb_Test.Padding = new System.Windows.Forms.Padding(2);
-            this.gb_Test.Size = new System.Drawing.Size(215, 110);
+            this.gb_Test.Size = new System.Drawing.Size(233, 117);
             this.gb_Test.TabIndex = 9;
             this.gb_Test.TabStop = false;
             this.gb_Test.Text = "测试指令";
@@ -180,7 +180,7 @@
             this.rbt_outLineMode.AutoSize = true;
             this.rbt_outLineMode.Checked = true;
             this.rbt_outLineMode.Font = new System.Drawing.Font("宋体", 12F);
-            this.rbt_outLineMode.Location = new System.Drawing.Point(112, 75);
+            this.rbt_outLineMode.Location = new System.Drawing.Point(119, 77);
             this.rbt_outLineMode.Margin = new System.Windows.Forms.Padding(2);
             this.rbt_outLineMode.Name = "rbt_outLineMode";
             this.rbt_outLineMode.Size = new System.Drawing.Size(90, 20);
@@ -194,7 +194,7 @@
             // 
             this.rbt_inLineMode.AutoSize = true;
             this.rbt_inLineMode.Font = new System.Drawing.Font("宋体", 12F);
-            this.rbt_inLineMode.Location = new System.Drawing.Point(17, 75);
+            this.rbt_inLineMode.Location = new System.Drawing.Point(24, 77);
             this.rbt_inLineMode.Margin = new System.Windows.Forms.Padding(2);
             this.rbt_inLineMode.Name = "rbt_inLineMode";
             this.rbt_inLineMode.Size = new System.Drawing.Size(90, 20);
@@ -207,7 +207,7 @@
             // 
             this.bt_StartTest.Enabled = false;
             this.bt_StartTest.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_StartTest.Location = new System.Drawing.Point(11, 25);
+            this.bt_StartTest.Location = new System.Drawing.Point(18, 27);
             this.bt_StartTest.Margin = new System.Windows.Forms.Padding(2);
             this.bt_StartTest.Name = "bt_StartTest";
             this.bt_StartTest.Size = new System.Drawing.Size(91, 40);
@@ -220,7 +220,7 @@
             // 
             this.bt_StopTest.Enabled = false;
             this.bt_StopTest.Font = new System.Drawing.Font("宋体", 12F);
-            this.bt_StopTest.Location = new System.Drawing.Point(110, 25);
+            this.bt_StopTest.Location = new System.Drawing.Point(117, 27);
             this.bt_StopTest.Margin = new System.Windows.Forms.Padding(2);
             this.bt_StopTest.Name = "bt_StopTest";
             this.bt_StopTest.Size = new System.Drawing.Size(91, 40);
@@ -234,11 +234,11 @@
             this.gb_measurement.Controls.Add(this.rbt_Measure18);
             this.gb_measurement.Controls.Add(this.rbt_Measure9);
             this.gb_measurement.Font = new System.Drawing.Font("宋体", 12F);
-            this.gb_measurement.Location = new System.Drawing.Point(17, 20);
+            this.gb_measurement.Location = new System.Drawing.Point(19, 25);
             this.gb_measurement.Margin = new System.Windows.Forms.Padding(2);
             this.gb_measurement.Name = "gb_measurement";
             this.gb_measurement.Padding = new System.Windows.Forms.Padding(2);
-            this.gb_measurement.Size = new System.Drawing.Size(215, 80);
+            this.gb_measurement.Size = new System.Drawing.Size(233, 100);
             this.gb_measurement.TabIndex = 6;
             this.gb_measurement.TabStop = false;
             this.gb_measurement.Text = "测量项";
@@ -247,7 +247,7 @@
             // 
             this.rbt_Measure18.AutoSize = true;
             this.rbt_Measure18.Font = new System.Drawing.Font("宋体", 10F);
-            this.rbt_Measure18.Location = new System.Drawing.Point(108, 38);
+            this.rbt_Measure18.Location = new System.Drawing.Point(113, 48);
             this.rbt_Measure18.Margin = new System.Windows.Forms.Padding(2);
             this.rbt_Measure18.Name = "rbt_Measure18";
             this.rbt_Measure18.Size = new System.Drawing.Size(102, 18);
@@ -261,7 +261,7 @@
             this.rbt_Measure9.AutoSize = true;
             this.rbt_Measure9.Enabled = false;
             this.rbt_Measure9.Font = new System.Drawing.Font("宋体", 10F);
-            this.rbt_Measure9.Location = new System.Drawing.Point(17, 38);
+            this.rbt_Measure9.Location = new System.Drawing.Point(22, 48);
             this.rbt_Measure9.Margin = new System.Windows.Forms.Padding(2);
             this.rbt_Measure9.Name = "rbt_Measure9";
             this.rbt_Measure9.Size = new System.Drawing.Size(88, 18);
@@ -276,19 +276,19 @@
             this.groupBox3.Controls.Add(this.bt_SaveCSV);
             this.groupBox3.Controls.Add(this.bt_SaveBmp);
             this.groupBox3.Font = new System.Drawing.Font("宋体", 12F);
-            this.groupBox3.Location = new System.Drawing.Point(247, 20);
+            this.groupBox3.Location = new System.Drawing.Point(283, 25);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(230, 128);
+            this.groupBox3.Size = new System.Drawing.Size(140, 221);
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "数据";
+            this.groupBox3.Text = "数据处理";
             // 
             // bt_ClearData
             // 
             this.bt_ClearData.Enabled = false;
             this.bt_ClearData.Font = new System.Drawing.Font("宋体", 12F);
             this.bt_ClearData.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.bt_ClearData.Location = new System.Drawing.Point(17, 80);
+            this.bt_ClearData.Location = new System.Drawing.Point(25, 151);
             this.bt_ClearData.Name = "bt_ClearData";
             this.bt_ClearData.Size = new System.Drawing.Size(91, 40);
             this.bt_ClearData.TabIndex = 2;
@@ -301,7 +301,7 @@
             this.bt_SaveCSV.Enabled = false;
             this.bt_SaveCSV.Font = new System.Drawing.Font("宋体", 12F);
             this.bt_SaveCSV.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.bt_SaveCSV.Location = new System.Drawing.Point(17, 26);
+            this.bt_SaveCSV.Location = new System.Drawing.Point(25, 95);
             this.bt_SaveCSV.Name = "bt_SaveCSV";
             this.bt_SaveCSV.Size = new System.Drawing.Size(91, 40);
             this.bt_SaveCSV.TabIndex = 1;
@@ -314,11 +314,11 @@
             this.bt_SaveBmp.Enabled = false;
             this.bt_SaveBmp.Font = new System.Drawing.Font("宋体", 12F);
             this.bt_SaveBmp.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.bt_SaveBmp.Location = new System.Drawing.Point(121, 26);
+            this.bt_SaveBmp.Location = new System.Drawing.Point(25, 36);
             this.bt_SaveBmp.Name = "bt_SaveBmp";
             this.bt_SaveBmp.Size = new System.Drawing.Size(90, 40);
             this.bt_SaveBmp.TabIndex = 0;
-            this.bt_SaveBmp.Text = "保存BMP";
+            this.bt_SaveBmp.Text = "保存图像";
             this.bt_SaveBmp.UseVisualStyleBackColor = true;
             this.bt_SaveBmp.Click += new System.EventHandler(this.bt_SaveBmp_Click);
             // 
@@ -873,7 +873,7 @@
             this.numericUpDownIntervalPoints.Size = new System.Drawing.Size(64, 20);
             this.numericUpDownIntervalPoints.TabIndex = 25;
             this.numericUpDownIntervalPoints.Value = new decimal(new int[] {
-            2500,
+            10,
             0,
             0,
             0});

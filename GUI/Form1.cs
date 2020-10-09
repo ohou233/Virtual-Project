@@ -220,7 +220,7 @@ namespace MyWindow
             //bool isOnlyProfileCountChecked = _checkBoxOnlyProfileCount.Checked;
             bool isOnlyProfileCountChecked = false;
             //bool isUseSimpleArray = _checkBoxUseSimpleArray.Checked;
-            bool isUseSimpleArray = true;
+            //bool isUseSimpleArray = true;
 
             _textBoxHighSpeedProfileFilePath.Enabled = !isOnlyProfileCountChecked;
             //_numericUpDownProfileNo.Enabled = !isOnlyProfileCountChecked;
@@ -749,7 +749,15 @@ namespace MyWindow
         private void bt_ClearData_Click(object sender, EventArgs e)
         {
             HAlgorithm.ClearListView(lv_AllFrameData);
-            HAlgorithm.InitListView2D(lv_AllFrameData);
+
+            if(rbt_Measure9.Checked==true)
+            {
+                HAlgorithm.InitListView2D(lv_AllFrameData);
+            }
+            else if(rbt_Measure18.Checked == true)
+            {
+                HAlgorithm.InitListView3D(lv_AllFrameData);
+            }
         }
 
         //保存CSV数据文件
@@ -1261,10 +1269,10 @@ namespace MyWindow
 
 
             //bool isUseSimpleArray = _checkBoxUseSimpleArray.Checked;
-            bool isUseSimpleArray = true;
+           // bool isUseSimpleArray = true;
 
             //bool isOnlyProfileCountChecked = _checkBoxOnlyProfileCount.Checked;
-            bool isOnlyProfileCountChecked = false;
+            //bool isOnlyProfileCountChecked = false;
 
             //_buttonInitializeHighSpeedDataCommunication.Enabled = !isUseSimpleArray;
             //_buttonInitializeHighSpeedDataCommunication.BackColor = !isUseSimpleArray ? colorEnabled : colorDisabled;
@@ -1300,51 +1308,92 @@ namespace MyWindow
             for (int i = 0; i < _deviceData.Length; i++)
             {
                 _deviceData[i].Status = DeviceStatus.NoConnection;
-                //_deviceStatusLabels[i].Text = _deviceData[i].GetStatusString();
-               // _receivedProfileCountLabels[i].Text = "0";
             }
 
-            //SetNumProfile();
-            //SetIntervalPoints();
-
             bool openEthernetSucceed = Open_Ethernet();
-            if(openEthernetSucceed)
+
+            SetIntervalPoints();
+            SetNumProfile();
+
+            if (openEthernetSucceed)
             {
                 Initialize_HighSpeedData_Communication_SimpleArray();
             }
+
         }
 
         //设置细化点数
         private void SetIntervalPoints()
         {
-            int m_CountProfile = Convert.ToInt32(numericUpDownIntervalPoints.Text);
-            String strA = m_CountProfile.ToString("x8");
-            byte[] _data = new byte[2];
-            string[] parameterTexts = new string[2];
-            parameterTexts[0] = strA.Substring(4, 2);
-            parameterTexts[1] = strA.Substring(6, 2);
-            if (0 < parameterTexts.Length)
-            {
-                _data = Array.ConvertAll(parameterTexts,
-                    delegate (string text) { return Convert.ToByte(text, 16); });
-            }
-            Array.Resize(ref _data, 2);
-            uint error = 0;
-            LJX8IF_TARGET_SETTING _targetSetting = new LJX8IF_TARGET_SETTING();
-            _targetSetting.byType = 16;
-            _targetSetting.byCategory = 0;
-            _targetSetting.byItem = 9;
-            _targetSetting.byTarget1 = 0;
-            _targetSetting.byTarget2 = 0;
-            _targetSetting.byTarget3 = 0;
-            _targetSetting.byTarget4 = 0;
-            using (PinnedObject pin = new PinnedObject(_data))
-            {
-                int rc = NativeMethods.LJX8IF_SetSetting(0, 2, _targetSetting,
-                    pin.Pointer, 2, ref error);
-            }
-        }
+            //int m_CountProfile = Convert.ToInt32(numericUpDownIntervalPoints.Text);
+            //String strA = m_CountProfile.ToString("x8");
+            //byte[] _data = new byte[2];
+            //string[] parameterTexts = new string[2];
+            //parameterTexts[0] = strA.Substring(4, 2);
+            //parameterTexts[1] = strA.Substring(6, 2);
+            //if (0 < parameterTexts.Length)
+            //{
+            //    _data = Array.ConvertAll(parameterTexts,
+            //        delegate (string text) { return Convert.ToByte(text, 16); });
+            //}
+            //Array.Resize(ref _data, 2);
+            //uint error = 0;
+            //LJX8IF_TARGET_SETTING _targetSetting = new LJX8IF_TARGET_SETTING();
+            //_targetSetting.byType = 16;
+            //_targetSetting.byCategory = 0;
+            //_targetSetting.byItem = 9;
+            //_targetSetting.byTarget1 = 0;
+            //_targetSetting.byTarget2 = 0;
+            //_targetSetting.byTarget3 = 0;
+            //_targetSetting.byTarget4 = 0;
+            //using (PinnedObject pin = new PinnedObject(_data))
+            //{
+            //    int rc = NativeMethods.LJX8IF_SetSetting(0, 2, _targetSetting,
+            //        pin.Pointer, 2, ref error);
+            //}
 
+            byte[] hex = new byte[4];
+            using (PinnedObject pin = new PinnedObject(hex))
+            {
+                uint dwDataSize = 4;
+                uint Error = 0;
+                try
+                {
+                    LJX8IF_TARGET_SETTING Target_Setting = new LJX8IF_TARGET_SETTING()
+                    {
+                        byCategory = 0x0,
+                        byItem = 0x09,
+                        byTarget1 = 0x0,
+                        byTarget2 = 0x0,
+                        byTarget3 = 0x0,
+                        byTarget4 = 0x0,
+                        byType = 0X10,
+                        reserve = 4
+                    };
+                    int line = Int32.Parse(numericUpDownIntervalPoints.Value.ToString());
+                    hex[0] = (byte)(line & 0xff);
+                    hex[1] = (byte)((line >> 8) & 0xff);   //先右移再与操作
+                    hex[2] = (byte)((line >> 16) & 0xff);
+                    hex[3] = (byte)((line >> 24) & 0xff);
+                    int rc = NativeMethods.LJX8IF_SetSetting(0, 0x01, Target_Setting, pin.Pointer, dwDataSize, ref Error);
+
+                    if( rc == (int)Rc.Ok)
+                    {
+                        AddLog("Set Refinement points Succeed");
+                    }
+                    else
+                    {
+                        AddLog("Set Refinement points failure");
+                    }
+
+                }
+                catch
+                {
+                    AddLog("Set Refinement points failure");
+                }
+                }
+        }
+                
         //设置批处理点数
         private void SetNumProfile()
         {
@@ -1688,9 +1737,6 @@ namespace MyWindow
                 //_deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
                 //_receivedProfileCountLabels[_currentDeviceId].Text = "0";
             }
-
-            SetNumProfile();
-            SetIntervalPoints();
 
             Pre_Start_HighSpeedDataCommunication();
         }
