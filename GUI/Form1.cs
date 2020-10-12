@@ -33,68 +33,32 @@ namespace MyWindow
         private const char NullChar = '\0';
         #endregion
 
-        #region Enum
-
-        /// <summary>
-        /// Send command definition
-        /// </summary>
-        /// <remark>Defined for separate return code distinction</remark>
+        #region 3D Enum
         private enum SendCommand
         {
-            /// <summary>None</summary>
             None,
-            /// <summary>Restart</summary>
             RebootController,
-            /// <summary>Trigger</summary>
             Trigger,
-            /// <summary>Start measurement</summary>
             StartMeasure,
-            /// <summary>Stop measurement</summary>
             StopMeasure,
-            /// <summary>Get profiles</summary>
             GetProfile,
-            /// <summary>Get batch profiles</summary>
             GetBatchProfile,
-            /// <summary>Initialize Ethernet high-speed data communication</summary>
             InitializeHighSpeedDataCommunication,
-            /// <summary>Request preparation before starting high-speed data communication</summary>
             PreStartHighSpeedDataCommunication,
-            /// <summary>Start high-speed data communication</summary>
             StartHighSpeedDataCommunication,
         }
-
         #endregion
 
         #region Field
-
-        /// <summary>Ethernet settings structure </summary>
-        //private LJX8IF_ETHERNET_CONFIG _ethernetConfig;
-        /// <summary>Current device ID</summary>
         private int _currentDeviceId = 0;
-        /// <summary>Send command</summary>
         private SendCommand _sendCommand;
-        /// <summary>Callback function used during high-speed communication</summary>
         private HighSpeedDataCallBack _callback;
-        /// <summary>Callback function used during high-speed communication (count only)</summary>
-        //private HighSpeedDataCallBack _callbackOnlyCount;
-        /// <summary>Callback function used during high-speed communication (simple array)</summary>
         private HighSpeedDataCallBackForSimpleArray _callbackSimpleArray;
-        /// <summary>Callback function used during high-speed communication (simple array) (count only)</summary>
         private HighSpeedDataCallBackForSimpleArray _callbackSimpleArrayOnlyCount;
-        /// The following are maintained in arrays to support multiple controllers.
-        /// <summary>Array of profile information structures</summary>
         private LJX8IF_PROFILE_INFO[] _profileInfo;
-        /// <summary>Array of controller information</summary>
         private DeviceData[] _deviceData;
-        /// <summary>Array of labels that indicate the controller status</summary>
-        //private Label[] _deviceStatusLabels;
-        /// <summary>Array of labels that indicate the number of received profiles </summary>
-        //private Label[] _receivedProfileCountLabels;
-        /// <summary>Array of value of receive buffer is full</summary>
         private static bool[] _isBufferFull = new bool[NativeMethods.DeviceCount];
-        /// <summary>Array of value of stop processing has done by buffer full error</summary>
         private static bool[] _isStopCommunicationByError = new bool[NativeMethods.DeviceCount];
-
         #endregion
 
         #region Delegate
@@ -150,48 +114,28 @@ namespace MyWindow
             for (int i = 0; i < NativeMethods.DeviceCount; i++)
             {
                 _deviceData[i] = new DeviceData();
-                //_deviceStatusLabels[i].Text = _deviceData[i].GetStatusString();
-               // _receivedProfileCountLabels[i].Text = "0";
             }
             _profileInfo = new LJX8IF_PROFILE_INFO[NativeMethods.DeviceCount];
 
             UpdateBatchSimpleArrayEnable();
             UpdateHighSpeedProfileSaveEnable();
             #endregion
-
         }
 
         private void CountSimpleArrayReceive(IntPtr headBuffer, IntPtr profileBuffer, IntPtr luminanceBuffer, uint isLuminanceEnable, uint profileSize, uint count, uint notify, uint user)
         {
-            // @Point
-            // Take care to only implement storing profile data in a thread save buffer in the callback function.
-            // As the thread used to call the callback function is the same as the thread used to receive data,
-            // the processing time of the callback function affects the speed at which data is received,
-            // and may stop communication from being performed properly in some environments.
             _deviceData[(int)user].SimpleArrayDataHighSpeed.Count += count;
             _deviceData[(int)user].SimpleArrayDataHighSpeed.Notify = notify;
         }
 
         private void ReceiveHighSpeedSimpleArray(IntPtr headBuffer, IntPtr profileBuffer, IntPtr luminanceBuffer, uint isLuminanceEnable, uint profileSize, uint count, uint notify, uint user)
         {
-            // @Point
-            // Take care to only implement storing profile data in a thread save buffer in the callback function.
-            // As the thread used to call the callback function is the same as the thread used to receive data,
-            // the processing time of the callback function affects the speed at which data is received,
-            // and may stop communication from being performed properly in some environments.
-
             _isBufferFull[(int)user] = _deviceData[(int)user].SimpleArrayDataHighSpeed.AddReceivedData(profileBuffer, luminanceBuffer, count);
             _deviceData[(int)user].SimpleArrayDataHighSpeed.Notify = notify;
         }
 
         private static void ReceiveHighSpeedData(IntPtr buffer, uint size, uint count, uint notify, uint user)
         {
-            // @Point
-            // Take care to only implement storing profile data in a thread save buffer in the callback function.
-            // As the thread used to call the callback function is the same as the thread used to receive data,
-            // the processing time of the callback function affects the speed at which data is received,
-            // and may stop communication from being performed properly in some environments.
-
             uint profileSize = (uint)(size / Marshal.SizeOf(typeof(int)));
             List<int[]> receiveBuffer = new List<int[]>();
             int[] bufferArray = new int[(int)(profileSize * count)];
@@ -217,17 +161,10 @@ namespace MyWindow
 
         private void UpdateHighSpeedProfileSaveEnable()
         {
-            //bool isOnlyProfileCountChecked = _checkBoxOnlyProfileCount.Checked;
             bool isOnlyProfileCountChecked = false;
-            //bool isUseSimpleArray = _checkBoxUseSimpleArray.Checked;
-            //bool isUseSimpleArray = true;
-
             _textBoxHighSpeedProfileFilePath.Enabled = !isOnlyProfileCountChecked;
-            //_numericUpDownProfileNo.Enabled = !isOnlyProfileCountChecked;
             _numericUpDownProfileSaveCount.Enabled = !isOnlyProfileCountChecked;
-            //_buttonHighSpeedSave.Enabled = !isOnlyProfileCountChecked && !isUseSimpleArray;
             _buttonHighSpeedProfileFileSave.Enabled = !isOnlyProfileCountChecked;
-            //_buttonHighSpeedSaveAsBitmapFile.Enabled = !isOnlyProfileCountChecked && isUseSimpleArray;
         }
 
         //打开相机
@@ -515,7 +452,6 @@ namespace MyWindow
                         MeasureIsSucced = HAlgorithm.OutLineMeasure(MeasureProject, lv_AllFrameData, out Radius, out PositionDegree, out RunTime,
                          out DistanceX1, out DistanceY1, OutLineFilePath, 
                          out Origin_Z_mm, out E2_OffestZ_mm, out E5_OffestZ_mm, out E10_OffestZ_mm, out E13_OffestZ_mm, out Profile);
-
                     }
                     else
                     {
@@ -542,11 +478,9 @@ namespace MyWindow
                 }
                 else
                 {
-
                     Thread.Sleep(200);
                 }
             }
-
         }
 
         //处于离线模式时的控件状态
@@ -566,7 +500,6 @@ namespace MyWindow
             bt_StartTest.Enabled = true;
             rbt_Measure9.Enabled = true;
             rbt_Measure18.Enabled = true;
-
             bt_StopTest.Enabled = false;
         }
 
@@ -606,8 +539,6 @@ namespace MyWindow
             bt_StopGrab.Enabled = true;
             bt_SaveBmp.Enabled = true;
             rbt_Measure9.Enabled = true;
-            //rbt_Measure18.Enabled = true;
-
         }
 
         //实时显示线程函数
@@ -659,7 +590,6 @@ namespace MyWindow
 
                     HAlgorithm.DispBuffer(MeasureProject, m_BufForDriver, stFrameInfo.nWidth, stFrameInfo.nHeight);
                 }
-       
             }
         }
 
@@ -690,13 +620,10 @@ namespace MyWindow
             {
                 ShowErrorMsg("Stop Grabbing Fail!", nRet);
             }
-
-            //控件操作 
         }
 
         //选择测试项
         #region
-
         //选择测量项18
         private void rbt_Measure18_CheckedChanged(object sender, EventArgs e)
         {
@@ -742,7 +669,6 @@ namespace MyWindow
                 MeasureProject = -1;
             }
         }
-
         #endregion
 
         //清空测试数据
@@ -781,7 +707,6 @@ namespace MyWindow
             {
                 ShowErrorMsg("保存失败！", 0);
             }
-
         }
 
         //安全退出
@@ -807,7 +732,8 @@ namespace MyWindow
 
             IntPtr pTemp = IntPtr.Zero;
             MyCamera.MvGvspPixelType enDstPixelType = MyCamera.MvGvspPixelType.PixelType_Gvsp_Undefined;
-            if (m_stFrameInfo.enPixelType == MyCamera.MvGvspPixelType.PixelType_Gvsp_Mono8 || m_stFrameInfo.enPixelType == MyCamera.MvGvspPixelType.PixelType_Gvsp_BGR8_Packed)
+            if (m_stFrameInfo.enPixelType == MyCamera.MvGvspPixelType.PixelType_Gvsp_Mono8 ||
+                m_stFrameInfo.enPixelType == MyCamera.MvGvspPixelType.PixelType_Gvsp_BGR8_Packed)
             {
                 pTemp = m_BufForDriver;
                 enDstPixelType = m_stFrameInfo.enPixelType;
@@ -887,7 +813,6 @@ namespace MyWindow
                         bmp.Palette = cp;
                         bmp.Save(dialog.FileName, ImageFormat.Bmp);
                     }
-
                 }
                 else
                 {
@@ -910,9 +835,7 @@ namespace MyWindow
                     }
                 }
             }
-
             ShowErrorMsg("保存成功！", 0);
-
         }
 
         //判断读取的像素类型
@@ -926,7 +849,6 @@ namespace MyWindow
                 case MyCamera.MvGvspPixelType.PixelType_Gvsp_Mono12:
                 case MyCamera.MvGvspPixelType.PixelType_Gvsp_Mono12_Packed:
                     return true;
-
                 default:
                     return false;
             }
@@ -1035,7 +957,6 @@ namespace MyWindow
                 bt_StartTest.Enabled = false;
                 rbt_Measure9.Enabled = false;
                 rbt_Measure18.Enabled = false;
-
                 bt_ClearData.Enabled = false;
                 bt_SaveCSV.Enabled = false;
             }
@@ -1049,13 +970,11 @@ namespace MyWindow
                     out Radius, out PositionDegree, out RunTime, out DistanceX1, out DistanceY1, out Origin_Z_mm,
                     out E2_OffestZ_mm, out E5_OffestZ_mm, out E10_OffestZ_mm, out E13_OffestZ_mm, out Profile);
 
-
                 //设置控件状态
                 bt_StopTest.Enabled = true;
                 bt_StartTest.Enabled = false;
                 rbt_Measure9.Enabled = false;
                 rbt_Measure18.Enabled = false;
-
                 bt_ClearData.Enabled = false;
                 bt_SaveCSV.Enabled = false;
             }
@@ -1068,7 +987,6 @@ namespace MyWindow
                 ShowErrorMsg("不处于采集图像状态", 0);
                 return;
             }
-
             if (RemoveCustomPixelFormats(m_stFrameInfo.enPixelType))
             {
                 ShowErrorMsg("不支持的像素格式", 0);
@@ -1165,10 +1083,9 @@ namespace MyWindow
                     }
                 }
             }
-
             ShowErrorMsg("保存成功！", 0);
         }
-
+        
         //停止测试
         private void bt_StopTest_Click(object sender, EventArgs e)
         {
@@ -1181,12 +1098,8 @@ namespace MyWindow
             bt_StartTest.Enabled = true;
             rbt_Measure9.Enabled = true;
             rbt_Measure18.Enabled = true;
-
-          
             bt_SaveCSV.Enabled = true;
             bt_ClearData.Enabled = true;
-
-
         }
 
         //ListView中数据保存为CSV
@@ -1223,7 +1136,6 @@ namespace MyWindow
                     }
                 }
             }
-
             sw.Flush();
             sw.Close();
         }
@@ -1258,7 +1170,6 @@ namespace MyWindow
                 _buttonInitialize.Enabled = false;
                 _buttonStartHighSpeedDataCommunication.Enabled = false;
                 _buttonStartMeasure.Enabled = false;
-
             }
         }
 
@@ -1266,23 +1177,7 @@ namespace MyWindow
         {
             Color colorEnabled = Color.FromArgb(255, 192, 218, 255);
             Color colorDisabled = Color.LightGray;
-
-
-            //bool isUseSimpleArray = _checkBoxUseSimpleArray.Checked;
-           // bool isUseSimpleArray = true;
-
-            //bool isOnlyProfileCountChecked = _checkBoxOnlyProfileCount.Checked;
-            //bool isOnlyProfileCountChecked = false;
-
-            //_buttonInitializeHighSpeedDataCommunication.Enabled = !isUseSimpleArray;
-            //_buttonInitializeHighSpeedDataCommunication.BackColor = !isUseSimpleArray ? colorEnabled : colorDisabled;
-            //_buttonInitializeHighSpeedDataCommunicationSimpleArray.Enabled = isUseSimpleArray;
-            //_buttonInitializeHighSpeedDataCommunicationSimpleArray.BackColor = isUseSimpleArray ? colorEnabled : colorDisabled;
-
-            //_buttonHighSpeedSave.Enabled = !isUseSimpleArray && !isOnlyProfileCountChecked;
-            //_buttonHighSpeedSaveAsBitmapFile.Enabled = false;
-            
-        }
+         }
 
         private void _checkBoxStartTimer_CheckedChanged(object sender, EventArgs e)
         {
@@ -1297,7 +1192,6 @@ namespace MyWindow
                 _timerHighSpeedReceive.Stop();
             }
             _numericUpDownInterval.Enabled = !isStart;
-            //_checkBoxOnlyProfileCount.Enabled = !isStart;
         }
 
         private void _buttonInitialize_Click(object sender, EventArgs e)
@@ -1319,39 +1213,11 @@ namespace MyWindow
             {
                 Initialize_HighSpeedData_Communication_SimpleArray();
             }
-
         }
 
         //设置细化点数
         private void SetIntervalPoints()
         {
-            //int m_CountProfile = Convert.ToInt32(numericUpDownIntervalPoints.Text);
-            //String strA = m_CountProfile.ToString("x8");
-            //byte[] _data = new byte[2];
-            //string[] parameterTexts = new string[2];
-            //parameterTexts[0] = strA.Substring(4, 2);
-            //parameterTexts[1] = strA.Substring(6, 2);
-            //if (0 < parameterTexts.Length)
-            //{
-            //    _data = Array.ConvertAll(parameterTexts,
-            //        delegate (string text) { return Convert.ToByte(text, 16); });
-            //}
-            //Array.Resize(ref _data, 2);
-            //uint error = 0;
-            //LJX8IF_TARGET_SETTING _targetSetting = new LJX8IF_TARGET_SETTING();
-            //_targetSetting.byType = 16;
-            //_targetSetting.byCategory = 0;
-            //_targetSetting.byItem = 9;
-            //_targetSetting.byTarget1 = 0;
-            //_targetSetting.byTarget2 = 0;
-            //_targetSetting.byTarget3 = 0;
-            //_targetSetting.byTarget4 = 0;
-            //using (PinnedObject pin = new PinnedObject(_data))
-            //{
-            //    int rc = NativeMethods.LJX8IF_SetSetting(0, 2, _targetSetting,
-            //        pin.Pointer, 2, ref error);
-            //}
-
             byte[] hex = new byte[4];
             using (PinnedObject pin = new PinnedObject(hex))
             {
@@ -1385,7 +1251,6 @@ namespace MyWindow
                     {
                         AddLog("Set Refinement points failure");
                     }
-
                 }
                 catch
                 {
@@ -1437,10 +1302,6 @@ namespace MyWindow
                 }
 
                 LJX8IF_ETHERNET_CONFIG ethernetConfig = openEthernetForm.EthernetConfig;
-                // @Point
-                // # Enter the "_currentDeviceId" set here for the communication settings into the arguments of each DLL function.
-                // # If you want to get data from multiple controllers, prepare and set multiple "_currentDeviceId" values,
-                //   enter these values into the arguments of the DLL functions, and then use the functions.
 
                 int rc = NativeMethods.LJX8IF_EthernetOpen(_currentDeviceId, ref ethernetConfig);
                 AddLogResult(rc, Resources.IDS_ETHERNET_OPEN);
@@ -1456,14 +1317,11 @@ namespace MyWindow
                     _deviceData[_currentDeviceId].Status = DeviceStatus.NoConnection;
                     return false;
                 }
-                //_deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
-                //_receivedProfileCountLabels[_currentDeviceId].Text = "0";
             }
         }
 
         private void AddLogResult(int rc, string commandName)
         {
-           
             if (rc == (int)Rc.Ok)
             {
                 AddLog(string.Format(Resources.IDS_LOG_FORMAT, commandName, Resources.IDS_RESULT_OK, rc));
@@ -1497,8 +1355,6 @@ namespace MyWindow
                 case (int)Rc.ErrTimeout:
                     AddLog(string.Format(Resources.IDS_RC_FORMAT, Resources.IDS_RC_ERR_TIMEOUT));
                     _deviceData[_currentDeviceId].Status = DeviceStatus.NoConnection;
-                    //_deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
-                    //_receivedProfileCountLabels[_currentDeviceId].Text = "0";
                     break;
                 case (int)Rc.ErrParameter:
                     AddLog(string.Format(Resources.IDS_RC_FORMAT, Resources.IDS_RC_ERR_PARAMETER));
@@ -1560,7 +1416,6 @@ namespace MyWindow
                 {
                     return;
                 }
-
                 // Individual return code
                 IndividualErrorLog(rc);
             }
@@ -1720,13 +1575,7 @@ namespace MyWindow
                 int rc = NativeMethods.LJX8IF_InitializeHighSpeedDataCommunicationSimpleArray(_currentDeviceId, ref ethernetConfig,
                     highSpeedInitializeForm.HighSpeedPortNo, _callbackSimpleArray,
                     highSpeedInitializeForm.ProfileCount, (uint)_currentDeviceId);
-
-                // @Point
-                // # When the frequency of calls is low, the callback function may not be called once per specified number of profiles.
-                // # The callback function is called when both of the following conditions are met.
-                //   * There is one packet of received data.
-                //   * The specified number of profiles have been received by the time the call frequency has been met.
-
+                
                 AddLogResult(rc, Resources.IDS_INITIALIZE_HIGH_SPEED_DATA_ETHERNET_COMMUNICATION_SIMPLE_ARRAY);
 
                 if (rc == (int)Rc.Ok)
@@ -1734,10 +1583,7 @@ namespace MyWindow
                     _deviceData[_currentDeviceId].Status = DeviceStatus.EthernetFast;
                     _deviceData[_currentDeviceId].EthernetConfig = ethernetConfig;
                 }
-                //_deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
-                //_receivedProfileCountLabels[_currentDeviceId].Text = "0";
             }
-
             Pre_Start_HighSpeedDataCommunication();
         }
 
@@ -1750,18 +1596,9 @@ namespace MyWindow
                 if (DialogResult.OK != preStartHighSpeedForm.ShowDialog()) return;
 
                 LJX8IF_HIGH_SPEED_PRE_START_REQUEST request = preStartHighSpeedForm.Request;
-                // @Point
-                // # SendPosition is used to specify which profile to start sending data from during high-speed communication.
-                // # When "Overwrite" is specified for the operation when memory full and 
-                //   "0: From previous send complete position" is specified for the send start position,
-                //    if the LJ-X continues to accumulate profiles, the LJ-X memory will become full,
-                //    and the profile at the previous send complete position will be overwritten with a new profile.
-                //    In this situation, because the profile at the previous send complete position is not saved, an error will occur.
-
                 LJX8IF_PROFILE_INFO profileInfo = new LJX8IF_PROFILE_INFO();
  
                 int rc = NativeMethods.LJX8IF_PreStartHighSpeedDataCommunication(_currentDeviceId, ref request, ref profileInfo);
-                //profileInfo.nProfileDataCount = 2500;
 
                 AddLogResult(rc, Resources.IDS_PRE_START_HIGH_SPEED_DATA_COMMUNICATION);
                 if (rc != (int)Rc.Ok) return;
@@ -1772,7 +1609,6 @@ namespace MyWindow
                 _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.Clear();
                 _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.DataWidth = profileInfo.nProfileDataCount;
                 _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.IsLuminanceEnable = profileInfo.byLuminanceOutput == 1;
-
                 _profileInfo[_currentDeviceId] = profileInfo;
             }
         }
@@ -1786,7 +1622,6 @@ namespace MyWindow
             _isBufferFull[_currentDeviceId] = false;
             _isStopCommunicationByError[_currentDeviceId] = false;
 
-           // _receivedProfileCountLabels[_currentDeviceId].Text = "0";
             int rc = NativeMethods.LJX8IF_StartHighSpeedDataCommunication(_currentDeviceId);
 
             AddLogResult(rc, Resources.IDS_START_HIGH_SPEED_DATA_COMMUNICATION);
@@ -1805,9 +1640,7 @@ namespace MyWindow
                 _buttonStopMeasure.Enabled = true;
                 _buttonHighSpeedSaveAsBitmapFile.Enabled = true;
             }
-
             _sendCommand = SendCommand.StartMeasure;
-
             int rc = NativeMethods.LJX8IF_StartMeasure(_currentDeviceId);
             AddLogResult(rc, Resources.IDS_START_MEASURE);
         }
@@ -1821,15 +1654,11 @@ namespace MyWindow
                 _buttonStopHighSpeedDataCommunication.Enabled = true;
                 _buttonHighSpeedSaveAsBitmapFile.Enabled = false;
             }
-
             _sendCommand = SendCommand.StopMeasure;
-
             int rc = NativeMethods.LJX8IF_StopMeasure(_currentDeviceId);
             AddLogResult(rc, Resources.IDS_STOP_MEASURE);
 
             Disp_ProfileByte2ptr();
-
-            
         }
 
         private void _buttonStopHighSpeedDataCommunication_Click(object sender, EventArgs e)
@@ -1858,10 +1687,6 @@ namespace MyWindow
                     _deviceData[_currentDeviceId].EthernetConfig = config;
                     break;
             }
-            //_deviceStatusLabels[_currentDeviceId].Text = _deviceData[_currentDeviceId].GetStatusString();
-            //_receivedProfileCountLabels[_currentDeviceId].Text = "0";
-
-            //ClearMemory();
 
             if (_deviceData[_currentDeviceId].Status == DeviceStatus.Ethernet)
             {
@@ -1895,13 +1720,11 @@ namespace MyWindow
 
             Cursor.Current = Cursors.WaitCursor;
 
-            //int startIndex = (int)_numericUpDownProfileNo.Value;
             int startIndex = 0;
             int dataCount = (int)_numericUpDownProfileSaveCount.Value;
             bool result = _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.SaveDataAsImages(_textBoxHighSpeedProfileFilePath.Text, startIndex, dataCount);
             
             AddLog(result ? "Succeed to save image." : "Failed to save image.");
-
         }
 
         private void AddError(uint error)
@@ -1925,12 +1748,6 @@ namespace MyWindow
 
         private void Disp_ProfileByte2ptr()
         {
-            //byte[] _profileImage = _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.GetImageByte(0, (int)_deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.Count);
-            //int m_3DWidth = _deviceData[_currentDeviceId].SimpleArrayDataHighSpeed.DataWidth;
-            //int m_3DHeight = _profileImage.Count() / 2 / m_3DWidth;
-            //IntPtr ptr = Marshal.AllocHGlobal(_profileImage.Length);
-            //Marshal.Copy(_profileImage, 0, ptr, _profileImage.Length);
-
             int m_3DWidth, m_3DHeight;
             IntPtr ptr = ProfileByte2ptr(out m_3DWidth, out m_3DHeight);
 
@@ -1949,7 +1766,6 @@ namespace MyWindow
             List<int[]> data = ThreadSafeBuffer.Get(Define.DeviceId, out notify, out batchNo);
 
             int count = data.Count;
-            //_labelReceiveProfileCount.Text = (Convert.ToUInt32(_labelReceiveProfileCount.Text) + count).ToString();
 
             if ((uint)(notify & 0xFFFF) != 0)
             {
@@ -1989,41 +1805,19 @@ namespace MyWindow
             {
                 uint notify;
                 int batchNo;
-              //   if (true)
-              //   {
-                    //@Point
-                 ////# Simple array data performed to conversion and storing on .
-                //_receivedProfileCountLabels[i].Text = _deviceData[i].SimpleArrayDataHighSpeed.Count.ToString();
+                //Simple array data performed to conversion and storing on .
                 notify = _deviceData[i].SimpleArrayDataHighSpeed.Notify;
                 batchNo = _deviceData[i].SimpleArrayDataHighSpeed.BatchNo;
-                  //}
-            //    else if (_checkBoxOnlyProfileCount.Checked)
-            //{
-            //    _receivedProfileCountLabels[i].Text = ThreadSafeBuffer.GetCount(i, out notify, out batchNo).ToString();
-            //}
-            //else
-            //{
-            //    List<int[]> data = ThreadSafeBuffer.Get(i, out notify, out batchNo);
-            //    if (data.Count == 0 && notify == 0) continue;
-
-            //    foreach (int[] profile in data)
-            //    {
-            //        if (_deviceData[i].ProfileDataHighSpeed.Count < Define.BufferFullCount)
-            //        {
-            //            _deviceData[i].ProfileDataHighSpeed.Add(new ProfileData(profile, _profileInfo[i]));
-            //        }
-            //    }
-            //    _receivedProfileCountLabels[i].Text = (Convert.ToInt32(_receivedProfileCountLabels[i].Text) + data.Count).ToString();
-            //}
-
-            if (notify == 0) continue;
-
+                if (notify == 0)  continue;
                 AddLog(string.Format("  notify[{0}] = {1,0:x8}\tbatch[{0}] = {2}", i, notify, batchNo));
             }
         }
 
         // 控件大小随窗体大小等比例缩放
         #region 
+        private float x;//定义当前窗体的宽度
+        private float y;//定义当前窗体的高度
+
         void changeSize()
         {
             SetStyle(ControlStyles.UserPaint, true);
@@ -2035,8 +1829,6 @@ namespace MyWindow
             y = this.Height;
             setTag(this);
         }
-        private float x;//定义当前窗体的宽度
-        private float y;//定义当前窗体的高度
         
         private void setTag(Control cons)
         {
@@ -2058,7 +1850,6 @@ namespace MyWindow
 
         private void setControls(float newx, float newy, Control cons)
         {
-
             //遍历窗体中的控件，重新设置控件的值
             foreach (Control con in cons.Controls)
             {
@@ -2067,7 +1858,6 @@ namespace MyWindow
                 SetDouble(con);
                 if (con.Tag != null)
                 {
-
                     string[] mytag = con.Tag.ToString().Split(new char[] { ';' });
                     //根据窗体缩放的比例确定控件的值
                     con.Width = Convert.ToInt32(System.Convert.ToSingle(mytag[0]) * newx);//宽度

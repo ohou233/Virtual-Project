@@ -1781,13 +1781,13 @@ namespace HalconAlgorithm
                 hv_CircleRadiu.Dispose();
                 using (HDevDisposeHelper dh = new HDevDisposeHelper())
                 {
-                    CircleRadius = (hv_EdgeCircleCenterRadius * 2) * hv_PixclRealDis;
+                    CircleRadius = (hv_EdgeCircleCenterRadius * 2) * hv_PixclRealDis - 0.0565;
                 }
                 hv_PositionDegree.Dispose();
                 using (HDevDisposeHelper dh = new HDevDisposeHelper())
                 {
                     PositionDegree = 2 * (((((((hv_X1 * hv_PixclRealDis) - 19.605)).TuplePow(
-                        2)) + ((((hv_Y1 * hv_PixclRealDis) - 6.788)).TuplePow(2)))).TupleSqrt());
+                        2)) + ((((hv_Y1 * hv_PixclRealDis) - 6.788)).TuplePow(2)))).TupleSqrt()) - 0.065;
                 }
                 hv_runtime.Dispose();
                 using (HDevDisposeHelper dh = new HDevDisposeHelper())
@@ -1815,6 +1815,7 @@ namespace HalconAlgorithm
                     double ButtomCenterCol = (hv_ButtomEdgeColBegin + hv_ButtomEdgeColEnd) / 2;
                     outWindow.DispArrow(hv_EdgeCircleCenterRow, hv_EdgeCircleCenterCol, (HTuple)RightCenterRow, (HTuple)RightCenterCol, (HTuple)6);
                     outWindow.DispArrow(hv_EdgeCircleCenterRow, hv_EdgeCircleCenterCol, (HTuple)ButtomCenterRow, (HTuple)ButtomCenterCol, (HTuple)6);
+                    outWindow.DispText("NG", "window", "top", "left", "red", "box", "true");
                 }
                 else
                 {
@@ -1831,6 +1832,7 @@ namespace HalconAlgorithm
                     double ButtomCenterCol = (hv_ButtomEdgeColBegin + hv_ButtomEdgeColEnd) / 2;
                     outWindow.DispArrow(hv_EdgeCircleCenterRow, hv_EdgeCircleCenterCol, (HTuple)RightCenterRow, (HTuple)RightCenterCol, (HTuple)6);
                     outWindow.DispArrow(hv_EdgeCircleCenterRow, hv_EdgeCircleCenterCol, (HTuple)ButtomCenterRow, (HTuple)ButtomCenterCol, (HTuple)6);
+                    outWindow.DispText("PASS", "window", "top", "left", "green", "box", "true");
                 }
             }
             catch 
@@ -2019,6 +2021,7 @@ namespace HalconAlgorithm
                     outWindow.DispCircle(hv_p_E5_y_fit, hv_p_E5_x_fit, 10);
                     outWindow.DispCircle(hv_p_E10_y_fit, hv_p_E10_x_fit, 10);
                     outWindow.DispCircle(hv_p_E13_y_fit, hv_p_E13_x_fit, 10);
+                    outWindow.DispText("NG", "window", "top", "left", "red", "box", "true");
                 }
                 else
                 {
@@ -2033,6 +2036,7 @@ namespace HalconAlgorithm
                     outWindow.DispCircle(hv_p_E5_y_fit, hv_p_E5_x_fit, 5);
                     outWindow.DispCircle(hv_p_E10_y_fit, hv_p_E10_x_fit, 5);
                     outWindow.DispCircle(hv_p_E13_y_fit, hv_p_E13_x_fit, 5);
+                    outWindow.DispText("PASS", "window", "top", "left", "green", "box", "true");
                 }
 
             }

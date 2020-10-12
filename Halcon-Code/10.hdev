@@ -3,36 +3,41 @@
 <procedure name="main">
 <interface/>
 <body>
-<l>read_image (Image, '//mac/Home/Desktop/virtual_project/Data/BackLight/Image_20200806150516330.bmp')</l>
-<l>get_image_size (Image, Width, Height)</l>
-<l>dev_set_draw ('margin')    </l>
-<l>count_seconds (StartTime)</l>
-<l>gen_TwoCircle_info (Image, MaxCircleRow, MaxCircleColumn, MaxCircleRadius, MinCircleRow, MinCircleColumn, MinCircleRadius, TwoCirclePhi)</l>
-<l>gen_L1L2_Measure10 (Image, MinCircleRow, MinCircleColumn, MinCircleRadius, TwoCirclePhi, Width, Height, RightCircleRowEdge1, RightCircleColumnEdge1, LeftCircleRowEdge1, LeftCircleColumnEdge1, RightCircleRowEdge2, RightCircleColumnEdge2, LeftCircleRowEdge2, LeftCircleColumnEdge2)</l>
-<c>*分别计算L1、L2的中心坐标</c>
-<l>RightCenterRow := (RightCircleRowEdge1+RightCircleRowEdge2)/2</l>
-<l>RightCenterCol := (RightCircleColumnEdge1+RightCircleColumnEdge2)/2</l>
-<l>LeftCenterRow := (LeftCircleRowEdge1+LeftCircleRowEdge2)/2</l>
-<l>LeftCenterCol := (LeftCircleColumnEdge1+LeftCircleColumnEdge2)/2</l>
-<c>*显示并计算L1、L2之间距离</c>
-<l>distance_pp (RightCenterRow, RightCenterCol, LeftCenterRow, LeftCenterCol, L1_L2)</l>
-<c>*定位右侧测量矩形</c>
-<l>gen_right_edge(Image, MinCircleRow, MinCircleColumn, MinCircleRadius*3/4, MinCircleRadius*5/4, MaxCircleColumn, TwoCirclePhi, Width, Height, rad(180), 0, RightRowEdge1, RightColumnEdge1, RightRowEdge2, RightColumnEdge2)</l>
-<c>*计算L3中心坐标和起点、终点坐标</c>
-<l>L3CenterRow := (RightCenterRow + LeftCenterRow)/2</l>
-<l>L3CenterCol := (RightCenterCol + LeftCenterCol)/2</l>
-<l>L3StartRow := (RightCircleRowEdge1 + LeftCircleRowEdge2)/2</l>
-<l>L3StartCol := (RightCircleColumnEdge1 + LeftCircleColumnEdge2)/2</l>
-<l>L3EndRow := (RightCircleRowEdge2 + LeftCircleRowEdge1)/2</l>
-<l>L3EndCol := (RightCircleColumnEdge2 + LeftCircleColumnEdge1)/2</l>
-<c>*计算X1</c>
-<l>distance_pl (L3CenterRow, L3CenterCol, RightRowEdge1, RightColumnEdge1, RightRowEdge2, RightColumnEdge2, X1)</l>
-<c>*计算运行时间</c>
-<l>count_seconds (StopTime)</l>
-<l>runtime := (StopTime - StartTime)*1000</l>
-<c>*输出结果</c>
-<l>distanceL1L2 := L1_L2</l>
-<l>distanceX1 := X1</l>
+<l>list_image_files ('//mac/Home/Desktop/VirtualProject/Data/BackLight_ALL', 'default', [], ImageFiles)</l>
+<l>for Index := 1 to 5 by 1</l>
+<l>    read_image (Image, ImageFiles[Index])</l>
+<l>    get_image_size (Image, Width, Height)</l>
+<l>    dev_set_draw ('margin')    </l>
+<l>    count_seconds (StartTime)</l>
+<l>    gen_TwoCircle_info (Image, MaxCircleRow, MaxCircleColumn, MaxCircleRadius, MinCircleRow, MinCircleColumn, MinCircleRadius, TwoCirclePhi)</l>
+<l>    gen_L1L2_Measure10 (Image, MinCircleRow, MinCircleColumn, MinCircleRadius, TwoCirclePhi, Width, Height, RightCircleRowEdge1, RightCircleColumnEdge1, LeftCircleRowEdge1, LeftCircleColumnEdge1, RightCircleRowEdge2, RightCircleColumnEdge2, LeftCircleRowEdge2, LeftCircleColumnEdge2)</l>
+<c>    *分别计算L1、L2的中心坐标</c>
+<l>    RightCenterRow := (RightCircleRowEdge1+RightCircleRowEdge2)/2</l>
+<l>    RightCenterCol := (RightCircleColumnEdge1+RightCircleColumnEdge2)/2</l>
+<l>    LeftCenterRow := (LeftCircleRowEdge1+LeftCircleRowEdge2)/2</l>
+<l>    LeftCenterCol := (LeftCircleColumnEdge1+LeftCircleColumnEdge2)/2</l>
+<c>    *显示并计算L1、L2之间距离</c>
+<l>    distance_pp (RightCenterRow, RightCenterCol, LeftCenterRow, LeftCenterCol, L1_L2)</l>
+<c>    *定位右侧测量矩形</c>
+<l>    gen_right_edge(Image, MinCircleRow, MinCircleColumn, MinCircleRadius*3/4, MinCircleRadius*5/4, MaxCircleColumn, TwoCirclePhi, Width, Height, rad(180), 0, RightRowEdge1, RightColumnEdge1, RightRowEdge2, RightColumnEdge2)</l>
+<c>    *计算L3中心坐标和起点、终点坐标</c>
+<l>    L3CenterRow := (RightCenterRow + LeftCenterRow)/2</l>
+<l>    L3CenterCol := (RightCenterCol + LeftCenterCol)/2</l>
+<l>    L3StartRow := (RightCircleRowEdge1 + LeftCircleRowEdge2)/2</l>
+<l>    L3StartCol := (RightCircleColumnEdge1 + LeftCircleColumnEdge2)/2</l>
+<l>    L3EndRow := (RightCircleRowEdge2 + LeftCircleRowEdge1)/2</l>
+<l>    L3EndCol := (RightCircleColumnEdge2 + LeftCircleColumnEdge1)/2</l>
+<c>    *计算X1</c>
+<l>    distance_pl (L3CenterRow, L3CenterCol, RightRowEdge1, RightColumnEdge1, RightRowEdge2, RightColumnEdge2, X1)</l>
+<c>    *计算运行时间</c>
+<l>    count_seconds (StopTime)</l>
+<l>    runtime := (StopTime - StartTime)*1000</l>
+<c>    *输出结果</c>
+<l>    distanceL1L2 := L1_L2</l>
+<l>    distanceX1 := X1</l>
+<c></c>
+<l>endfor</l>
+<c></c>
 </body>
 <docu id="main">
 <parameters/>
