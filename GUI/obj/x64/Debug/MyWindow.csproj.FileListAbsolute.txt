@@ -86,3 +86,8 @@ D:\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.Forms.OpenEthernetForm.resourc
 D:\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.Forms.PreStartHighSpeedForm.resources
 D:\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.Properties.Resources.resources
 D:\VirtualProject\Code\GUI\obj\x64\Debug\MyWindow.csproj.GenerateResource.Cache
+\\Mac\Home\Desktop\VirtualProject\Code\GUI\bin\x64\Debug\AlgorithmDLL.pdb
+C:\Users\iamxb\Desktop\Virtual Project\Code\GUI\bin\x64\Debug\AlgorithmDLL.pdb
+C:\Users\iamxb\Desktop\Virtual Project\Code\GUI\obj\x64\Debug\MyWindow.Forms.HighSpeedInitializeForm.resources
+C:\Users\iamxb\Desktop\Virtual Project\Code\GUI\obj\x64\Debug\MyWindow.Forms.OpenEthernetForm.resources
+C:\Users\iamxb\Desktop\Virtual Project\Code\GUI\obj\x64\Debug\MyWindow.Forms.PreStartHighSpeedForm.resources

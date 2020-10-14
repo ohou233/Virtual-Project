@@ -1206,13 +1206,16 @@ namespace MyWindow
 
             bool openEthernetSucceed = Open_Ethernet();
 
-            SetIntervalPoints();
-            SetNumProfile();
+            //SetIntervalPoints();
+            //SetNumProfile();
 
             if (openEthernetSucceed)
             {
                 Initialize_HighSpeedData_Communication_SimpleArray();
             }
+
+            btn_Set3DProgram.Enabled = true;
+            btn_Get3DProgram.Enabled = true;
         }
 
         //设置细化点数
@@ -1791,6 +1794,126 @@ namespace MyWindow
                     NativeMethods.LJX8IF_FinalizeHighSpeedDataCommunication(i);
                     Invoke(new InvokeDelagate(ShowBufferFullMessage));
                 }
+            }
+        }
+
+        private void btn_Set3DProgram_Click(object sender, EventArgs e)
+        {
+            byte[] hex = new byte[4];
+            using (PinnedObject pin = new PinnedObject(hex))
+            {
+                uint dwDataSize = 4;
+                uint Error = 0;
+
+                LJX8IF_TARGET_SETTING Target_Setting = new LJX8IF_TARGET_SETTING()
+                {
+                    byCategory = 0x0,
+                    byItem = 0x09,
+                    byTarget1 = 0x0,
+                    byTarget2 = 0x0,
+                    byTarget3 = 0x0,
+                    byTarget4 = 0x0,
+                    byType = 0X10,
+                    reserve = 4
+                };
+                int line = Int32.Parse(numericUpDownIntervalPoints.Text);
+                hex[0] = (byte)(line & 0xff);
+                hex[1] = (byte)((line >> 8) & 0xff);   //先右移再与操作
+                hex[2] = (byte)((line >> 16) & 0xff);
+                hex[3] = (byte)((line >> 24) & 0xff);
+                int rc = NativeMethods.LJX8IF_SetSetting(0, 0x01, Target_Setting, pin.Pointer, dwDataSize, ref Error);
+                //  AddLogResult(rc, Resources.IDS_SET_SETTING);
+
+                //Enum.GetName(typeof(Samplingperiod), setting.ToInt32());
+                Target_Setting.byItem = 0x0A;
+                int rows = Int32.Parse(m_NumOfProfile.Text);
+                hex[0] = (byte)(rows & 0xff);
+                hex[1] = (byte)((rows >> 8) & 0xff);   //先右移再与操作
+                hex[2] = (byte)((rows >> 16) & 0xff);
+                hex[3] = (byte)((rows >> 24) & 0xff);
+                rc = NativeMethods.LJX8IF_SetSetting(0, 0x02, Target_Setting, pin.Pointer, dwDataSize, ref Error);
+                // AddLogResult(rc, Resources.IDS_SET_SETTING);
+
+                //LineSpace = setting.ToInt32();
+                //Target_Setting.byType = 0X10;采样周期
+                //int HzSelect = Int32.Parse(_comboBoxLjxSamplingPeriod.SelectedIndex.ToString());
+                //Target_Setting.byItem = 0x02;
+                //hex[0] = (byte)(HzSelect & 0xff);
+                // hex[1] = (byte)((HzSelect >> 8) & 0xff);   //先右移再与操作
+                // hex[2] = (byte)((HzSelect >> 16) & 0xff);
+                //hex[3] = (byte)((HzSelect >> 24) & 0xff);
+                // rc = NativeMethods.LJX8IF_SetSetting(0, 0x01, Target_Setting, pin.Pointer, dwDataSize, ref Error);
+                AddLogResult(rc, Resources.IDS_SET_SETTING);
+                
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            byte[] hex = new byte[4];
+            using (PinnedObject pin = new PinnedObject(hex))
+            {
+                uint dwDataSize = 4;
+
+            LJX8IF_TARGET_SETTING Target_Setting = new LJX8IF_TARGET_SETTING()
+            {
+                byCategory = 0x0,
+                byItem = 0x09,
+                byTarget1 = 0x0,
+                byTarget2 = 0x0,
+                byTarget3 = 0x0,
+                byTarget4 = 0x0,
+                byType = 0X10
+            };
+            int rc = NativeMethods.LJX8IF_GetSetting(0, 0x02, Target_Setting, pin.Pointer, dwDataSize);
+            if (rc == (int)Rc.Ok)
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = 0; i < dwDataSize; i++)
+                {
+                    stringBuilder.Insert(0, string.Format("{0:x2}", hex[i]));
+                }
+                numericUpDownIntervalPoints.Text = System.Convert.ToString(System.Convert.ToInt32(stringBuilder.ToString(), 16));
+            }
+            else
+            {
+                AddLogResult(rc, Resources.IDS_GET_SETTING);
+                return;
+            }
+            ////Target_Setting.byType = 0X10;采样周期
+            //Target_Setting.byItem = 0x02;
+            //rc = NativeMethods.LJX8IF_GetSetting(0, 0x02, Target_Setting, pin.Pointer, dwDataSize);
+            //if (rc == (int)Rc.Ok)
+            //{
+            //    StringBuilder stringBuilder = new StringBuilder();
+            //    for (int i = 0; i < dwDataSize; i++)
+            //    {
+            //        stringBuilder.Insert(0, string.Format("{0:x2}", hex[i]));
+            //    }
+            //    _comboBoxLjxSamplingPeriod.SelectedItem = System.Convert.ToInt32(stringBuilder.ToString(), 16);
+
+            //}
+            //else
+            //{
+            //    AddLogResult(rc, Resources.IDS_GET_SETTING);
+            //}
+            Target_Setting.byItem = 0x0A;
+            rc = NativeMethods.LJX8IF_GetSetting(0, 0x02, Target_Setting, pin.Pointer, dwDataSize);
+            if (rc == (int)Rc.Ok)
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = 0; i < dwDataSize; i++)
+                {
+                    stringBuilder.Insert(0, string.Format("{0:x2}", hex[i]));
+                }
+                m_NumOfProfile.Text = System.Convert.ToString(System.Convert.ToInt32(stringBuilder.ToString(), 16));
+
+            }
+            else
+            {
+                AddLogResult(rc, Resources.IDS_GET_SETTING);
+            }
+
             }
         }
 

@@ -5,19 +5,24 @@
 <body>
 <l>Set_Offest_Param (p_A1_x_offest, p_A1_y_offest, p_A2_y_offest, p_A2_x_offest, p_A3_y_offest, p_A3_x_offest, p_A4_y_offest, p_A4_x_offest, p_A5_y_offest, p_A5_x_offest, p_A6_y_offest, p_A6_x_offest, p_A7_y_offest, p_A7_x_offest, p_A8_y_offest, p_A8_x_offest, p_E2_y_offest, p_E2_x_offest, p_E5_y_offest, p_E5_x_offest, p_E10_y_offest, p_E10_x_offest, p_E13_y_offest, p_E13_x_offest, B_offest, C_offest)</l>
 <c></c>
+<l>Z_Origin :=[]</l>
+<l>E2_Z:=[]</l>
+<l>E5_Z:=[]</l>
+<l>E10_Z:=[]</l>
+<l>E13_Z:=[]</l>
+<l>Profile :=[]</l>
 <l>dev_close_window ()</l>
 <l>dev_open_window (0, 0, 640, 500, 'black', WindowHandle)</l>
 <c></c>
-<l>list_image_files ('//mac/Home/Desktop/VirtualProject/Data/3d-Image', 'default', [], ImageFiles)</l>
-<l>for Index := 0 to |ImageFiles|-1 by 1</l>
+<l>list_image_files ('//mac/Home/Desktop/VirtualProject/Data/3d-Image/2', 'default', [], ImageFiles)</l>
+<l>for Index :=0 to |ImageFiles|-1 by 1</l>
 <l>    read_image (ImageZ, ImageFiles[Index])</l>
 <l>    get_image_size (ImageZ, Width, Height)</l>
-<c>    </c>
-<c>    </c>
-<l>*     scale_image (ImageZ, ImageScaled, 0.222707, -7921)</l>
-<c>    </c>
+<c>        </c>
+<l>    scale_image (ImageZ, ImageScaled, 0.285554, -10322)</l>
+<c></c>
 <c>    *定位两圆心</c>
-<l>    gen_TwoCircle_info(ImageZ, Row_Origin, Col_Origin, MaxCircleRadius, RowEnd_X, ColEnd_X, MinCircleRadius, TwoCirclePhi)</l>
+<l>    gen_TwoCircle_info(ImageScaled, Row_Origin, Col_Origin, MaxCircleRadius, RowEnd_X, ColEnd_X, MinCircleRadius, TwoCirclePhi)</l>
 <c>    </c>
 <l>    hom_mat2d_identity (HomMat2DIdentity)</l>
 <c>    </c>
@@ -32,9 +37,19 @@
 <c>    </c>
 <c>    *计算轮廓度</c>
 <l>    my_gen_result (E2_Z_mm, E5_Z_mm, E10_Z_mm, E13_Z_mm, result)</l>
+<c>    </c>
+<l>    Z_Origin := [Z_Origin, Z_Origin_Median]</l>
+<l>    E2_Z:=[E2_Z, E2_Z_mm]</l>
+<l>    E5_Z:=[E5_Z, E5_Z_mm]</l>
+<l>    E10_Z:=[E10_Z, E10_Z_mm]</l>
+<l>    E13_Z:=[E13_Z, E13_Z_mm]</l>
+<l>    Profile := [Profile, result]</l>
 <l>    stop()</l>
 <l>endfor</l>
 <c></c>
+<l>tuple_max (Profile, Max)</l>
+<l>tuple_min(Profile, Min)</l>
+<l>error := Max-Min</l>
 </body>
 <docu id="main">
 <parameters/>
@@ -151,16 +166,23 @@
 </oc>
 </interface>
 <body>
-<l>* fast_threshold (Image, Regions, 128, 255, 20)</l>
+<l>threshold (Image, Regions, 65, 120)</l>
 <c></c>
-<l>* threshold (Image, Regions, 152, 181)</l>
-<c></c>
-<l>auto_threshold (Image, Regions, 0.2)</l>
 <l>connection (Regions, ConnectedRegions)</l>
 <c>* 提取两个圆形区域</c>
+<l>* select_shape (ConnectedRegions, MaxCircleSelectedRegions, ['area','circularity'], 'and', [229831,0.4258], [689493,0.4722])</l>
 <c></c>
-<l>select_shape (ConnectedRegions, MaxCircleSelectedRegions, ['area','circularity'], 'and', [217996,0.7004], [1.24768e+06,0.7301])</l>
-<l>select_shape (ConnectedRegions, MinCircleSelectedRegions, ['area','circularity'], 'and', [217996,0.7579], [1.24768e+06,0.8006])</l>
+<c></c>
+<l>select_shape (ConnectedRegions, MaxCircleSelectedRegions, ['area','circularity'], 'and', [0,0.2505], [1.16792e+06,0.5])</l>
+<l>* select_shape (ConnectedRegions, MinCircleSelectedRegions, ['area','circularity'], 'and', [0,0.1308], [1.16792e+06,0.3534])</l>
+<l>select_shape (MaxCircleSelectedRegions, MaxCircleSelectedRegions, 'area', 'and', 255566, 500000)</l>
+<c></c>
+<l>select_shape (ConnectedRegions, MinCircleSelectedRegions, ['area','circularity'], 'and', [136023,0.3987], [267355,0.6407])</l>
+<c></c>
+<c></c>
+<c></c>
+<l>* select_shape (ConnectedRegions, MaxCircleSelectedRegions, ['area','circularity'], 'and', [217996,0.7004], [1.24768e+06,0.7301])</l>
+<l>* select_shape (ConnectedRegions, MinCircleSelectedRegions, ['area','circularity'], 'and', [217996,0.7579], [1.24768e+06,0.8006])</l>
 <c></c>
 <l>smallest_circle (MaxCircleSelectedRegions, MaxCircleRow, MaxCircleColumn, MaxCircleRadius)</l>
 <l>smallest_circle (MinCircleSelectedRegions, MinCircleRow, MinCircleColumn, MinCircleRadius)</l>
@@ -311,28 +333,28 @@
 </interface>
 <body>
 <l>p_A1_x_offest := 7.12/0.0125875</l>
-<l>p_A1_y_offest := 4.340/0.01</l>
+<l>p_A1_y_offest := 4.340/0.02</l>
 <c></c>
 <l>p_A2_x_offest := 7.12/0.0125875</l>
-<l>p_A2_y_offest := -4.340/0.01</l>
+<l>p_A2_y_offest := -4.340/0.018</l>
 <c></c>
 <l>p_A3_x_offest := 4.540 /0.0125875</l>
-<l>p_A3_y_offest := -6.570/0.01</l>
+<l>p_A3_y_offest := -6.570/0.0185</l>
 <c></c>
 <l>p_A4_x_offest := -4.540/0.0125875</l>
-<l>p_A4_y_offest := -6.570/0.01</l>
+<l>p_A4_y_offest := -6.570/0.0182</l>
 <c></c>
 <l>p_A5_x_offest := -6.940 /0.0125875</l>
-<l>p_A5_y_offest := -4.050/0.01</l>
+<l>p_A5_y_offest := -4.340/0.02</l>
 <c></c>
 <l>p_A6_x_offest := -6.940 /0.0125875</l>
-<l>p_A6_y_offest := 4.050/0.01</l>
+<l>p_A6_y_offest := 4.340/0.025</l>
 <c></c>
 <l>p_A7_x_offest := -4.540 /0.0125875</l>
-<l>p_A7_y_offest := 6.570/0.01</l>
+<l>p_A7_y_offest := 6.570/0.0216</l>
 <c></c>
 <l>p_A8_x_offest := 4.540 /0.0125875</l>
-<l>p_A8_y_offest := 6.570/0.01</l>
+<l>p_A8_y_offest := 6.570/0.0215</l>
 <c></c>
 <l>p_E2_x_offest := 5.220 /0.0125875</l>
 <l>p_E2_y_offest := 1.520/0.01</l>
@@ -429,15 +451,20 @@
 <c></c>
 <c>*根据八个平面拟合点，获取八个Z向值，去除最大最小值干扰后求取中位值</c>
 <c>*将中位值作为Z向0点</c>
-<l>* tuple_max (Surface_Zs, Z_Origin_Max)</l>
-<l>* tuple_min (Surface_Zs, Z_Origin_Min)</l>
+<l>tuple_max (Surface_Zs, Z_Origin_Max)</l>
+<l>tuple_min (Surface_Zs, Z_Origin_Min)</l>
+<l>tuple_mean (Surface_Zs, Mean)</l>
+<l>* threshVal := ((Z_Origin_Max-Mean)+(Mean-Z_Origin_Min))/12</l>
+<c></c>
 <l>Z_Origin_NoMaxMin := []</l>
 <l>for Index := 0 to |Surface_Zs|-1 by 1</l>
 <l>*     if(Surface_Zs[Index] != Z_Origin_Max and Surface_Zs[Index] != Z_Origin_Min)</l>
+<l>*     if(abs(Surface_Zs[Index]-Mean) &lt; threshVal)</l>
 <l>        Z_Origin_NoMaxMin := [Z_Origin_NoMaxMin, (Surface_Zs[Index]-32768)*1.6/1000]</l>
 <l>*     endif</l>
 <l>endfor</l>
-<l>tuple_mean (Z_Origin_NoMaxMin, Z_Origin_median)</l>
+<l>* tuple_mean (Z_Origin_NoMaxMin, Z_Origin_median)</l>
+<l>tuple_median (Z_Origin_NoMaxMin, Z_Origin_median)</l>
 <l>return ()</l>
 </body>
 <docu id="my_fit_surface">
