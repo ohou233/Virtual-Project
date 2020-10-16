@@ -50,7 +50,7 @@
             this._textBoxProfileCnt.Name = "_textBoxProfileCnt";
             this._textBoxProfileCnt.Size = new System.Drawing.Size(64, 21);
             this._textBoxProfileCnt.TabIndex = 25;
-            this._textBoxProfileCnt.Text = "2500";
+            this._textBoxProfileCnt.Text = "2000";
             // 
             // _labelProfileCnt
             // 

@@ -946,11 +946,11 @@ namespace MyWindow
                     }
                 }
 
-                //保存异常图像
-                if (PositionDegree < 0 || PositionDegree > 0.06 || Radius < 9.40 || Radius > 9.50)
-                {
-                    SaveErrorBMP();
-                }
+                ////保存异常图像
+                //if (PositionDegree < 0 || PositionDegree > 0.06 || Radius < 9.40 || Radius > 9.50)
+                //{
+                //    SaveErrorBMP();
+                //}
                 //设置控件状态
                 bt_StopGrab.Enabled = false;
                 bt_StopTest.Enabled = true;
@@ -1655,13 +1655,13 @@ namespace MyWindow
                 _buttonStartMeasure.Enabled = true;
                 _buttonStopMeasure.Enabled = false;
                 _buttonStopHighSpeedDataCommunication.Enabled = true;
-                _buttonHighSpeedSaveAsBitmapFile.Enabled = false;
             }
             _sendCommand = SendCommand.StopMeasure;
             int rc = NativeMethods.LJX8IF_StopMeasure(_currentDeviceId);
             AddLogResult(rc, Resources.IDS_STOP_MEASURE);
 
             Disp_ProfileByte2ptr();
+            _buttonHighSpeedSaveAsBitmapFile.Enabled = true;
         }
 
         private void _buttonStopHighSpeedDataCommunication_Click(object sender, EventArgs e)

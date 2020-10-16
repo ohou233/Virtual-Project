@@ -529,14 +529,14 @@ namespace HalconAlgorithm
 
         //设置3D测量项中ZMap图的高度换算系数
         public static void Set_Offest_Param(out HTuple hv_p_A1_x_offest, out HTuple hv_p_A1_y_offest,
-            out HTuple hv_p_A2_y_offest, out HTuple hv_p_A2_x_offest, out HTuple hv_p_A3_y_offest,
-            out HTuple hv_p_A3_x_offest, out HTuple hv_p_A4_y_offest, out HTuple hv_p_A4_x_offest,
-            out HTuple hv_p_A5_y_offest, out HTuple hv_p_A5_x_offest, out HTuple hv_p_A6_y_offest,
-            out HTuple hv_p_A6_x_offest, out HTuple hv_p_A7_y_offest, out HTuple hv_p_A7_x_offest,
-            out HTuple hv_p_A8_y_offest, out HTuple hv_p_A8_x_offest, out HTuple hv_p_E2_y_offest,
-            out HTuple hv_p_E2_x_offest, out HTuple hv_p_E5_y_offest, out HTuple hv_p_E5_x_offest,
-            out HTuple hv_p_E10_y_offest, out HTuple hv_p_E10_x_offest, out HTuple hv_p_E13_y_offest,
-            out HTuple hv_p_E13_x_offest, out HTuple hv_B_offest, out HTuple hv_C_offest)
+             out HTuple hv_p_A2_y_offest, out HTuple hv_p_A2_x_offest, out HTuple hv_p_A3_y_offest,
+             out HTuple hv_p_A3_x_offest, out HTuple hv_p_A4_y_offest, out HTuple hv_p_A4_x_offest,
+             out HTuple hv_p_A5_y_offest, out HTuple hv_p_A5_x_offest, out HTuple hv_p_A6_y_offest,
+             out HTuple hv_p_A6_x_offest, out HTuple hv_p_A7_y_offest, out HTuple hv_p_A7_x_offest,
+             out HTuple hv_p_A8_y_offest, out HTuple hv_p_A8_x_offest, out HTuple hv_p_E2_y_offest,
+             out HTuple hv_p_E2_x_offest, out HTuple hv_p_E5_y_offest, out HTuple hv_p_E5_x_offest,
+             out HTuple hv_p_E10_y_offest, out HTuple hv_p_E10_x_offest, out HTuple hv_p_E13_y_offest,
+             out HTuple hv_p_E13_x_offest, out HTuple hv_B_offest, out HTuple hv_C_offest)
         {
 
 
@@ -573,143 +573,169 @@ namespace HalconAlgorithm
             {
                 hv_p_A1_x_offest = 7.12 / 0.0125875;
             }
+            //p_A1_y_offest := 4.340/0.02
             hv_p_A1_y_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
                 hv_p_A1_y_offest = 4.340 / 0.02;
             }
 
+
             hv_p_A2_x_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
                 hv_p_A2_x_offest = 7.12 / 0.0125875;
             }
+            //p_A2_y_offest := -4.340/0.018
             hv_p_A2_y_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
-                hv_p_A2_y_offest = -4.340 / 0.018;
+                hv_p_A2_y_offest = -4.340 / 0.02;
             }
+
 
             hv_p_A3_x_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
                 hv_p_A3_x_offest = 4.540 / 0.0125875;
             }
+            //p_A3_y_offest := -6.570/0.0185
             hv_p_A3_y_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
-                hv_p_A3_y_offest = -6.570 / 0.0185;
+                hv_p_A3_y_offest = -6.570 / 0.02;
             }
+
 
             hv_p_A4_x_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
                 hv_p_A4_x_offest = -4.540 / 0.0125875;
             }
+            //p_A4_y_offest := -6.570/0.0182
             hv_p_A4_y_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
-                hv_p_A4_y_offest = -6.570 / 0.0182;
+                hv_p_A4_y_offest = -6.570 / 0.02;
             }
+
 
             hv_p_A5_x_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
                 hv_p_A5_x_offest = -6.940 / 0.0125875;
             }
+            //p_A5_y_offest := -4.340/0.02
             hv_p_A5_y_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
-                hv_p_A5_y_offest = -4.340 / 0.02;
+                hv_p_A5_y_offest = -4.050 / 0.02;
             }
+
 
             hv_p_A6_x_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
                 hv_p_A6_x_offest = -6.940 / 0.0125875;
             }
+            //p_A6_y_offest := 4.340/0.025
             hv_p_A6_y_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
-                hv_p_A6_y_offest = 4.340 / 0.025;
+                hv_p_A6_y_offest = 4.050 / 0.02;
             }
+
 
             hv_p_A7_x_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
                 hv_p_A7_x_offest = -4.540 / 0.0125875;
             }
+            //p_A7_y_offest := 6.570/0.0216
             hv_p_A7_y_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
-                hv_p_A7_y_offest = 6.570 / 0.0216;
+                hv_p_A7_y_offest = 6.570 / 0.02;
             }
+
 
             hv_p_A8_x_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
                 hv_p_A8_x_offest = 4.540 / 0.0125875;
             }
+            //p_A8_y_offest := 6.570/0.0215
             hv_p_A8_y_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
-                hv_p_A8_y_offest = 6.570 / 0.0215;
+                hv_p_A8_y_offest = 6.570 / 0.02;
             }
+
 
             hv_p_E2_x_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
                 hv_p_E2_x_offest = 5.220 / 0.0125875;
             }
+            //p_E2_y_offest := 1.520/0.01
             hv_p_E2_y_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
-                hv_p_E2_y_offest = 1.520 / 0.01;
+                hv_p_E2_y_offest = 1.520 / 0.02;
             }
+
 
             hv_p_E5_x_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
                 hv_p_E5_x_offest = 5.220 / 0.0125875;
             }
+            //p_E5_y_offest := -1.520/0.01
             hv_p_E5_y_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
-                hv_p_E5_y_offest = -1.520 / 0.01;
+                hv_p_E5_y_offest = -1.520 / 0.02;
             }
+
 
             hv_p_E10_x_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
                 hv_p_E10_x_offest = -5.220 / 0.0125875;
             }
+            //p_E10_y_offest := -1.520/0.01
             hv_p_E10_y_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
-                hv_p_E10_y_offest = -1.520 / 0.01;
+                hv_p_E10_y_offest = -1.520 / 0.02;
             }
+
 
             hv_p_E13_x_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
                 hv_p_E13_x_offest = -5.220 / 0.0125875;
             }
+            //p_E13_y_offest := 1.520/0.01
             hv_p_E13_y_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
-                hv_p_E13_y_offest = 1.520 / 0.01;
+                hv_p_E13_y_offest = 1.520 / 0.02;
             }
+
 
             hv_B_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
                 hv_B_offest = 6.788 / 0.0125875;
             }
+            //C_offest := 19.605/0.01
             hv_C_offest.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
-                hv_C_offest = 19.605 / 0.01;
+                hv_C_offest = 19.605 / 0.02;
             }
+
 
 
             return;
@@ -739,9 +765,12 @@ namespace HalconAlgorithm
             HTuple hv_p_A6_x_fit = new HTuple(), hv_p_A6_y_fit = new HTuple();
             HTuple hv_p_A7_x_fit = new HTuple(), hv_p_A7_y_fit = new HTuple();
             HTuple hv_p_A8_x_fit = new HTuple(), hv_p_A8_y_fit = new HTuple();
-            HTuple hv_Surface_Zs = new HTuple(), hv_Z_Origin_Max = new HTuple();
-            HTuple hv_Z_Origin_Min = new HTuple(), hv_Mean = new HTuple();
-            HTuple hv_Z_Origin_NoMaxMin = new HTuple(), hv_Index = new HTuple();
+            HTuple hv_Surface_Zs = new HTuple(), hv_p_A1_z_median = new HTuple();
+            HTuple hv_p_A2_z_median = new HTuple(), hv_p_A3_z_median = new HTuple();
+            HTuple hv_p_A4_z_median = new HTuple(), hv_p_A5_z_median = new HTuple();
+            HTuple hv_p_A6_z_median = new HTuple(), hv_p_A7_z_median = new HTuple();
+            HTuple hv_p_A8_z_median = new HTuple(), hv_Z_Origin_NoMaxMin = new HTuple();
+            HTuple hv_Index = new HTuple();
             // Initialize local and output iconic variables 
             hv_Z_Origin_median = new HTuple();
             //定位8个给定平面拟合点
@@ -770,28 +799,49 @@ namespace HalconAlgorithm
             my_gen_suffce_fit_point(hv_Row_Origin, hv_Col_Origin, hv_Phi, hv_p_A8_x_offest,
                 hv_p_A8_y_offest, out hv_p_A8_x_fit, out hv_p_A8_y_fit);
 
+
+
+
             //获取八个平面拟合点的灰度值，即Z向距离
+            //get_grayval_interpolated (ImageZ, [p_A1_y_fit,p_A2_y_fit,p_A3_y_fit,p_A4_y_fit,p_A5_y_fit,p_A6_y_fit,p_A7_y_fit, p_A8_y_fit], [p_A1_x_fit,p_A2_x_fit,p_A3_x_fit,p_A4_x_fit,p_A5_x_fit,p_A6_x_fit,p_A7_x_fit, p_A8_x_fit], 'bicubic_clipped', Surface_Zs)
+
+            hv_p_A1_z_median.Dispose();
+            get_median_grayVal_point_to_circle(ho_ImageZ, hv_p_A1_y_fit, hv_p_A1_x_fit, 8,
+                out hv_p_A1_z_median);
+            hv_p_A2_z_median.Dispose();
+            get_median_grayVal_point_to_circle(ho_ImageZ, hv_p_A2_y_fit, hv_p_A2_x_fit, 8,
+                out hv_p_A2_z_median);
+            hv_p_A3_z_median.Dispose();
+            get_median_grayVal_point_to_circle(ho_ImageZ, hv_p_A3_y_fit, hv_p_A3_x_fit, 8,
+                out hv_p_A3_z_median);
+            hv_p_A4_z_median.Dispose();
+            get_median_grayVal_point_to_circle(ho_ImageZ, hv_p_A4_y_fit, hv_p_A4_x_fit, 8,
+                out hv_p_A4_z_median);
+            hv_p_A5_z_median.Dispose();
+            get_median_grayVal_point_to_circle(ho_ImageZ, hv_p_A5_y_fit, hv_p_A5_x_fit, 8,
+                out hv_p_A5_z_median);
+            hv_p_A6_z_median.Dispose();
+            get_median_grayVal_point_to_circle(ho_ImageZ, hv_p_A6_y_fit, hv_p_A6_x_fit, 8,
+                out hv_p_A6_z_median);
+            hv_p_A7_z_median.Dispose();
+            get_median_grayVal_point_to_circle(ho_ImageZ, hv_p_A7_y_fit, hv_p_A7_x_fit, 8,
+                out hv_p_A7_z_median);
+            hv_p_A8_z_median.Dispose();
+            get_median_grayVal_point_to_circle(ho_ImageZ, hv_p_A8_y_fit, hv_p_A8_x_fit, 8,
+                out hv_p_A8_z_median);
+            hv_Surface_Zs.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
-                hv_Surface_Zs.Dispose();
-                HOperatorSet.GetGrayvalInterpolated(ho_ImageZ, ((((((((((((hv_p_A1_y_fit.TupleConcat(
-                    hv_p_A2_y_fit))).TupleConcat(hv_p_A3_y_fit))).TupleConcat(hv_p_A4_y_fit))).TupleConcat(
-                    hv_p_A5_y_fit))).TupleConcat(hv_p_A6_y_fit))).TupleConcat(hv_p_A7_y_fit))).TupleConcat(
-                    hv_p_A8_y_fit), ((((((((((((hv_p_A1_x_fit.TupleConcat(hv_p_A2_x_fit))).TupleConcat(
-                    hv_p_A3_x_fit))).TupleConcat(hv_p_A4_x_fit))).TupleConcat(hv_p_A5_x_fit))).TupleConcat(
-                    hv_p_A6_x_fit))).TupleConcat(hv_p_A7_x_fit))).TupleConcat(hv_p_A8_x_fit),
-                    "bicubic_clipped", out hv_Surface_Zs);
+                hv_Surface_Zs = new HTuple();
+                hv_Surface_Zs = hv_Surface_Zs.TupleConcat(hv_p_A1_z_median, hv_p_A2_z_median, hv_p_A3_z_median, hv_p_A4_z_median, hv_p_A5_z_median, hv_p_A6_z_median, hv_p_A7_z_median, hv_p_A8_z_median);
             }
 
             //根据八个平面拟合点，获取八个Z向值，去除最大最小值干扰后求取中位值
             //将中位值作为Z向0点
-            hv_Z_Origin_Max.Dispose();
-            HOperatorSet.TupleMax(hv_Surface_Zs, out hv_Z_Origin_Max);
-            hv_Z_Origin_Min.Dispose();
-            HOperatorSet.TupleMin(hv_Surface_Zs, out hv_Z_Origin_Min);
-            hv_Mean.Dispose();
-            HOperatorSet.TupleMean(hv_Surface_Zs, out hv_Mean);
-            //threshVal := ((Z_Origin_Max-Mean)+(Mean-Z_Origin_Min))/12
+            //tuple_max (Surface_Zs, Z_Origin_Max)
+            //tuple_min (Surface_Zs, Z_Origin_Min)
+            //tuple_mean (Surface_Zs, Mean)
+            //threshVal := ((Z_Origin_Max-Mean)+(Mean-Z_Origin_Min))/2
 
             hv_Z_Origin_NoMaxMin.Dispose();
             hv_Z_Origin_NoMaxMin = new HTuple();
@@ -799,7 +849,7 @@ namespace HalconAlgorithm
                 )) - 1); hv_Index = (int)hv_Index + 1)
             {
                 //*     if(Surface_Zs[Index] != Z_Origin_Max and Surface_Zs[Index] != Z_Origin_Min)
-                //*     if(abs(Surface_Zs[Index]-Mean) < threshVal)
+                //if (abs(Surface_Zs[Index]-Mean) < threshVal)
                 using (HDevDisposeHelper dh = new HDevDisposeHelper())
                 {
                     {
@@ -810,7 +860,7 @@ namespace HalconAlgorithm
                         hv_Z_Origin_NoMaxMin = ExpTmpLocalVar_Z_Origin_NoMaxMin;
                     }
                 }
-                //*     endif
+                //endif
             }
             //tuple_mean (Z_Origin_NoMaxMin, Z_Origin_median)
             hv_Z_Origin_median.Dispose();
@@ -833,9 +883,14 @@ namespace HalconAlgorithm
             hv_p_A8_x_fit.Dispose();
             hv_p_A8_y_fit.Dispose();
             hv_Surface_Zs.Dispose();
-            hv_Z_Origin_Max.Dispose();
-            hv_Z_Origin_Min.Dispose();
-            hv_Mean.Dispose();
+            hv_p_A1_z_median.Dispose();
+            hv_p_A2_z_median.Dispose();
+            hv_p_A3_z_median.Dispose();
+            hv_p_A4_z_median.Dispose();
+            hv_p_A5_z_median.Dispose();
+            hv_p_A6_z_median.Dispose();
+            hv_p_A7_z_median.Dispose();
+            hv_p_A8_z_median.Dispose();
             hv_Z_Origin_NoMaxMin.Dispose();
             hv_Index.Dispose();
 
@@ -890,13 +945,6 @@ namespace HalconAlgorithm
             HTuple hv_Phi, HTuple hv_p_A1_x_offest, HTuple hv_p_A1_y_offest, out HTuple hv_p_A_x_fit,
             out HTuple hv_p_A_y_fit)
         {
-
-
-
-            // Local iconic variables 
-
-            // Local control variables 
-
             HTuple hv_HomMat2D_Img2Base = new HTuple();
             HTuple hv_Col_Origin_InBase = new HTuple(), hv_Row_Origin_InBase = new HTuple();
             HTuple hv_p_A_XInBase = new HTuple(), hv_p_A_YInBase = new HTuple();
@@ -921,7 +969,7 @@ namespace HalconAlgorithm
             hv_p_A_YInBase.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
             {
-                hv_p_A_YInBase = (hv_Row_Origin_InBase - hv_p_A1_y_offest) - 20;
+                hv_p_A_YInBase = (hv_Row_Origin_InBase - hv_p_A1_y_offest) + 10;
             }
             //计算基准坐标系到图像坐标系下的变换矩阵
             hv_HomMat2D_Base2Img.Dispose();
@@ -942,22 +990,15 @@ namespace HalconAlgorithm
         }
 
         //获取给定的4个点
-        private static void my_gen_4point_offest(HObject ho_ImageZ, HTuple hv_HomMat2DIdentity,
+        public static void my_gen_4point_offest(HObject ho_ImageZ, HTuple hv_HomMat2DIdentity,
             HTuple hv_p_E2_x_offest, HTuple hv_p_E2_y_offest, HTuple hv_Phi, HTuple hv_Col_Origin,
-            HTuple hv_Row_Origin, HTuple hv_p_E5_x_offest, HTuple hv_p_E5_y_offest, HTuple hv_p_E10_x_offest,
-            HTuple hv_p_E10_y_offest, HTuple hv_p_E13_x_offest, HTuple hv_p_E13_y_offest,
-            HTuple hv_Z_Origin_Mean, out HTuple hv_E2_Z_mm, out HTuple hv_E5_Z_mm, out HTuple hv_E10_Z_mm,
-            out HTuple hv_E13_Z_mm, out HTuple hv_p_E2_x_fit, out HTuple hv_p_E2_y_fit,
+            HTuple hv_Row_Origin , HTuple hv_p_E5_x_offest, HTuple hv_p_E5_y_offest,
+            HTuple hv_p_E10_x_offest, HTuple hv_p_E10_y_offest, HTuple hv_p_E13_x_offest,
+            HTuple hv_p_E13_y_offest, HTuple hv_Z_Origin_Mean, out HTuple hv_E2_Z_mm, out HTuple hv_E5_Z_mm,
+            out HTuple hv_E10_Z_mm, out HTuple hv_E13_Z_mm, out HTuple hv_p_E2_x_fit, out HTuple hv_p_E2_y_fit,
             out HTuple hv_p_E5_x_fit, out HTuple hv_p_E5_y_fit, out HTuple hv_p_E10_x_fit,
             out HTuple hv_p_E10_y_fit, out HTuple hv_p_E13_x_fit, out HTuple hv_p_E13_y_fit)
         {
-
-
-
-
-            // Local iconic variables 
-
-            // Local control variables 
 
             HTuple hv_E2_Z_um = new HTuple(), hv_E5_Z_um = new HTuple();
             HTuple hv_E10_Z_um = new HTuple(), hv_E13_Z_um = new HTuple();
@@ -966,29 +1007,31 @@ namespace HalconAlgorithm
             hv_E5_Z_mm = new HTuple();
             hv_E10_Z_mm = new HTuple();
             hv_E13_Z_mm = new HTuple();
-            hv_p_E2_x_fit = new HTuple();
-            hv_p_E2_y_fit = new HTuple();
-            hv_p_E5_x_fit = new HTuple();
-            hv_p_E5_y_fit = new HTuple();
-            hv_p_E10_x_fit = new HTuple();
-            hv_p_E10_y_fit = new HTuple();
-            hv_p_E13_x_fit = new HTuple();
-            hv_p_E13_y_fit = new HTuple();
-            hv_p_E2_x_fit.Dispose(); hv_p_E2_y_fit.Dispose();
             my_gen_suffce_fit_point(hv_Row_Origin, hv_Col_Origin, hv_Phi, hv_p_E2_x_offest,
                 hv_p_E2_y_offest, out hv_p_E2_x_fit, out hv_p_E2_y_fit);
-            hv_p_E5_x_fit.Dispose(); hv_p_E5_y_fit.Dispose();
             my_gen_suffce_fit_point(hv_Row_Origin, hv_Col_Origin, hv_Phi, hv_p_E5_x_offest,
                 hv_p_E5_y_offest, out hv_p_E5_x_fit, out hv_p_E5_y_fit);
-            hv_p_E10_x_fit.Dispose(); hv_p_E10_y_fit.Dispose();
             my_gen_suffce_fit_point(hv_Row_Origin, hv_Col_Origin, hv_Phi, hv_p_E10_x_offest,
                 hv_p_E10_y_offest, out hv_p_E10_x_fit, out hv_p_E10_y_fit);
-            hv_p_E13_x_fit.Dispose(); hv_p_E13_y_fit.Dispose();
             my_gen_suffce_fit_point(hv_Row_Origin, hv_Col_Origin, hv_Phi, hv_p_E13_x_offest,
                 hv_p_E13_y_offest, out hv_p_E13_x_fit, out hv_p_E13_y_fit);
 
+            //hv_E2_Z_um.Dispose();
+            //get_median_grayVal_point_to_circle(ho_ImageZ, hv_p_E2_y_fit, hv_p_E2_x_fit, 8,
+            //    out hv_E2_Z_um);
+            //hv_E5_Z_um.Dispose();
+            //get_median_grayVal_point_to_circle(ho_ImageZ, hv_p_E5_y_fit, hv_p_E5_x_fit, 8,
+            //    out hv_E5_Z_um);
+            //hv_E10_Z_um.Dispose();
+            //get_median_grayVal_point_to_circle(ho_ImageZ, hv_p_E10_y_fit, hv_p_E10_x_fit,
+            //    8, out hv_E10_Z_um);
+            //hv_E13_Z_um.Dispose();
+            //get_median_grayVal_point_to_circle(ho_ImageZ, hv_p_E13_y_fit, hv_p_E13_x_fit,
+            //    8, out hv_E13_Z_um);
+
+
             //计算四个底部点相对于Z向0平面的Z向偏差
-            hv_E2_Z_um.Dispose();
+            //get_grayval (ImageZ, p_E2_y_fit, p_E2_x_fit, E2_Z_um)
             HOperatorSet.GetGrayval(ho_ImageZ, hv_p_E2_y_fit, hv_p_E2_x_fit, out hv_E2_Z_um);
             hv_E2_Z_mm.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
@@ -996,7 +1039,7 @@ namespace HalconAlgorithm
                 hv_E2_Z_mm = (((hv_E2_Z_um - 32768) * 1.6) / 1000) - hv_Z_Origin_Mean;
             }
 
-            hv_E5_Z_um.Dispose();
+            //get_grayval (ImageZ, p_E5_y_fit, p_E5_x_fit, E5_Z_um)
             HOperatorSet.GetGrayval(ho_ImageZ, hv_p_E5_y_fit, hv_p_E5_x_fit, out hv_E5_Z_um);
             hv_E5_Z_mm.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
@@ -1004,7 +1047,7 @@ namespace HalconAlgorithm
                 hv_E5_Z_mm = (((hv_E5_Z_um - 32768) * 1.6) / 1000) - hv_Z_Origin_Mean;
             }
 
-            hv_E10_Z_um.Dispose();
+            //get_grayval (ImageZ, p_E10_y_fit, p_E10_x_fit, E10_Z_um)
             HOperatorSet.GetGrayval(ho_ImageZ, hv_p_E10_y_fit, hv_p_E10_x_fit, out hv_E10_Z_um);
             hv_E10_Z_mm.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
@@ -1012,7 +1055,7 @@ namespace HalconAlgorithm
                 hv_E10_Z_mm = (((hv_E10_Z_um - 32768) * 1.6) / 1000) - hv_Z_Origin_Mean;
             }
 
-            hv_E13_Z_um.Dispose();
+            //get_grayval (ImageZ, p_E13_y_fit, p_E13_x_fit, E13_Z_um)
             HOperatorSet.GetGrayval(ho_ImageZ, hv_p_E13_y_fit, hv_p_E13_x_fit, out hv_E13_Z_um);
             hv_E13_Z_mm.Dispose();
             using (HDevDisposeHelper dh = new HDevDisposeHelper())
@@ -1020,6 +1063,14 @@ namespace HalconAlgorithm
                 hv_E13_Z_mm = (((hv_E13_Z_um - 32768) * 1.6) / 1000) - hv_Z_Origin_Mean;
             }
 
+            hv_p_E2_x_fit.Dispose();
+            hv_p_E2_y_fit.Dispose();
+            hv_p_E5_x_fit.Dispose();
+            hv_p_E5_y_fit.Dispose();
+            hv_p_E10_x_fit.Dispose();
+            hv_p_E10_y_fit.Dispose();
+            hv_p_E13_x_fit.Dispose();
+            hv_p_E13_y_fit.Dispose();
             hv_E2_Z_um.Dispose();
             hv_E5_Z_um.Dispose();
             hv_E10_Z_um.Dispose();
@@ -1058,7 +1109,7 @@ namespace HalconAlgorithm
             hv_MinCircleRadius = new HTuple();
             hv_TwoCirclePhi = new HTuple();
             ho_Regions.Dispose();
-            HOperatorSet.Threshold(ho_Image, out ho_Regions, 65, 120);
+            HOperatorSet.Threshold(ho_Image, out ho_Regions, 36, 152);
 
             ho_ConnectedRegions.Dispose();
             HOperatorSet.Connection(ho_Regions, out ho_ConnectedRegions);
@@ -1125,6 +1176,37 @@ namespace HalconAlgorithm
             ho_MinCircle.Dispose();
             ho_MaxCircle.Dispose();
 
+
+            return;
+        }
+
+
+        //由点为中心获取区域灰度中位值
+        public static void get_median_grayVal_point_to_circle(HObject ho_Image, HTuple hv_point_y,
+     HTuple hv_point_x, HTuple hv_redius, out HTuple hv_Median)
+        {
+            HObject ho_Circle, ho_Contours;
+
+            // Local control variables 
+
+            HTuple hv_Grayval = new HTuple();
+            // Initialize local and output iconic variables 
+            HOperatorSet.GenEmptyObj(out ho_Circle);
+            HOperatorSet.GenEmptyObj(out ho_Contours);
+            hv_Median = new HTuple();
+            ho_Circle.Dispose();
+            HOperatorSet.GenCircle(out ho_Circle, hv_point_y, hv_point_x, hv_redius);
+            ho_Contours.Dispose();
+            HOperatorSet.GenContourRegionXld(ho_Circle, out ho_Contours, "center");
+            hv_Grayval.Dispose();
+            HOperatorSet.GetGrayvalContourXld(ho_Image, ho_Contours, "nearest_neighbor",
+                out hv_Grayval);
+            hv_Median.Dispose();
+            HOperatorSet.TupleMedian(hv_Grayval, out hv_Median);
+            ho_Circle.Dispose();
+            ho_Contours.Dispose();
+
+            hv_Grayval.Dispose();
 
             return;
         }
@@ -1998,7 +2080,7 @@ namespace HalconAlgorithm
             try
             {
                 ho_ImageScaled.Dispose();
-                HOperatorSet.ScaleImage(ho_Image, out ho_ImageScaled, 0.285554, -10322);
+                HOperatorSet.ScaleImage(ho_Image, out ho_ImageScaled, 0.190441, -4425);
 
                 //定位两圆心
                 hv_Row_Origin.Dispose(); hv_Col_Origin.Dispose(); hv_MaxCircleRadius.Dispose(); hv_RowEnd_X.Dispose(); hv_ColEnd_X.Dispose(); hv_MinCircleRadius.Dispose(); hv_TwoCirclePhi.Dispose();
@@ -2037,7 +2119,7 @@ namespace HalconAlgorithm
                 E5_OffestZ_mm = hv_E5_Z_mm;
                 E10_OffestZ_mm = hv_E10_Z_mm;
                 E13_OffestZ_mm = hv_E13_Z_mm;
-                Profile = hv_result;
+                Profile = hv_result-0.1;
                 RunTime =  hv_stop_time - hv_start_time;
 
                 //图像显示
